@@ -5,6 +5,16 @@ import { getFunctions } from "firebase/functions"
 import { logger } from "./logger-service"
 import type { Project } from "@/types/project"
 
+// Log environment variables for debugging
+console.log('Firebase Config - Environment Variables:', {
+  hasApiKey: !!process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  hasAuthDomain: !!process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  hasProjectId: !!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  hasDatabaseUrl: !!process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
+  hasMessagingSenderId: !!process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  hasAppId: !!process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+})
+
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
