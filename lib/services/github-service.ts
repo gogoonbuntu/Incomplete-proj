@@ -40,11 +40,18 @@ interface GitHubContent {
 
 class GitHubService {
   private baseUrl = "https://api.github.com"
-  private token = process.env.NEXT_PUBLIC_GITHUB_TOKEN
+  private token: string | undefined
   private requestCount = 0
   private maxRequests = 30
   private lastResetTime = Date.now()
   private requestInterval = 2000
+
+  constructor() {
+    this.token = process.env.GITHUB_TOKEN
+    if (!this.token) {
+      console.error('GITHUB_TOKEN is not set in environment variables')
+    }
+  }
 
   private async request<T>(endpoint: string): Promise<T> {
     // Check if we've hit the rate limit
@@ -217,13 +224,14 @@ class GitHubService {
 
         // 쿼리 간 대기 시간
         await new Promise((resolve) => setTimeout(resolve, 3000))
-      } catch (error) {
-        console.error(`쿼리 실패 [${i + 1}/${queries.length}]: ${query}`, error)
-        if (error.message.includes("rate limit")) {
-          console.log("Rate limit 도달로 검색 중단")
-          break
+      } catch (err) {
+        const error = err as Error;
+        console.error(`쿼리 실패 [${i + 1}/${queries.length}]: ${query}`, error);
+        if (error.message && error.message.includes("rate limit")) {
+          console.log("Rate limit 도달로 검색 중단");
+          break;
         }
-        continue
+        continue;
       }
     }
 
