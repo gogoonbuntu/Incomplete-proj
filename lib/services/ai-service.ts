@@ -8,16 +8,20 @@ interface SummaryRequest {
 }
 
 class AIService {
-  private apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "***REMOVED***"
+  private apiKey: string
   private genAI: GoogleGenerativeAI
   private requestCount = 0
   private lastResetTime = Date.now()
-  private maxRequestsPerMinute = 8 // 더욱 보수적으로 설정
+  private maxRequestsPerMinute = 8 // More conservative setting
   private dailyRequestCount = 0
   private lastDayReset = new Date().getDate()
-  private maxDailyRequests = 100 // 일일 한도를 보수적으로 설정
+  private maxDailyRequests = 100 // Conservative daily limit
 
   constructor() {
+    this.apiKey = process.env.GEMINI_API_KEY || ''
+    if (!this.apiKey) {
+      console.error('GEMINI_API_KEY is not set in environment variables')
+    }
     this.genAI = new GoogleGenerativeAI(this.apiKey)
   }
 
