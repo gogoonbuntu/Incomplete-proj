@@ -47,9 +47,15 @@ class GitHubService {
   private requestInterval = 2000
 
   constructor() {
-    this.token = process.env.GITHUB_TOKEN
+    // 다양한 방식으로 환경 변수 로드 시도
+    this.token = process.env.GITHUB_TOKEN || process.env.NEXT_PUBLIC_GITHUB_TOKEN
+    
     if (!this.token) {
-      console.error('GITHUB_TOKEN is not set in environment variables')
+      console.warn('GITHUB_TOKEN is not set in environment variables. GitHub API 기능이 제한됩니다.')
+      // 개발 환경에서 테스트용 토큰 사용 (실제 API 호출은 제한됨)
+      if (process.env.NODE_ENV === 'development') {
+        this.token = '***REMOVED***'
+      }
     }
   }
 

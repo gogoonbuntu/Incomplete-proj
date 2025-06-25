@@ -9,7 +9,7 @@ interface SummaryRequest {
 
 class AIService {
   private apiKey: string
-  private genAI: GoogleGenerativeAI
+  private genAI: GoogleGenerativeAI | null = null
   private requestCount = 0
   private lastResetTime = Date.now()
   private maxRequestsPerMinute = 8 // More conservative setting
@@ -18,11 +18,21 @@ class AIService {
   private maxDailyRequests = 100 // Conservative daily limit
 
   constructor() {
-    this.apiKey = process.env.GEMINI_API_KEY || ''
+    // 다양한 방식으로 환경 변수 로드 시도
+    this.apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY || ''
+    
     if (!this.apiKey) {
-      console.error('GEMINI_API_KEY is not set in environment variables')
+      console.warn('GEMINI_API_KEY is not set in environment variables. AI 기능이 제한됩니다.')
+      // 개발 환경에서 테스트용 키 사용 (실제 API 호출은 제한됨)
+      if (process.env.NODE_ENV === 'development') {
+        this.apiKey = '***REMOVED***'
+      }
     }
-    this.genAI = new GoogleGenerativeAI(this.apiKey)
+    
+    // API 키가 있을 때만 GoogleGenerativeAI 초기화
+    if (this.apiKey) {
+      this.genAI = new GoogleGenerativeAI(this.apiKey)
+    }
   }
 
   private async checkRateLimit(): Promise<boolean> {
@@ -78,6 +88,11 @@ class AIService {
       }
 
       logger.info(`통합 AI 분석 시작: ${repository.full_name}`)
+
+      if (!this.genAI) {
+        logger.warn("AI API 키가 설정되지 않아 기본 분석 사용")
+        return this.getFallbackAnalysis(repository, readme)
+      }
 
       const model = this.genAI.getGenerativeModel({
         model: "gemini-1.5-flash",

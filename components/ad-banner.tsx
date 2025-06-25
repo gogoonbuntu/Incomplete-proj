@@ -34,8 +34,23 @@ export function AdBanner({
     if (typeof window === "undefined") return
     
     try {
-      // Initialize ads when the component mounts
-      if (window.adsbygoogle) {
+      // 광고 중복 초기화 방지를 위한 확인
+      const adElements = document.querySelectorAll('ins.adsbygoogle');
+      
+      // 현재 요소가 이미 초기화되었는지 확인
+      let alreadyInitialized = false;
+      
+      // 타입스크립트 오류 피하기 위해 HTMLElement로 타입 지정
+      adElements.forEach((ad: Element) => {
+        // 안전하게 타입 확인
+        const htmlAd = ad as HTMLElement;
+        if (htmlAd.getAttribute('data-adsbygoogle-status') === 'done') {
+          alreadyInitialized = true;
+        }
+      });
+      
+      // 아직 초기화되지 않은 경우에만 초기화
+      if (window.adsbygoogle && !alreadyInitialized) {
         (window.adsbygoogle = window.adsbygoogle || []).push({})
       }
     } catch (error) {
