@@ -1,4 +1,4 @@
-import { firebaseService } from "./firebase-service"
+import { firebaseServicePromise } from './firebase-service'
 import { githubService } from "./github-service"
 import { scoringService } from "./scoring-service"
 import { aiService } from "./ai-service"
@@ -30,7 +30,8 @@ class ProjectService {
 
   async getProjects(): Promise<Project[]> {
     try {
-      return await firebaseService.getProjects()
+      const firebaseService = await firebaseServicePromise;
+return await firebaseService.getProjects()
     } catch (error) {
       logger.error("프로젝트 목록 로드 실패", error)
       return []
@@ -39,9 +40,9 @@ class ProjectService {
 
   async getProject(id: string): Promise<Project | null> {
     try {
-      const project = await firebaseService.getProject(id)
+      const project = await (await firebaseServicePromise).getProject(id)
       if (project) {
-        await firebaseService.incrementProjectView(id)
+        await (await firebaseServicePromise).incrementProjectView(id)
       }
       return project
     } catch (error) {
@@ -52,7 +53,8 @@ class ProjectService {
 
   async searchProjects(query: string): Promise<Project[]> {
     try {
-      return await firebaseService.searchProjects(query)
+      const firebaseService = await firebaseServicePromise;
+return await firebaseService.searchProjects(query)
     } catch (error) {
       logger.error("프로젝트 검색 실패", error)
       return []
@@ -61,7 +63,8 @@ class ProjectService {
 
   async triggerCrawling(): Promise<void> {
     try {
-      await firebaseService.triggerCrawling()
+      const firebaseService = await firebaseServicePromise;
+await firebaseService.triggerCrawling()
     } catch (error) {
       logger.error("크롤링 트리거 실패", error)
       throw error
@@ -248,7 +251,7 @@ class ProjectService {
             topics: repo.topics || existingProject.topics,
           }
 
-          await firebaseService.saveProject(updatedProject)
+          await (await firebaseServicePromise).saveProject(updatedProject)
           updateCount++
           logger.info(`프로젝트 업데이트 완료: ${repo.full_name}`)
         }
@@ -332,7 +335,7 @@ class ProjectService {
         defaultBranch: repository.default_branch || "main",
       }
 
-      await firebaseService.saveProject(project)
+      await (await firebaseServicePromise).saveProject(project)
       logger.success(`Firebase에 저장 완료: ${project.title}`)
     } catch (error) {
       logger.error(`프로젝트 처리 중 오류: ${repository.full_name}`, error)
@@ -348,8 +351,8 @@ class ProjectService {
   // Bookmark management
   async addBookmark(userId: string, projectId: string): Promise<void> {
     try {
-      await firebaseService.addBookmark(userId, projectId)
-      await firebaseService.addProjectInteraction(projectId, userId, "bookmark")
+      await (await firebaseServicePromise).addBookmark(userId, projectId)
+      await (await firebaseServicePromise).addProjectInteraction(projectId, userId, "bookmark")
     } catch (error) {
       logger.error("북마크 추가 실패", error)
       throw error
@@ -358,7 +361,8 @@ class ProjectService {
 
   async removeBookmark(userId: string, projectId: string): Promise<void> {
     try {
-      await firebaseService.removeBookmark(userId, projectId)
+      const firebaseService = await firebaseServicePromise;
+await firebaseService.removeBookmark(userId, projectId)
     } catch (error) {
       logger.error("북마크 제거 실패", error)
       throw error
@@ -367,7 +371,8 @@ class ProjectService {
 
   async getUserBookmarks(userId: string): Promise<string[]> {
     try {
-      return await firebaseService.getUserBookmarks(userId)
+      const firebaseService = await firebaseServicePromise;
+return await firebaseService.getUserBookmarks(userId)
     } catch (error) {
       logger.error("사용자 북마크 로드 실패", error)
       return []
@@ -376,7 +381,8 @@ class ProjectService {
 
   async getBookmarkedProjects(userId: string): Promise<Project[]> {
     try {
-      return await firebaseService.getBookmarkedProjects(userId)
+      const firebaseService = await firebaseServicePromise;
+return await firebaseService.getBookmarkedProjects(userId)
     } catch (error) {
       logger.error("북마크된 프로젝트 로드 실패", error)
       return []

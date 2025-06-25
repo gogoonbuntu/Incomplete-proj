@@ -245,10 +245,11 @@ export const mockProjects: Project[] = [
 // Realtime Database에 초기 데이터를 추가하는 함수
 export async function seedMockData() {
   try {
-    const { firebaseService } = await import("./services/firebase-service")
+    const { firebaseServicePromise } = await import("./services/firebase-service")
 
     console.log("Adding mock projects to Realtime Database...")
 
+    const firebaseService = await firebaseServicePromise;
     for (const project of mockProjects) {
       await firebaseService.saveProject(project)
       console.log(`Added project: ${project.title}`)

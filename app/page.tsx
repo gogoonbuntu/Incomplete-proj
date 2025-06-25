@@ -9,6 +9,7 @@ import { LoadingSpinner } from "@/components/loading-spinner"
 import { CrawlingLogs } from "@/components/crawling-logs"
 import { useAuth } from "@/hooks/use-auth"
 import { projectService, type CrawlingProgress } from "@/lib/services/project-service"
+import { firebaseServicePromise } from '@/lib/services/firebase-service';
 import { logger } from "@/lib/services/logger-service"
 import type { Project, FilterOptions, SortOption } from "@/types/project"
 import { Button } from "@/components/ui/button"

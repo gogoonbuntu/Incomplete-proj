@@ -25,13 +25,26 @@ export function getServerFirebaseConfig() {
     credential: process.env.FIREBASE_SERVICE_ACCOUNT_KEY ? 
       JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY) : 
       undefined,
-    databaseURL: process.env.FIREBASE_DATABASE_URL,
+    databaseURL: process.env.FIREBASE_DATABASE_URL || process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
     storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    projectId: process.env.FIREBASE_PROJECT_ID || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   };
 
-  // Validate required config
-  if (!config.credential || !config.databaseURL) {
-    throw new Error('Missing required Firebase configuration for server');
+  // Log warning but don't throw error in production
+  if (!config.credential) {
+    console.warn('Firebase service account key is missing. Some server-side Firebase features may not work.');
+    
+    if (process.env.NODE_ENV !== 'production') {
+      throw new Error('Missing Firebase service account key for server');
+    }
+  }
+  
+  if (!config.databaseURL) {
+    console.warn('Firebase database URL is missing. Some server-side Firebase features may not work.');
+    
+    if (process.env.NODE_ENV !== 'production') {
+      throw new Error('Missing Firebase database URL for server');
+    }
   }
 
   return config;
@@ -54,53 +67,69 @@ export async function initializeFirebaseClient() {
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   };
 
-  // Validate required config
+  // Validate required config but don't throw errors in production
   if (!firebaseConfig.apiKey || !firebaseConfig.databaseURL) {
-    throw new Error('Missing required Firebase configuration');
+    console.error('Missing required Firebase configuration');
+    if (process.env.NODE_ENV !== 'production') {
+      throw new Error('Missing required Firebase configuration');
+    }
   }
 
-  firebaseApp = initializeApp(firebaseConfig);
-  
-  // For debugging and development
-  if (process.env.NODE_ENV === 'development') {
-    window.firebaseApp = firebaseApp;
-  }
-
-  return firebaseApp;
+  const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+  firebaseApp = app;
+  authInstance = getAuth(app);
+  dbInstance = getDatabase(app);
+  functionsInstance = getFunctions(app);
+  return app;
 }
 
 // Helper functions to get Firebase services
-export function getFirebaseAuth(): Auth {
-  if (!authInstance) {
-    const app = firebaseApp || (getApps().length > 0 ? getApp() : null);
-    if (!app) {
-      throw new Error('Firebase app not initialized. Call initializeFirebaseClient() first.');
+export async function getFirebaseAuth(): Promise<Auth> {
+  try {
+    await initializeFirebaseClient();
+    if (!authInstance) {
+      console.error('Firebase Auth not initialized');
+      if (process.env.NODE_ENV !== 'production') {
+        throw new Error('Firebase Auth not initialized');
+      }
     }
-    authInstance = getAuth(app);
+    return authInstance as Auth;
+  } catch (error) {
+    console.error('Failed to get Firebase Auth:', error);
+    throw error;
   }
-  return authInstance;
 }
 
-export function getFirebaseDatabase(): Database {
-  if (!dbInstance) {
-    const app = firebaseApp || (getApps().length > 0 ? getApp() : null);
-    if (!app) {
-      throw new Error('Firebase app not initialized. Call initializeFirebaseClient() first.');
+export async function getFirebaseDatabase(): Promise<Database> {
+  try {
+    await initializeFirebaseClient();
+    if (!dbInstance) {
+      console.error('Firebase Database not initialized');
+      if (process.env.NODE_ENV !== 'production') {
+        throw new Error('Firebase Database not initialized');
+      }
     }
-    dbInstance = getDatabase(app);
+    return dbInstance as Database;
+  } catch (error) {
+    console.error('Failed to get Firebase Database:', error);
+    throw error;
   }
-  return dbInstance;
 }
 
-export function getFirebaseFunctions(): Functions {
-  if (!functionsInstance) {
-    const app = firebaseApp || (getApps().length > 0 ? getApp() : null);
-    if (!app) {
-      throw new Error('Firebase app not initialized. Call initializeFirebaseClient() first.');
+export async function getFirebaseFunctions(): Promise<Functions> {
+  try {
+    await initializeFirebaseClient();
+    if (!functionsInstance) {
+      console.error('Firebase Functions not initialized');
+      if (process.env.NODE_ENV !== 'production') {
+        throw new Error('Firebase Functions not initialized');
+      }
     }
-    functionsInstance = getFunctions(app);
+    return functionsInstance as Functions;
+  } catch (error) {
+    console.error('Failed to get Firebase Functions:', error);
+    throw error;
   }
-  return functionsInstance;
 }
 
 // Initialize Firebase when this module is imported (for client-side usage)

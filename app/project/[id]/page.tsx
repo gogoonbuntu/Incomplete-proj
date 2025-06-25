@@ -27,6 +27,7 @@ import {
 import { useAuth } from "@/hooks/use-auth"
 import { useBookmarks } from "@/hooks/use-bookmarks"
 import { projectService } from "@/lib/services/project-service"
+import { firebaseServicePromise } from '@/lib/services/firebase-service';
 import type { Project } from "@/types/project"
 import { AdBanner } from "@/components/ad-banner"
 

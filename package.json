@@ -4,9 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/verify-env.js",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prepare-vercel": "node scripts/prepare-vercel-env.js",
+    "verify-env": "node scripts/verify-env.js"
   },
   "dependencies": {
     "@google/generative-ai": "latest",
@@ -68,6 +71,8 @@
   },
   "devDependencies": {
     "@types/node": "^22",
+    "chalk": "^4.1.2",
+    "dotenv": "^16.4.5",
     "postcss": "^8.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"

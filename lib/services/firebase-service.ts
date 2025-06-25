@@ -14,6 +14,7 @@ import {
   push, 
   update, 
   onValue,
+  connectDatabaseEmulator,
   type Database, 
   type DatabaseReference, 
   type DataSnapshot,
@@ -23,6 +24,7 @@ import {
 import { 
   getFunctions, 
   httpsCallable, 
+  connectFunctionsEmulator,
   type Functions, 
   type HttpsCallable
 } from "firebase/functions"
@@ -38,37 +40,63 @@ import {
 
 // Firebase service class that handles initialization and provides methods
 class FirebaseService {
-  private auth: Auth;
-  private db: Database;
-  private functions: Functions;
+  private auth!: Auth;
+  private db!: Database;
+  private functions!: Functions;
   private connectionStatus: "connected" | "disconnected" | "unknown" = "unknown";
   private authStateUnsubscribe: Unsubscribe | null = null;
   private connectionRef: DatabaseReference | null = null;
   private connectionUnsubscribe: (() => void) | null = null;
   private backupInterval: NodeJS.Timeout | null = null;
+  private isInitialized = false;
 
-  constructor() {
+  // Use static async factory for instance creation
+  static async createInstance() {
+    const instance = new FirebaseService();
+    await instance.initialize();
+    return instance;
+  }
+
+  private async initialize() {
     try {
-      this.auth = getFirebaseAuth();
-      this.db = getFirebaseDatabase();
-      this.functions = getFirebaseFunctions();
+      this.auth = await getFirebaseAuth();
+      this.db = await getFirebaseDatabase();
+      this.functions = await getFirebaseFunctions();
       
-      if (typeof window !== 'undefined') {
-        console.log('Firebase services initialized successfully on client');
-        this.setupConnectionMonitoring();
-      } else {
-        console.log('Firebase services initialized successfully on server');
+      // Setup emulators in development
+      if (process.env.NODE_ENV === 'development') {
+        const host = 'localhost';
+        if (process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATORS === 'true') {
+          connectDatabaseEmulator(this.db, host, 9000);
+          connectFunctionsEmulator(this.functions, host, 5001);
+          logger.info('Firebase emulators connected');
+        }
       }
+      
+      // Set up auth state listener
+      this.setupAuthStateListener();
+      
+      // Setup connection monitoring on client side
+      if (typeof window !== 'undefined') {
+        this.setupConnectionMonitoring();
+        // Initialize backup interval for client side only
+        this.initializeBackup();
+      }
+      
+      this.isInitialized = true;
+      logger.info('FirebaseService initialized successfully');
     } catch (error) {
-      console.error('Error initializing Firebase services:', error);
+      logger.error('Failed to initialize FirebaseService:', error);
       throw error;
     }
   }
 
-  private setupConnectionMonitoring() {
-    if (typeof window === 'undefined') return;
-    
-    // Monitor auth state
+  // Provide a no-op initializeBackup if not implemented
+  private initializeBackup() {
+    // No-op for now; implement if needed
+  }
+
+  private setupAuthStateListener() {
     this.authStateUnsubscribe = onAuthStateChanged(this.auth, (user) => {
       if (user) {
         logger.info('User signed in:', user.uid);
@@ -76,7 +104,9 @@ class FirebaseService {
         logger.info('User signed out');
       }
     });
-    
+  }
+
+  private setupConnectionMonitoring() {
     // Monitor database connection
     this.connectionRef = ref(this.db, '.info/connected');
     this.connectionUnsubscribe = onValue(this.connectionRef, (snapshot: DataSnapshot) => {
@@ -492,4 +522,5 @@ class FirebaseService {
   }
 }
 
-export const firebaseService = new FirebaseService()
+// Export an async-initialized singleton
+export const firebaseServicePromise = FirebaseService.createInstance();

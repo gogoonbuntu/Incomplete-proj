@@ -6,6 +6,7 @@ import { ProjectCard } from "@/components/project-card"
 import { LoadingSpinner } from "@/components/loading-spinner"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/hooks/use-auth"
+import { firebaseServicePromise } from '@/lib/services/firebase-service';
 import { projectService } from "@/lib/services/project-service"
 import type { Project } from "@/types/project"
 import { Bookmark, Heart } from "lucide-react"

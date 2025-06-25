@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
 import type { User } from "firebase/auth"
-import { firebaseService } from "@/lib/services/firebase-service"
+import { firebaseServicePromise } from '@/lib/services/firebase-service';
 
 interface AuthContextType {
   user: User | null
@@ -18,18 +18,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const unsubscribe = firebaseService.onAuthStateChanged((user) => {
-      setUser(user)
-      setLoading(false)
-    })
-
-    return unsubscribe
+    let unsubscribe: (() => void) | undefined;
+    firebaseServicePromise.then(firebaseService => {
+      unsubscribe = firebaseService.onAuthStateChanged((user: any) => {
+        setUser(user);
+        setLoading(false);
+      });
+    });
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, [])
 
   const signIn = async () => {
     try {
       setLoading(true)
-      await firebaseService.signInWithGoogle()
+      const firebaseService = await firebaseServicePromise;
+      await firebaseService.signInWithGoogle();
     } catch (error) {
       console.error("Failed to sign in:", error)
     } finally {
@@ -40,7 +45,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = async () => {
     try {
       setLoading(true)
-      await firebaseService.signOut()
+      const firebaseService = await firebaseServicePromise;
+      await firebaseService.signOut();
     } catch (error) {
       console.error("Failed to sign out:", error)
     } finally {
