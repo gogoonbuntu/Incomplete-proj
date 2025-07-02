@@ -29,6 +29,18 @@ export interface Project {
   linesOfCode?: number
   views?: number
   defaultBranch?: string
+  // 프로젝트 설명 자동 업데이트 관련 필드
+  koreanDescription?: string
+  englishDescription?: string
+  isDescriptionUpdated?: boolean
+  lastDescriptionUpdate?: string
+  lastDescriptionUpdateAttempt?: string
+  readme?: {
+    content: string
+    encoding: string
+  }
+  name?: string
+  full_name?: string
 }
 
 export interface FilterOptions {

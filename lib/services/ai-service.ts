@@ -7,6 +7,35 @@ interface SummaryRequest {
   language: string
 }
 
+// 프로젝트 분석 결과 타입
+interface ProjectAnalysis {
+  summary: string
+  techStack: string[]
+  difficulty: string
+  completionStatus: string
+  estimatedTime: string
+  category: string
+  tags: string[]
+  todos: string[]
+  categories: string[]
+}
+
+// GitHub 저장소 타입
+interface Repository {
+  name?: string
+  full_name?: string
+  description?: string
+  language?: string
+  stargazers_count?: number
+  forks_count?: number
+  updated_at?: string
+  created_at?: string
+  html_url?: string
+  owner?: {
+    login?: string
+  }
+}
+
 class AIService {
   private apiKey: string
   private genAI: GoogleGenerativeAI | null = null
@@ -70,9 +99,49 @@ class AIService {
     return true
   }
 
+  /**
+   * 텍스트 생성 메서드 - 프로젝트 설명 업데이트에 사용
+   * @param prompt 텍스트 생성을 위한 프롬프트
+   * @returns 생성된 텍스트 또는 null (오류 발생 시)
+   */
+  async generateText(prompt: string): Promise<string | null> {
+    try {
+      if (!this.genAI) {
+        logger.warn("AI API 키가 설정되지 않아 텍스트 생성을 건너뜁니다.")
+        return null
+      }
+      
+      // 요청 한도 확인
+      const canProceed = await this.checkRateLimit()
+      if (!canProceed) {
+        logger.warn("AI API 한도 초과로 텍스트 생성을 건너뜁니다.")
+        return null
+      }
+      
+      // 텍스트 생성 모델 사용
+      const model = this.genAI.getGenerativeModel({
+        model: "gemini-pro",
+      })
+      
+      // 요청 횟수 증가
+      this.requestCount++
+      this.dailyRequestCount++
+      
+      // 텍스트 생성
+      const result = await model.generateContent(prompt)
+      const response = await result.response
+      const text = response.text()
+      
+      return text
+    } catch (error) {
+      logger.error("텍스트 생성 중 오류:", error)
+      return null
+    }
+  }
+
   // 단일 통합 AI 요청으로 모든 정보를 한 번에 처리
   async analyzeProjectWithAI(
-    repository: any,
+    repository: Repository,
     readme: string,
   ): Promise<{
     summary: string
@@ -165,16 +234,22 @@ README (처음 2000자): ${readme.substring(0, 2000)}
     }
   }
 
-  private getFallbackAnalysis(repository: any, readme: string) {
-    const language = repository.language || "Unknown"
+  private getFallbackAnalysis(repository: Repository, readme: string): ProjectAnalysis {
+    const language = repository.language || "Unknown";
     return {
-      summary: this.getFallbackSummary(repository),
+      summary: "AI 분석을 사용할 수 없습니다. 기본 분석 결과입니다.",
+      techStack: ["Unknown"],
+      difficulty: "Medium",
+      completionStatus: "Unknown",
+      estimatedTime: "Unknown",
+      category: "Other",
+      tags: ["incomplete-project"],
       todos: this.getFallbackTodos(language),
-      categories: this.getFallbackCategories(repository, readme),
+      categories: this.getFallbackCategories(repository, readme)
     }
   }
 
-  private getFallbackSummary(repository: any): string {
+  private getFallbackSummary(repository: Repository): string {
     const language = repository.language || "Unknown"
     const description = repository.description || ""
 
@@ -215,4 +290,9 @@ README (처음 2000자): ${readme.substring(0, 2000)}
   }
 }
 
+
+
 export const aiService = new AIService()
+
+// Promise-based initialization for the AI service
+export const aiServicePromise = Promise.resolve(aiService)

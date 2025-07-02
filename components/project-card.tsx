@@ -80,8 +80,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
             {project.language}
           </Badge>
           <Badge className={`text-xs border ${getScoreColor(project.score)}`}>점수 {project.score}</Badge>
-          {project.categories?.slice(0, 2).map((category) => (
-            <Badge key={category} variant="outline" className="text-xs">
+          {project.categories?.slice(0, 2).map((category, index) => (
+            <Badge key={`${category}-${index}`} variant="outline" className="text-xs">
               {category}
             </Badge>
           ))}

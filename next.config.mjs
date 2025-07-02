@@ -1,9 +1,10 @@
 /** @type {import('next').NextConfig} */
-import { loadEnvConfig } from '@next/env';
+
+// dotenv를 직접 사용하여 환경 변수 로드
+import dotenv from 'dotenv';
 
 // 환경 변수 로드 (개발 환경과 프로덕션 환경 모두 지원)
-const projectDir = process.cwd();
-loadEnvConfig(projectDir);
+dotenv.config({ path: '.env.local' });
 
 const nextConfig = {
   eslint: {
