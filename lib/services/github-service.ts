@@ -52,9 +52,9 @@ class GitHubService {
     
     if (!this.token) {
       console.warn('GITHUB_TOKEN is not set in environment variables. GitHub API 기능이 제한됩니다.')
-      // 개발 환경에서 테스트용 토큰 사용 (실제 API 호출은 제한됨)
+      // 개발 환경에서도 토큰이 필요합니다
       if (process.env.NODE_ENV === 'development') {
-        this.token = '***REMOVED***'
+        console.error('개발 환경에서도 .env.local 파일에 GITHUB_TOKEN을 설정해야 합니다.')
       }
     }
   }

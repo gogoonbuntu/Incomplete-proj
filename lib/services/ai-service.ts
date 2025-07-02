@@ -52,9 +52,9 @@ class AIService {
     
     if (!this.apiKey) {
       console.warn('GEMINI_API_KEY is not set in environment variables. AI 기능이 제한됩니다.')
-      // 개발 환경에서 테스트용 키 사용 (실제 API 호출은 제한됨)
+      // 개발 환경에서도 API 키가 필요합니다
       if (process.env.NODE_ENV === 'development') {
-        this.apiKey = '***REMOVED***'
+        console.error('개발 환경에서도 .env.local 파일에 GEMINI_API_KEY를 설정해야 합니다.')
       }
     }
     
