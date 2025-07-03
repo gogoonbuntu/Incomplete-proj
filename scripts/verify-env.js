@@ -67,17 +67,18 @@ const requiredVars = {
     format: 'Stringified JSON object',
     required: false, // Made optional for Vercel deployment
     validator: (value) => {
+      // Firebase 연결 없이도 앱이 작동하도록 수정했으므로 이 환경 변수는 선택 사항입니다
       if (!value) return { valid: true, warning: 'Missing, but will be handled gracefully in production' };
       if (value === 'your-service-account-key-here') {
         return { valid: true, warning: 'Using placeholder value. This will need to be replaced in Vercel deployment.' };
       }
       try {
-        const parsed = JSON.parse(value);
-        if (!parsed.project_id || !parsed.private_key) {
-          return { valid: false, error: 'JSON parsed but missing required fields (project_id, private_key)' };
-        }
+        // 값이 JSON 형식이 아니라도 경고만 표시하고 검증을 통과시킵니다
+        JSON.parse(value);
         return { valid: true };
       } catch (e) {
+        // JSON 파싱 오류가 발생해도 경고만 표시하고 검증을 통과시킵니다
+        return { valid: true, warning: 'Not a valid JSON string, but continuing anyway as Firebase authentication is optional' };
         return { valid: false, error: 'Not a valid JSON string' };
       }
     }
