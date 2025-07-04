@@ -1,10 +1,22 @@
 /** @type {import('next').NextConfig} */
 
-// dotenv를 직접 사용하여 환경 변수 로드
-import dotenv from 'dotenv';
-
-// 환경 변수 로드 (개발 환경과 프로덕션 환경 모두 지원)
-dotenv.config({ path: '.env.local' });
+// 환경 변수 로드 시도 (개발 환경과 프로덕션 환경 모두 지원)
+try {
+  // ESM에서는 동적 임포트를 사용해야 함
+  const dotenvResult = await import('dotenv').catch(() => ({ default: null }));
+  const dotenv = dotenvResult.default;
+  
+  // dotenv가 있으면 환경 변수 로드
+  if (dotenv) {
+    dotenv.config({ path: '.env.local' });
+    console.log('Environment variables loaded from .env.local');
+  } else {
+    console.log('dotenv module not found, continuing with existing environment variables');
+  }
+} catch (error) {
+  console.log('Error loading environment variables:', error.message);
+  // 오류가 발생해도 빌드는 계속 진행
+}
 
 const nextConfig = {
   eslint: {
