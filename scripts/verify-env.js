@@ -8,9 +8,20 @@
  * node scripts/verify-env.js
  */
 
-require('dotenv').config({ path: '.env.local' });
+try {
+  require('dotenv').config({ path: '.env.local' });
+} catch (error) {
+  console.log('Warning: dotenv package not found, continuing with existing environment variables');
+  // Continue without dotenv, we'll just use the environment variables that are already set
+}
 
-const chalk = require('chalk') || { green: (t) => t, yellow: (t) => t, red: (t) => t };
+let chalk;
+try {
+  chalk = require('chalk');
+} catch (error) {
+  console.log('Warning: chalk package not found, continuing without colors');
+  chalk = { green: (t) => t, yellow: (t) => t, red: (t) => t };
+}
 
 console.log(chalk.green('Verifying environment variables for deployment...\n'));
 
