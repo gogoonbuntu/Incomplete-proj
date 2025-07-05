@@ -36,6 +36,15 @@ const nextConfig = {
     FIREBASE_DATABASE_URL: process.env.FIREBASE_DATABASE_URL,
     FIREBASE_STORAGE_BUCKET: process.env.FIREBASE_STORAGE_BUCKET
   },
+  // 경로 별칭 설정 강화
+  webpack: (config, { isServer }) => {
+    // 절대 경로 별칭 추가
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': process.cwd()
+    };
+    return config;
+  },
 }
 
 export default nextConfig
