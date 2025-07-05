@@ -16,7 +16,7 @@ declare global {
 
 export function GoogleAdSense({ adClient }: GoogleAdSenseProps) {
   // Get client ID from props or environment variable
-  const clientId = adClient || process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT || ""
+  const clientId = adClient || process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT || "ca-pub-3343461027648901"
   
   useEffect(() => {
     // Only run on client side and if client ID exists

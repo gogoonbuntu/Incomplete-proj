@@ -7,6 +7,7 @@ import type { User } from "firebase/auth"
 interface AuthContextType {
   user: User | null
   loading: boolean
+  isAdmin: boolean // 모든 사용자에게 관리자 권한 부여
   signIn: () => Promise<void>
   signOut: () => Promise<void>
 }
@@ -15,6 +16,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: false,
+  isAdmin: true, // 개발 모드에서 항상 관리자로 설정
   signIn: async () => { console.log('로그인 기능 비활성화됨') },
   signOut: async () => { console.log('로그아웃 기능 비활성화됨') }
 })
@@ -33,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, loading, isAdmin: true, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   )

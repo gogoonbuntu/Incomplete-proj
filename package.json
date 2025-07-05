@@ -10,7 +10,8 @@
     "lint": "next lint",
     "prepare-vercel": "node scripts/prepare-vercel-env.js",
     "verify-env": "node scripts/verify-env.js",
-    "update-descriptions": "node scripts/start-description-updater.js"
+    "update-descriptions": "node scripts/start-description-updater.js",
+    "update-summaries": "node scripts/start-summary-updater.js"
   },
   "dependencies": {
     "@google/generative-ai": "latest",
