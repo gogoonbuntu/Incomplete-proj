@@ -2,6 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { db, storage } from "@/lib/firebase-admin";
 import { readFile } from "fs/promises";
 import path from "path";
+import { logger } from "@/services/logger";
 
 // Initialize Gemini API with key from environment variables
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
@@ -63,7 +64,7 @@ export const summaryGenerator = {
         const daysSinceUpdate = (Date.now() - lastUpdate.getTime()) / (1000 * 60 * 60 * 24);
         
         if (daysSinceUpdate < 7) {
-          console.log(`[Summary Generator] Project ${projectData.name} was updated recently (${daysSinceUpdate.toFixed(1)} days ago)`);
+          logger.logSummaryUpdate(`Project ${projectData.name} was updated recently (${daysSinceUpdate.toFixed(1)} days ago) - skipping`);
           return null;
         }
       }
@@ -119,7 +120,7 @@ export const summaryGenerator = {
       const response = result.response;
       const text = response.text();
       
-      console.log(`[Summary Generator] Successfully generated summary for ${projectData.name}`);
+      logger.logSummaryUpdate(`Successfully generated summary for ${projectData.name}`);
       return text;
     } catch (error) {
       console.error("[Summary Generator] Error generating summary:", error);
@@ -135,7 +136,7 @@ export const summaryGenerator = {
         lastSummaryUpdate: new Date().toISOString(),
       });
       
-      console.log(`[Summary Generator] Updated summary for project ${projectId}`);
+      logger.logSummaryUpdate(`Updated summary for project ${projectId}`);
       return true;
     } catch (error) {
       console.error("[Summary Generator] Error updating project summary:", error);
@@ -152,7 +153,7 @@ export const summaryGenerator = {
       return false;
     }
 
-    console.log(`[Summary Generator] Processing project: ${project.name}`);
+    logger.logSummaryUpdate(`Processing project: ${project.name}`);
     const summary = await summaryGenerator.analyzeSummary(project);
     
     if (summary) {

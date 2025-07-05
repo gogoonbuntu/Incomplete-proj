@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { summaryGenerator } from "@/services/summary-generator";
 import { adminAuth } from "@/lib/admin-service";
+import { logger } from "@/services/logger";
 
 // Status tracking for the service
 let isRunning = false;
@@ -61,15 +62,27 @@ export async function GET(request: NextRequest) {
   //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   // }
 
+  // Check for logs parameter
+  const url = new URL(request.url);
+  const showLogs = url.searchParams.get('logs') === 'true';
+  const logLines = url.searchParams.get('lines') ? parseInt(url.searchParams.get('lines')!) : 20;
+  
   checkAndResetCounters();
   
-  return NextResponse.json({
+  // If logs are requested, return the logs as well
+  const responseData: any = {
     isRunning,
     lastRun,
     processedToday,
     apiCallsToday: summaryGenerator.checkAndResetCounter(),
     status
-  });
+  };
+  
+  if (showLogs) {
+    responseData.logs = logger.getSummaryUpdateLog(logLines);
+  }
+  
+  return NextResponse.json(responseData);
 }
 
 // POST handler - start or stop the service

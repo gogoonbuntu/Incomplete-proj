@@ -1,12 +1,16 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useAuth } from "@/hooks/use-auth"
 import { RefreshCw, Play, AlertCircle } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
 
 interface StatusData {
   isRunning: boolean;
@@ -16,30 +20,50 @@ interface StatusData {
   status: string;
 }
 
+interface ServiceStatus {
+  isRunning: boolean;
+  lastRun: string;
+  processedToday: number;
+  apiCallsToday: number;
+  status: string;
+  logs: string;
+}
+
 export default function SummaryUpdaterPage() {
   const { isAdmin } = useAuth();
   const [status, setStatus] = useState<StatusData | null>(null);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [serviceStatus, setServiceStatus] = useState<ServiceStatus>({
+    isRunning: false,
+    lastRun: "",
+    processedToday: 0,
+    apiCallsToday: 0,
+    status: "idle",
+    logs: ""
+  });
   
+  const { toast } = useToast();
+
   // Fetch status from API
-  const fetchStatus = async () => {
+  const fetchStatus = async (includeLog = false) => {
     try {
-      const res = await fetch("/api/admin/summary-updater", {
-        cache: "no-cache",
+      setLoading(true);
+      const url = includeLog
+        ? "/api/admin/summary-updater?logs=true&lines=50"
+        : "/api/admin/summary-updater";
+      
+      const response = await fetch(url);
+      const data = await response.json();
+      setServiceStatus(data);
+    } catch (error) {
+      console.error("Error fetching summary updater status:", error);
+      toast({
+        title: "오류",
+        description: "상태 정보를 가져오는데 실패했습니다.",
+        variant: "destructive",
       });
-      
-      if (!res.ok) {
-        throw new Error(`API returned ${res.status}`);
-      }
-      
-      const data = await res.json();
-      setStatus(data);
-      setError(null);
-    } catch (err) {
-      setError(`오류: ${err instanceof Error ? err.message : "알 수 없는 오류"}`);
-      console.error("Status fetch error:", err);
     } finally {
       setLoading(false);
     }
@@ -79,9 +103,19 @@ export default function SummaryUpdaterPage() {
 
   // Initial load and refresh every 30 seconds
   useEffect(() => {
-    fetchStatus();
-    const interval = setInterval(fetchStatus, 30000);
-    return () => clearInterval(interval);
+    // Initial fetch with logs
+    fetchStatus(true);
+    
+    // Regular status updates (without logs to reduce bandwidth)
+    const interval = setInterval(() => fetchStatus(), 5000);
+    
+    // Get logs every 30 seconds
+    const logInterval = setInterval(() => fetchStatus(true), 30000);
+    
+    return () => {
+      clearInterval(interval);
+      clearInterval(logInterval);
+    };
   }, []);
 
   // Status badge color
@@ -92,6 +126,15 @@ export default function SummaryUpdaterPage() {
       case "error": return "destructive";
       case "idle": return "outline";
       default: return "default";
+    }
+  };
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case "processing": return "처리 중";
+      case "error": return "오류";
+      case "idle": return "대기 중";
+      default: return "알 수 없음";
     }
   };
 
@@ -124,31 +167,79 @@ export default function SummaryUpdaterPage() {
                   <span>로딩 중...</span>
                 </div>
               ) : (
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-muted-foreground">상태:</span>
-                    <Badge variant={getStatusColor(status?.status)}>
-                      {status?.status === "processing" ? "처리 중" : 
-                       status?.status === "error" ? "오류" : 
-                       status?.status === "idle" ? "대기 중" : "알 수 없음"}
-                    </Badge>
-                  </div>
+                <Tabs defaultValue="status" className="w-full">
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="status">상태 정보</TabsTrigger>
+                    <TabsTrigger value="logs">실행 로그</TabsTrigger>
+                  </TabsList>
                   
-                  <div>
-                    <span className="text-muted-foreground">최근 실행:</span>{" "}
-                    {status?.lastRun ? new Date(status.lastRun).toLocaleString() : "없음"}
-                  </div>
+                  <TabsContent value="status">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>프로젝트 요약 생성 상태</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid gap-4">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium">상태:</span>
+                            <Badge variant={getStatusColor(serviceStatus.status)}>
+                              {getStatusText(serviceStatus.status)}
+                            </Badge>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium">마지막 실행:</span>
+                            <span className="text-sm">
+                              {serviceStatus.lastRun
+                                ? new Date(serviceStatus.lastRun).toLocaleString("ko-KR")
+                                : "실행된 적 없음"}
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium">오늘 처리된 프로젝트:</span>
+                            <span className="text-sm">{serviceStatus.processedToday}</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium">오늘 API 호출 수:</span>
+                            <span className="text-sm">{serviceStatus.apiCallsToday}</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                      <CardFooter className="border-t px-6 py-4">
+                        <div className="flex items-center justify-between w-full">
+                          <Button disabled={loading} onClick={processProject}>
+                            프로젝트 하나 처리
+                          </Button>
+                          <Button disabled={loading} onClick={(e) => { e.preventDefault(); fetchStatus(true); }}>
+                            상태 새로고침
+                          </Button>
+                        </div>
+                      </CardFooter>
+                    </Card>
+                  </TabsContent>
                   
-                  <div>
-                    <span className="text-muted-foreground">오늘 처리된 프로젝트:</span>{" "}
-                    {status?.processedToday || 0}개
-                  </div>
-                  
-                  <div>
-                    <span className="text-muted-foreground">오늘 API 호출 횟수:</span>{" "}
-                    {status?.apiCallsToday || 0}회
-                  </div>
-                </div>
+                  <TabsContent value="logs">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>프로젝트 요약 생성 로그</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <Textarea 
+                          value={serviceStatus.logs || "로그가 없습니다."} 
+                          readOnly 
+                          className="font-mono text-xs h-[400px] overflow-y-auto" 
+                        />
+                      </CardContent>
+                      <CardFooter className="border-t px-6 py-4">
+                        <Button 
+                          onClick={(e) => { e.preventDefault(); fetchStatus(true); }}
+                          disabled={loading}
+                        >
+                          로그 새로고침
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  </TabsContent>
+                </Tabs>
               )}
             </div>
             
