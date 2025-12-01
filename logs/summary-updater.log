@@ -1,0 +1,148 @@
+[2025-07-09 10:48:44] 🔄 자동 스케줄러에 의한 프로젝트 요약 업데이트 시작
+[2025-07-09 10:48:44] 모든 프로젝트가 최근 7일 이내에 업데이트되었습니다. 리셋이 필요합니다.
+[2025-07-09 10:48:44] 모든 프로젝트가 최근 7일 내에 업데이트되었습니다. 업데이트 상태를 리셋합니다...
+[2025-07-09 10:48:44] 모든 프로젝트의 업데이트 상태를 리셋합니다...
+[2025-07-09 10:48:44] 프로젝트 업데이트 상태 리셋 완료: 0개 프로젝트 리셋됨
+[2025-07-09 10:48:44] 업데이트 상태를 리셋 완료.
+[2025-07-09 10:48:44] 현재 처리할 프로젝트가 없습니다.
+[2025-07-09 10:53:02] 🔄 자동 스케줄러에 의한 프로젝트 요약 업데이트 시작
+[2025-07-09 10:53:02] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2025-07-09 10:53:02] 업데이트할 프로젝트가 없습니다.
+[2025-07-09 10:53:02] 프로젝트 처리 시작: undefined (ID: undefined)
+[2025-07-09 10:53:03] 프로젝트 요약 생성 실패: undefined
+[2025-07-09 10:55:46] 🔄 자동 스케줄러에 의한 프로젝트 요약 업데이트 시작
+[2025-07-09 10:55:46] 프로젝트 데이터베이스 접근 중...
+[2025-07-09 10:55:46] 총 0개의 프로젝트가 데이터베이스에 있습니다.
+[2025-07-09 10:55:46] 데이터베이스에 프로젝트가 없습니다. 테스트 프로젝트를 생성하거나 데이터를 가져와야 합니다.
+[2025-07-09 10:55:46] 현재 처리할 프로젝트가 없습니다.
+[2025-07-09 10:56:45] 테스트 프로젝트 생성 완료: test-project-1752026205897
+[2025-07-09 10:57:04] 🔄 자동 스케줄러에 의한 프로젝트 요약 업데이트 시작
+[2025-07-09 10:57:04] 프로젝트 데이터베이스 접근 중...
+[2025-07-09 10:57:04] 총 1개의 프로젝트가 데이터베이스에 있습니다.
+[2025-07-09 10:57:04] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2025-07-09 10:57:04] 가장 오래된 프로젝트 찾는 중...
+[2025-07-09 10:57:04] 프로젝트 데이터: id=test-project-1752026205897, name=테스트 프로젝트 1752026205897, 마지막 업데이트=2019-12-31T15:00:00.000Z
+[2025-07-09 10:57:04] 업데이트할 프로젝트를 찾았습니다: 테스트 프로젝트 1752026205897 (ID: test-project-1752026205897)
+[2025-07-09 10:57:04] 프로젝트 처리 시작: 테스트 프로젝트 1752026205897 (ID: test-project-1752026205897)
+[2025-07-09 10:57:05] 프로젝트 요약 생성 실패: 테스트 프로젝트 1752026205897
+[2025-07-09 20:42:01] 🔄 자동 스케줄러에 의한 프로젝트 요약 업데이트 시작
+[2025-07-09 20:42:01] 프로젝트 데이터베이스 접근 중...
+[2025-07-09 20:42:01] 총 1개의 프로젝트가 데이터베이스에 있습니다.
+[2025-07-09 20:42:01] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2025-07-09 20:42:01] 가장 오래된 프로젝트 찾는 중...
+[2025-07-09 20:42:01] 프로젝트 데이터: id=test-project-1752026205897, name=테스트 프로젝트 1752026205897, 마지막 업데이트=2019-12-31T15:00:00.000Z
+[2025-07-09 20:42:01] 업데이트할 프로젝트를 찾았습니다: 테스트 프로젝트 1752026205897 (ID: test-project-1752026205897)
+[2025-07-09 20:42:01] 프로젝트 처리 시작: 테스트 프로젝트 1752026205897 (ID: test-project-1752026205897)
+[2025-07-09 20:42:01] Gemini API 키 확인: AIza...H87M (39자리)
+[2025-07-09 20:42:01] 프로젝트 테스트 프로젝트 1752026205897 (ID: test-project-1752026205897)에 대한 요약 생성 시도 중...
+[2025-07-09 20:42:01] Gemini API 호출 중...
+[2025-07-09 20:42:03] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [{"@type":"type.googleapis.com/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_input_token_count","quotaId":"GenerateContentInputTokensPerModelPerMinute-FreeTier","quotaDimensions":{"location":"global","model":"gemini-1.5-pro"}},{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerMinutePerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-1.5-pro"}},{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-1.5-pro"}}]},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https://ai.google.dev/gemini-api/docs/rate-limits"}]},{"@type":"type.googleapis.com/google.rpc.RetryInfo","retryDelay":"57s"}]
+[2025-07-09 20:42:03] API 키가 유효하지 않거나 만료되었을 수 있습니다. .env.local 파일에서 확인해주세요.
+[2025-07-09 20:42:03] 프로젝트 요약 생성 실패: 테스트 프로젝트 1752026205897
+[2025-07-10 16:26:15] 🔄 자동 스케줄러에 의한 프로젝트 요약 업데이트 시작
+[2025-07-10 16:26:15] 프로젝트 데이터베이스 접근 중...
+[2025-07-10 16:26:15] 총 1개의 프로젝트가 데이터베이스에 있습니다.
+[2025-07-10 16:26:15] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2025-07-10 16:26:15] 가장 오래된 프로젝트 찾는 중...
+[2025-07-10 16:26:15] 프로젝트 데이터: id=test-project-1752026205897, name=테스트 프로젝트 1752026205897, 마지막 업데이트=2019-12-31T15:00:00.000Z
+[2025-07-10 16:26:15] 업데이트할 프로젝트를 찾았습니다: 테스트 프로젝트 1752026205897 (ID: test-project-1752026205897)
+[2025-07-10 16:26:15] 프로젝트 처리 시작: 테스트 프로젝트 1752026205897 (ID: test-project-1752026205897)
+[2025-07-10 16:26:15] Gemini API 키 확인: AIza...H87M (39자리)
+[2025-07-10 16:26:15] 프로젝트 테스트 프로젝트 1752026205897 (ID: test-project-1752026205897)에 대한 요약 생성 시도 중...
+[2025-07-10 16:26:15] Gemini API 호출 중...
+[2025-07-10 16:26:16] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [{"@type":"type.googleapis.com/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_input_token_count","quotaId":"GenerateContentInputTokensPerModelPerMinute-FreeTier","quotaDimensions":{"location":"global","model":"gemini-1.5-pro"}},{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerMinutePerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-1.5-pro"}},{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-1.5-pro"}}]},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https://ai.google.dev/gemini-api/docs/rate-limits"}]},{"@type":"type.googleapis.com/google.rpc.RetryInfo","retryDelay":"43s"}]
+[2025-07-10 16:26:16] 크레딧 제한으로 인한 오류. 다음 시도에서 최대 1번 재시도할 예정
+[2025-07-10 16:26:16] 프로젝트 요약 생성 실패: 테스트 프로젝트 1752026205897
+[2025-07-10 16:31:44] 총 1개의 Gemini API 키가 로드되었습니다.
+[2025-07-10 16:31:44] API 키 관리자 초기화: 1개의 Gemini API 키 로드됨
+[2025-07-10 16:31:44] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2025-07-10 16:31:44] 🔄 자동 스케줄러에 의한 프로젝트 요약 업데이트 시작
+[2025-07-10 16:31:44] API 키 상태: 전체 1개, 사용 가능 1개, 실패 0개
+[2025-07-10 16:31:44] 프로젝트 데이터베이스 접근 중...
+[2025-07-10 16:31:44] 총 1개의 프로젝트가 데이터베이스에 있습니다.
+[2025-07-10 16:31:44] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2025-07-10 16:31:44] 가장 오래된 프로젝트 찾는 중...
+[2025-07-10 16:31:44] 프로젝트 데이터: id=test-project-1752026205897, name=테스트 프로젝트 1752026205897, 마지막 업데이트=2019-12-31T15:00:00.000Z
+[2025-07-10 16:31:44] 업데이트할 프로젝트를 찾았습니다: 테스트 프로젝트 1752026205897 (ID: test-project-1752026205897)
+[2025-07-10 16:31:44] 프로젝트 처리 시작: 테스트 프로젝트 1752026205897 (ID: test-project-1752026205897)
+[2025-07-10 16:31:44] 프로젝트 테스트 프로젝트 1752026205897 (ID: test-project-1752026205897)에 대한 요약 생성 시도 중...
+[2025-07-10 16:31:44] Gemini API 호출 중...
+[2025-07-10 16:31:45] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [{"@type":"type.googleapis.com/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_input_token_count","quotaId":"GenerateContentInputTokensPerModelPerMinute-FreeTier","quotaDimensions":{"location":"global","model":"gemini-1.5-pro"}},{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerMinutePerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-1.5-pro"}},{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-1.5-pro"}}]},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https://ai.google.dev/gemini-api/docs/rate-limits"}]},{"@type":"type.googleapis.com/google.rpc.RetryInfo","retryDelay":"14s"}]
+[2025-07-10 16:31:45] 크레딧 제한으로 인한 오류. API 키 로테이션 시도 중... (1/5)
+[2025-07-10 16:31:45] ❌ 모든 Gemini API 키가 실패했습니다. 나중에 다시 시도하세요.
+[2025-07-10 16:31:45] 모든 API 키가 크레딧 한도에 도달했습니다. 나중에 다시 시도하세요.
+[2025-07-10 16:31:45] 프로젝트 요약 생성 실패: 테스트 프로젝트 1752026205897
+[2025-07-11 13:25:31] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-07-11 13:25:31] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-07-11 13:25:52] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-07-11 13:25:52] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-07-11 13:25:52] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2025-07-11 13:25:52] 🔄 자동 스케줄러에 의한 프로젝트 요약 업데이트 시작
+[2025-07-11 13:25:52] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2025-07-11 13:25:52] 프로젝트 데이터베이스 접근 중...
+[2025-07-11 13:25:52] 총 1개의 프로젝트가 데이터베이스에 있습니다.
+[2025-07-11 13:25:52] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2025-07-11 13:25:52] 가장 오래된 프로젝트 찾는 중...
+[2025-07-11 13:25:52] 프로젝트 데이터: id=test-project-1752026205897, name=테스트 프로젝트 1752026205897, 마지막 업데이트=2019-12-31T15:00:00.000Z
+[2025-07-11 13:25:52] 업데이트할 프로젝트를 찾았습니다: 테스트 프로젝트 1752026205897 (ID: test-project-1752026205897)
+[2025-07-11 13:25:52] 프로젝트 처리 시작: 테스트 프로젝트 1752026205897 (ID: test-project-1752026205897)
+[2025-07-11 13:25:52] 프로젝트 테스트 프로젝트 1752026205897 (ID: test-project-1752026205897)에 대한 요약 생성 시도 중...
+[2025-07-11 13:25:52] Gemini API 호출 중...
+[2025-07-11 13:25:53] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [{"@type":"type.googleapis.com/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_input_token_count","quotaId":"GenerateContentInputTokensPerModelPerMinute-FreeTier","quotaDimensions":{"model":"gemini-1.5-pro","location":"global"}},{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerMinutePerProjectPerModel-FreeTier","quotaDimensions":{"model":"gemini-1.5-pro","location":"global"}},{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-1.5-pro"}}]},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https://ai.google.dev/gemini-api/docs/rate-limits"}]},{"@type":"type.googleapis.com/google.rpc.RetryInfo","retryDelay":"7s"}]
+[2025-07-11 13:25:53] 크레딧 제한으로 인한 오류. API 키 로테이션 시도 중... (1/5)
+[2025-07-11 13:25:53] 🔄 Gemini API 키 로테이션: 키 #1에서 키 #2로 전환합니다.
+[2025-07-11 13:25:53] Gemini API 클라이언트 초기화됨: AIza...1iS4 (39자리)
+[2025-07-11 13:25:53] Gemini API 호출 중...
+[2025-07-11 13:25:53] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [{"@type":"type.googleapis.com/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_input_token_count","quotaId":"GenerateContentInputTokensPerModelPerMinute-FreeTier","quotaDimensions":{"location":"global","model":"gemini-1.5-pro"}},{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerMinutePerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-1.5-pro"}},{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-1.5-pro"}}]},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https://ai.google.dev/gemini-api/docs/rate-limits"}]},{"@type":"type.googleapis.com/google.rpc.RetryInfo","retryDelay":"6s"}]
+[2025-07-11 13:25:53] 크레딧 제한으로 인한 오류. API 키 로테이션 시도 중... (2/5)
+[2025-07-11 13:25:53] ❌ 모든 Gemini API 키가 실패했습니다. 나중에 다시 시도하세요.
+[2025-07-11 13:25:53] 모든 API 키가 크레딧 한도에 도달했습니다. 나중에 다시 시도하세요.
+[2025-07-11 13:25:53] 프로젝트 요약 생성 실패: 테스트 프로젝트 1752026205897
+[2025-11-27 17:39:59] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-11-27 17:39:59] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-11-27 17:39:59] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-11-27 17:39:59] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-11-27 17:39:59] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2025-11-27 17:39:59] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2025-11-27 17:40:00] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-11-27 17:40:00] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-11-27 17:40:01] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2025-12-01 15:34:26] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-12-01 15:34:26] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-12-01 15:34:26] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-12-01 15:34:26] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-12-01 15:34:27] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-12-01 15:34:27] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-12-01 15:34:27] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2025-12-01 15:34:27] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2025-12-01 15:34:28] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-12-01 15:34:28] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-12-01 16:57:25] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-12-01 16:57:25] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-12-01 16:57:25] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-12-01 16:57:25] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-12-01 16:57:25] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-12-01 16:57:25] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-12-01 16:57:25] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2025-12-01 16:57:25] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2025-12-01 16:57:27] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-12-01 16:57:27] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-12-01 17:07:10] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-12-01 17:07:10] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-12-01 17:07:10] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-12-01 17:07:10] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-12-01 17:07:10] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2025-12-01 17:07:10] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2025-12-01 17:07:11] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-12-01 17:07:11] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-12-01 18:50:02] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-12-01 18:50:02] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-12-01 18:50:02] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-12-01 18:50:02] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-12-01 18:50:02] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-12-01 18:50:02] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-12-01 18:50:02] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2025-12-01 18:50:02] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2025-12-01 18:50:04] 총 2개의 Gemini API 키가 로드되었습니다.
+[2025-12-01 18:50:04] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2025-12-01 18:50:04] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)

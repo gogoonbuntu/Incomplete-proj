@@ -198,14 +198,16 @@ class AIService {
 설명: ${repository.description || "설명 없음"}
 README (처음 2000자): ${readme.substring(0, 2000)}
 
-다음 형식으로 JSON 응답해주세요:
+아래 형식의 JSON으로만 응답하세요 (추가 텍스트 금지):
 {
-  "summary": "프로젝트 요약 (200자 이내)",
+  "summary_ko": "프로젝트 요약 (한국어, 200자 이내)",
+  "summary_en": "Project summary in English (max 2-3 sentences)",
   "todos": ["완성을 위한 작업1", "작업2", "작업3", "작업4", "작업5"],
   "categories": ["카테고리1", "카테고리2"]
 }
 
 카테고리는 다음 중에서 선택: web-development, mobile-app, cli-tool, api, game, data-science, machine-learning, devtools, library, prototype
+요약은 한국어/영어 버전을 각각 summary_ko, summary_en에 담아주세요.
 `
 
       this.requestCount++
@@ -219,8 +221,15 @@ README (처음 2000자): ${readme.substring(0, 2000)}
       try {
         const parsed = JSON.parse(text)
         logger.success(`통합 AI 분석 완료: ${repository.full_name}`)
+
+        const summaryKo = parsed.summary_ko || this.getFallbackSummary(repository)
+        const summaryEn = parsed.summary_en || ""
+        const combinedSummary = summaryEn
+          ? `KOREAN SUMMARY:\n${summaryKo}\n\nENGLISH SUMMARY:\n${summaryEn}`
+          : summaryKo
+
         return {
-          summary: parsed.summary || this.getFallbackSummary(repository),
+          summary: combinedSummary,
           todos: Array.isArray(parsed.todos) ? parsed.todos.slice(0, 5) : [],
           categories: Array.isArray(parsed.categories) ? parsed.categories.slice(0, 2) : ["prototype"],
         }

@@ -185,23 +185,23 @@ class GitHubService {
 
   // 더 다양하고 관대한 검색 조건으로 수정
   async findUnfinishedProjects(): Promise<GitHubRepository[]> {
-    // 더 다양한 검색 조건 추가
+    // 더 다양한 검색 조건 추가 (모든 쿼리는 최소 10개 이상의 스타를 가진 저장소만 검색)
     const queries = [
-      // 최근 업데이트된 프로젝트들 (더 관대한 조건)
-      "stars:1..50 pushed:>2023-06-01 size:50..5000 archived:false language:JavaScript",
-      "stars:1..50 pushed:>2023-06-01 size:50..5000 archived:false language:TypeScript",
-      "stars:1..30 pushed:>2023-06-01 size:50..3000 archived:false language:Python",
-      "stars:1..30 pushed:>2023-06-01 size:50..3000 archived:false language:Java",
-      "stars:1..20 pushed:>2023-06-01 size:50..2000 archived:false language:Go",
-      "stars:1..20 pushed:>2023-06-01 size:50..2000 archived:false language:Rust",
-      // TODO나 FIXME가 포함된 프로젝트들
-      "TODO in:readme stars:1..20 pushed:>2023-01-01 archived:false",
-      "FIXME in:readme stars:1..15 pushed:>2023-01-01 archived:false",
-      // 특정 키워드가 포함된 미완성 프로젝트들
-      "incomplete in:name,description stars:1..20 pushed:>2023-01-01 archived:false",
-      "unfinished in:name,description stars:1..20 pushed:>2023-01-01 archived:false",
-      "prototype in:name,description stars:1..25 pushed:>2023-01-01 archived:false",
-      "work-in-progress in:name,description stars:1..15 pushed:>2023-01-01 archived:false",
+      // 최근 업데이트된 프로젝트들 (최소 10 스타 이상)
+      "stars:10..50 pushed:>2023-06-01 size:50..5000 archived:false language:JavaScript",
+      "stars:10..50 pushed:>2023-06-01 size:50..5000 archived:false language:TypeScript",
+      "stars:10..100 pushed:>2023-06-01 size:50..5000 archived:false language:Python",
+      "stars:10..100 pushed:>2023-06-01 size:50..5000 archived:false language:Java",
+      "stars:10..100 pushed:>2023-06-01 size:50..5000 archived:false language:Go",
+      "stars:10..100 pushed:>2023-06-01 size:50..5000 archived:false language:Rust",
+      // TODO나 FIXME가 포함된 프로젝트들 (최소 10 스타 이상)
+      "TODO in:readme stars:10..200 pushed:>2023-01-01 archived:false",
+      "FIXME in:readme stars:10..200 pushed:>2023-01-01 archived:false",
+      // 특정 키워드가 포함된 미완성 프로젝트들 (최소 10 스타 이상)
+      "incomplete in:name,description stars:10..200 pushed:>2023-01-01 archived:false",
+      "unfinished in:name,description stars:10..200 pushed:>2023-01-01 archived:false",
+      "prototype in:name,description stars:10..200 pushed:>2023-01-01 archived:false",
+      "work-in-progress in:name,description stars:10..200 pushed:>2023-01-01 archived:false",
     ]
 
     const allRepos: GitHubRepository[] = []
@@ -248,8 +248,12 @@ class GitHubService {
 
     console.log(`중복 제거 후: ${uniqueRepos.length}개 고유 저장소`)
 
+    // 최소 스타 10개 이상인 저장소만 남김 (이중 안전장치)
+    const starredRepos = uniqueRepos.filter((repo) => repo.stargazers_count >= 10)
+    console.log(`스타 10개 이상 필터 후: ${starredRepos.length}개 저장소`)
+
     // 더 많은 프로젝트 반환 (50개로 증가)
-    const finalRepos = uniqueRepos.slice(0, 50)
+    const finalRepos = starredRepos.slice(0, 50)
     console.log(`최종 반환: ${finalRepos.length}개 저장소`)
 
     // 각 저장소의 기본 정보 로깅

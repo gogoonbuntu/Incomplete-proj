@@ -1,0 +1,12 @@
+# 여러 Gemini API 키 설정 예시
+# .env.local 파일에 다음과 같이 추가하세요
+
+# 기본 Gemini API 키
+GEMINI_API_KEY=AIza...your-original-api-key
+
+# 추가 Gemini API 키 (1번부터 5번까지 설정 가능)
+GEMINI_API_KEY_1=AIza...your-second-api-key
+GEMINI_API_KEY_2=AIza...your-third-api-key
+GEMINI_API_KEY_3=AIza...your-fourth-api-key
+# GEMINI_API_KEY_4=AIza...
+# GEMINI_API_KEY_5=AIza...
