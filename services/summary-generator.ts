@@ -1,9 +1,11 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import Groq from "groq-sdk";
 import { db, storage } from "../lib/firebase-admin";
 import { readFile } from "fs/promises";
 import path from "path";
 import { logger } from "./logger";
 import { apiKeyManager } from "./api-key-manager";
+import { githubService } from "./github-service";
 import { Timestamp, FieldValue, DocumentSnapshot, DocumentData, Firestore } from "firebase-admin/firestore";
 
 // DB가 null이 아님을 확인
@@ -17,6 +19,7 @@ const firestore = db as Firestore;
 // API 인스턴스를 저장할 변수들
 let genAI: GoogleGenerativeAI;
 let model: any;
+let groq: Groq | null = null;
 
 // 현재 API 키로 Gemini API 클라이언트 초기화
 function initializeGeminiApi() {
@@ -41,8 +44,27 @@ function initializeGeminiApi() {
   }
 }
 
+// Groq API 초기화
+function initializeGroqApi() {
+  const apiKey = apiKeyManager.getGroqApiKey();
+  if (!apiKey) {
+    logger.logSummaryUpdate("⚠️ Groq API를 초기화할 수 없습니다: API 키가 없습니다.");
+    return false;
+  }
+
+  try {
+    groq = new Groq({ apiKey });
+    logger.logSummaryUpdate("Groq API 클라이언트 초기화됨 (폴백용)");
+    return true;
+  } catch (error) {
+    logger.logSummaryUpdate(`⚠️ Groq API 초기화 오류: ${error}`);
+    return false;
+  }
+}
+
 // 초기 API 클라이언트 설정
 initializeGeminiApi();
+initializeGroqApi();
 
 // Initialize counters to track API usage
 let apiCallsToday = 0;
@@ -112,13 +134,13 @@ export const summaryGenerator = {
   },
 
   // Check if we've hit API limits and determine if we can make a call now
-  canMakeApiCall: (maxCallsPerDay = 50, maxCallsPerMinute = 10) => {
+  canMakeApiCall: (maxCallsPerDay = 500, maxCallsPerMinute = 30) => {
     const counters = summaryGenerator.checkAndResetCounter();
     
     // API 키 상태 확인
     const keyStats = apiKeyManager.getStats();
-    if (keyStats.available === 0 && keyStats.total > 0) {
-      logger.logSummaryUpdate(`모든 API 키(${keyStats.total}개)가 사용 불가 상태입니다.`);
+    if (keyStats.available === 0 && keyStats.total > 0 && !apiKeyManager.getGroqApiKey()) {
+      logger.logSummaryUpdate(`모든 API 키(${keyStats.total}개)가 사용 불가 상태이며 Groq 폴백이 없습니다.`);
       return false;
     }
     
@@ -126,8 +148,8 @@ export const summaryGenerator = {
     if (counters.dailyCalls >= maxCallsPerDay) {
       logger.logSummaryUpdate(`일일 API 호출 한도(${maxCallsPerDay}) 초과: ${counters.dailyCalls}`);
       // API 키가 여러 개 있을 경우 일일 한도가 키마다 별도로 적용될 수 있음
-      if (keyStats.available > 1) {
-        logger.logSummaryUpdate(`다른 API 키를 사용할 수 있습니다(${keyStats.available}개 사용 가능). 계속 진행합니다.`);
+      if (keyStats.available > 1 || apiKeyManager.getGroqApiKey()) {
+        logger.logSummaryUpdate(`다른 API 키나 Groq를 사용할 수 있습니다. 계속 진행합니다.`);
         return true;
       }
       return false;
@@ -312,7 +334,7 @@ export const summaryGenerator = {
   // Analyze README content and generate summary
   analyzeSummary: async (projectData: ProjectData): Promise<string | null> => {
     // 일일 API 호출 제한 확인
-    if (!summaryGenerator.canMakeApiCall() && apiKeyManager.getStats().available === 0) {
+    if (!summaryGenerator.canMakeApiCall() && apiKeyManager.getStats().available === 0 && !apiKeyManager.getGroqApiKey()) {
       logger.logSummaryUpdate("API 호출 일일 한도에 도달했고 사용 가능한 API 키가 없습니다.");
       return null;
     }
@@ -321,57 +343,88 @@ export const summaryGenerator = {
       // API 초기화 상태 확인
       if (!model) {
         const initialized = initializeGeminiApi();
-        if (!initialized) {
+        if (!initialized && !apiKeyManager.getGroqApiKey()) {
           logger.logSummaryUpdate("Gemini API 클라이언트를 초기화할 수 없습니다.");
           return null;
         }
       }
       
-      logger.logSummaryUpdate(`프로젝트 ${projectData.name} (ID: ${projectData.id})에 대한 요약 생성 시도 중...`);
+      logger.logSummaryUpdate(`프로젝트 ${projectData.name} (ID: ${projectData.id}) 정밀 분석 중...`);
+
+      // NEW: Get more technical context (File Tree and Entry Point)
+      const owner = 'tmddud333'; // Default owner
+      const repo = projectData.name;
       
-      // Create prompt for Gemini API
+      let fileTree: string[] = [];
+      let packageJsonContent: string | null = null;
+      let mainCode: string | null = null;
+
+      try {
+        [fileTree, packageJsonContent, mainCode] = await Promise.all([
+          githubService.fetchFileTree(owner, repo),
+          githubService.fetchFileContent(owner, repo, 'package.json'),
+          githubService.fetchFileContent(owner, repo, 'src/index.ts') || 
+          githubService.fetchFileContent(owner, repo, 'index.ts') || 
+          githubService.fetchFileContent(owner, repo, 'main.py') ||
+          githubService.fetchFileContent(owner, repo, 'app.py')
+        ]);
+      } catch (e) {
+        logger.logSummaryUpdate(`GitHub 추가 데이터 획득 실패 (기본 정보로 진행): ${projectData.name}`);
+      }
+
+      // Optimize context: Parse dependencies from package.json if available
+      let dependencies = "Unknown";
+      if (packageJsonContent) {
+        try {
+          const pkg = JSON.parse(packageJsonContent);
+          dependencies = Object.keys(pkg.dependencies || {}).join(', ') || "No dependencies found";
+        } catch (e) {}
+      }
+
+      const technicalContext = {
+        files: fileTree.slice(0, 15).join(', '),
+        dependencies,
+        codeSnippet: mainCode ? mainCode.substring(0, 1200) : "No significant entry file code available"
+      };
+      
+      // Create prompt for Principal Architect (Objective & Strategic)
       const prompt = `
-      You are an assistant that analyzes GitHub projects and writes clear descriptions in both Korean and English.
-      Use the following information about a project:
-      
-      Project Name: ${projectData.name}
-      Current Description: ${projectData.description || "No description available"}
-      Primary Language: ${projectData.language || "Unknown"}
-      
-      ${projectData.readme ? `README Content (first 4000 chars): ${projectData.readme.substring(0, 4000)}...` : "No README available"}
-      
-      Your task:
-      1. Analyze the project and write a concise Korean summary (2-3 sentences) that explains what this project does and why it is interesting.
-      2. Write a concise English summary (2-3 sentences) that explains the same content for international users.
-      3. Write a bullet list (in Korean) of 3-5 main features or purposes of this project.
-      4. Write a short technical overview paragraph (in Korean) highlighting the frameworks, languages, or libraries used.
-      5. Choose 1-3 categories that best describe this project from the following list and output them as simple English identifiers:
-         web-development, mobile-app, cli-tool, api, game, data-science, machine-learning, devtools, library, prototype, other
-      
-      Very Important:
-      - All Korean natural language sentences (summary, features, technical explanation) MUST be written in Korean only.
-      - The English summary MUST be written in clear, professional English.
-      - Category names MUST be chosen only from the given list and written exactly as they appear.
-      - Do not mix multiple languages in a single sentence.
-      
-      Format the response exactly as follows (keep the section titles in English, but the content where indicated):
-      
-      KOREAN SUMMARY:
-      [한 문단 요약 (한국어)]
-      
-      ENGLISH SUMMARY:
-      [One-paragraph summary in English]
-      
-      FEATURES:
-      - [특징 1 (한국어)]
-      - [특징 2 (한국어)]
-      - [특징 3 (한국어)]
-      
-      TECHNICAL:
-      [기술적 개요 (한국어)]
-      
-      CATEGORIES:
-      [comma-separated English category identifiers from the list above, e.g. "web-development, api"]
+당신은 수만 개의 시스템을 설계하고 검토해 온 **수석 소프트웨어 아키텍트(Principal Architect)**입니다.
+제공된 데이터를 바탕으로 이 프로젝트에 대한 **냉철한 공학적 감사(Engineering Audit)**와 **전략적 조언**을 작성하세요. 
+과장된 마케팅 용어는 배제하고, 엔지니어가 읽었을 때 신뢰할 수 있는 실무적 통찰만 담으세요.
+
+[엔지니어링 데이터]
+- 프로젝트명: ${projectData.name}
+- 핵심 스택: ${projectData.language} / ${technicalContext.dependencies}
+- 아키텍처 토폴로지: ${technicalContext.files}
+- 핵심 구현부(Partial): 
+\`\`\`
+${technicalContext.codeSnippet}
+\`\`\`
+- 문서화 상태: ${projectData.readme ? "README 제공됨" : "문서 없음"}
+
+[분석 가이드라인]
+1. **의도 파악(Intent)**: 파일 구조와 사용된 패키지(예: cron, redis, socket.io 등)를 결합하여, 이 프로젝트가 해결하려는 구체적인 '페인 포인트'를 정의하세요.
+2. **현상태 진단(Assessment)**: 코드와 구조에서 보이는 설계적 특징(예: 모듈화 수준, 관심사 분리 여부)을 객관적으로 서술하세요. 없는 기능을 있다고 하지 마세요.
+3. **실용적 활용 방향(Direction)**: 이 프로젝트가 어떤 서비스의 프로토타입으로 적합한지, 혹은 어떤 시스템의 컴포넌트로 흡수될 수 있을지 비즈니스적/기술적 유즈케이스를 제안하세요.
+4. **엔지니어링 제언**: "훌륭합니다" 같은 칭찬 대신, "현 구조에서는 ~부분의 병목이 예상되므로 ~패턴으로의 리팩토링이 우선됨"과 같은 실무적 조언을 하세요.
+
+[응답 형식]
+
+KOREAN SUMMARY:
+[프로젝트의 본질적 용도와 현재의 기술적 성숙도를 냉철하게 요약한 한국어 리포트 (한 문단)]
+
+ENGLISH SUMMARY:
+[Objective technical evaluation and strategic value proposition in professional English]
+
+FEATURES:
+- [코드와 구조에서 확인된 실질적인 기술적/기능적 명세 3-5가지 (한국어)]
+
+TECHNICAL:
+[의존성 기반의 기술적 특이사항 분석 및 아키텍처 고도화를 위한 구체적인 기술 로드맵 제언 (한국어)]
+
+CATEGORIES:
+[web-development, mobile-app, cli-tool, api, game, data-science, machine-learning, devtools, library, prototype, other 중 1-3개]
       `;
 
       // API 호출 및 키 로테이션 로직 구현
@@ -379,67 +432,81 @@ export const summaryGenerator = {
       let keyRotationCount = 0;
       const MAX_KEY_ROTATIONS = 5; // 최대 키 로테이션 시도 횟수
       
-      // 초기 시도 + 재시도 + 키 로테이션
+      // 1. Gemini 시도
       while (attemptCount <= retryAttemptsCounter || keyRotationCount < MAX_KEY_ROTATIONS) {
         try {
+          if (!model) break;
+
           if (attemptCount > 0) {
             logger.logSummaryUpdate(`🔄 Gemini API 재시도 중... (시도 ${attemptCount}/${retryAttemptsCounter})`);
-            // 재시도 간에 잠시 지연
             await new Promise(resolve => setTimeout(resolve, RETRY_DELAY_MS));
           } else {
             logger.logSummaryUpdate("Gemini API 호출 중...");
-            // 첫 시도에만 API 카운터 증가
             apiCallsToday++;
             apiCallsThisMinute++;
           }
           
-          // API 호출
           const result = await model.generateContent(prompt);
           const response = result.response;
           const text = response.text();
           
-          // 성공했으면 재시도 카운터 초기화
           retryAttemptsCounter = 0;
           lastRetryTime = 0;
           
-          logger.logSummaryUpdate(`요약 생성 성공: ${projectData.name} (${text.length}자)`);
+          logger.logSummaryUpdate(`요약 생성 성공 (Gemini): ${projectData.name}`);
           return text;
         } catch (apiError: any) {
           const errorMessage = apiError?.message || String(apiError);
           logger.logSummaryUpdate(`⚠️ Gemini API 오류: ${errorMessage}`);
           
-          // 크레딧 제한 관련 오류인지 확인
           const isCreditLimitError = errorMessage.includes("quota") || 
                                    errorMessage.includes("rate limit") || 
                                    errorMessage.includes("credit") ||
                                    errorMessage.includes("exceeded") ||
-                                   errorMessage.includes("limit");
+                                   errorMessage.includes("limit") ||
+                                   errorMessage.includes("suspended");
           
-          // 현재 API 키를 가져와서 실패 보고
           const currentKey = apiKeyManager.getCurrentGeminiApiKey();
           
           if (isCreditLimitError && currentKey) {
-            // 키 로테이션 시도
-            logger.logSummaryUpdate(`크레딧 제한으로 인한 오류. API 키 로테이션 시도 중... (${keyRotationCount + 1}/${MAX_KEY_ROTATIONS})`);            
+            logger.logSummaryUpdate(`키 로테이션 시도 중... (${keyRotationCount + 1}/${MAX_KEY_ROTATIONS})`);            
             const newKey = apiKeyManager.reportFailedGeminiKey(currentKey, errorMessage);
             
             if (newKey) {
-              // 새로운 키로 API 클라이언트 초기화
               initializeGeminiApi();
               keyRotationCount++;
-              attemptCount = 0; // 새 키로 재시도 카운터 초기화
+              attemptCount = 0;
               continue;
             } else {
-              logger.logSummaryUpdate("모든 API 키가 크레딧 한도에 도달했습니다. 나중에 다시 시도하세요.");
+              logger.logSummaryUpdate("모든 Gemini API 키가 실패했습니다.");
               break;
             }
           } else if (attemptCount < retryAttemptsCounter) {
-            // 크레딧 제한 오류가 아니거나, 현재 키에서 재시도 가능한 경우
             attemptCount++;
             continue;
           } else {
-            logger.logSummaryUpdate(`재시도 한도(${retryAttemptsCounter})에 도달했습니다. 요약 생성 실패.`);
             break;
+          }
+        }
+      }
+
+      // 2. Groq 폴백 시도
+      if (apiKeyManager.getGroqApiKey()) {
+        if (!groq) initializeGroqApi();
+        if (groq) {
+          try {
+            logger.logSummaryUpdate(`Groq API로 폴백 시도 중: ${projectData.name}`);
+            const completion = await groq.chat.completions.create({
+              messages: [{ role: "user", content: prompt }],
+              model: "llama-3.3-70b-versatile",
+            });
+            const text = completion.choices[0]?.message?.content || null;
+            if (text) {
+              logger.logSummaryUpdate(`요약 생성 성공 (Groq): ${projectData.name}`);
+              return text;
+            }
+          } catch (groqError: any) {
+            logger.logSummaryUpdate(`⚠️ Groq API 오류: ${groqError?.message || String(groqError)}`);
           }
         }
       }

@@ -155,3 +155,801 @@
 [2025-12-02 13:53:18] 총 2개의 Gemini API 키가 로드되었습니다.
 [2025-12-02 13:53:18] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
 [2025-12-02 13:53:19] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2026-02-19 14:57:59] 총 2개의 Gemini API 키가 로드되었습니다.
+[2026-02-19 14:57:59] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2026-02-19 14:57:59] Groq API 키가 로드되었습니다.
+[2026-02-19 14:57:59] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2026-02-19 14:57:59] Groq API 클라이언트 초기화됨 (폴백용)
+[2026-02-19 14:57:59] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-19 14:57:59] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 14:58:00] 총 1개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 14:58:00] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 14:58:00] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 14:58:00] 프로젝트 데이터: id=test-project-1752026205897, name=테스트 프로젝트 1752026205897, 마지막 업데이트=2019-12-31T15:00:00.000Z
+[2026-02-19 14:58:00] 업데이트할 프로젝트를 찾았습니다: 테스트 프로젝트 1752026205897 (ID: test-project-1752026205897)
+[2026-02-19 14:58:00] 프로젝트 처리 시작: 테스트 프로젝트 1752026205897 (ID: test-project-1752026205897)
+[2026-02-19 14:58:00] 프로젝트 테스트 프로젝트 1752026205897 (ID: test-project-1752026205897)에 대한 요약 생성 시도 중...
+[2026-02-19 14:58:00] Gemini API 호출 중...
+[2026-02-19 14:58:00] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [403 Forbidden] Permission denied: Consumer 'api_key:AIzaSyCtOONwzIF5fPWlVGvWSBqJvDxRI7OH87M' has been suspended. [{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"CONSUMER_SUSPENDED","domain":"googleapis.com","metadata":{"consumer":"projects/282268589154","containerInfo":"api_key:AIzaSyCtOONwzIF5fPWlVGvWSBqJvDxRI7OH87M","service":"generativelanguage.googleapis.com"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"Permission denied: Consumer 'api_key:AIzaSyCtOONwzIF5fPWlVGvWSBqJvDxRI7OH87M' has been suspended."}]
+[2026-02-19 14:58:00] 키 로테이션 시도 중... (1/5)
+[2026-02-19 14:58:00] 🔄 Gemini API 키 로테이션: 키 #1에서 키 #2로 전환합니다.
+[2026-02-19 14:58:00] Gemini API 클라이언트 초기화됨: AIza...1iS4 (39자리)
+[2026-02-19 14:58:00] Gemini API 호출 중...
+[2026-02-19 14:58:00] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 14:58:00] Groq API로 폴백 시도 중: 테스트 프로젝트 1752026205897
+[2026-02-19 14:58:02] 요약 생성 성공 (Groq): 테스트 프로젝트 1752026205897
+[2026-02-19 14:58:02] Updated summary for project test-project-1752026205897
+[2026-02-19 14:58:02] 프로젝트 요약이 성공적으로 업데이트됨: 테스트 프로젝트 1752026205897
+[2026-02-19 15:01:38] 총 2개의 Gemini API 키가 로드되었습니다.
+[2026-02-19 15:01:38] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2026-02-19 15:01:38] Groq API 키가 로드되었습니다.
+[2026-02-19 15:01:38] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2026-02-19 15:01:38] Groq API 클라이언트 초기화됨 (폴백용)
+[2026-02-19 15:01:38] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-19 15:01:38] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:01:38] 총 1개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:01:38] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:01:38] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:01:38] 프로젝트 데이터: id=test-project-1752026205897, name=테스트 프로젝트 1752026205897, 마지막 업데이트=2026-02-19T05:58:02.113Z
+[2026-02-19 15:01:38] 프로젝트 테스트 프로젝트 1752026205897(test-project-1752026205897)는 최근에 업데이트됨 (0.0일 전) - 건너뜁니다.
+[2026-02-19 15:01:38] 현재 처리할 프로젝트가 없습니다.
+[2026-02-19 15:11:38] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-19 15:11:38] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:11:38] 총 1개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:11:38] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:11:38] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:11:38] 프로젝트 데이터: id=test-project-1752026205897, name=테스트 프로젝트 1752026205897, 마지막 업데이트=2026-02-19T05:58:02.113Z
+[2026-02-19 15:11:38] 프로젝트 테스트 프로젝트 1752026205897(test-project-1752026205897)는 최근에 업데이트됨 (0.0일 전) - 건너뜁니다.
+[2026-02-19 15:11:38] 현재 처리할 프로젝트가 없습니다.
+[2026-02-19 15:21:39] 총 2개의 Gemini API 키가 로드되었습니다.
+[2026-02-19 15:21:39] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2026-02-19 15:21:39] Groq API 키가 로드되었습니다.
+[2026-02-19 15:21:39] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2026-02-19 15:21:39] Groq API 클라이언트 초기화됨 (폴백용)
+[2026-02-19 15:21:39] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-19 15:21:39] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:21:39] 총 1개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:21:39] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:21:39] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:21:39] 프로젝트 데이터: id=test-project-1752026205897, name=테스트 프로젝트 1752026205897, 마지막 업데이트=2026-02-19T05:58:02.113Z
+[2026-02-19 15:21:39] 프로젝트 테스트 프로젝트 1752026205897(test-project-1752026205897)는 최근에 업데이트됨 (0.0일 전) - 건너뜁니다.
+[2026-02-19 15:21:39] 현재 처리할 프로젝트가 없습니다.
+[2026-02-19 15:24:44] 총 2개의 Gemini API 키가 로드되었습니다.
+[2026-02-19 15:24:44] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2026-02-19 15:24:44] Groq API 키가 로드되었습니다.
+[2026-02-19 15:24:44] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2026-02-19 15:24:44] Groq API 클라이언트 초기화됨 (폴백용)
+[2026-02-19 15:24:44] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-19 15:24:44] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:24:45] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:24:45] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:24:45] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:24:45] 프로젝트 데이터: id=test-project-1752026205897, name=테스트 프로젝트 1752026205897, 마지막 업데이트=2026-02-19T05:58:02.113Z
+[2026-02-19 15:24:45] 프로젝트 테스트 프로젝트 1752026205897(test-project-1752026205897)는 최근에 업데이트됨 (0.0일 전) - 건너뜁니다.
+[2026-02-19 15:24:45] 현재 처리할 프로젝트가 없습니다.
+[2026-02-19 15:24:46] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-19 15:24:46] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:24:46] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:24:46] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:24:46] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:24:46] 프로젝트 데이터: id=test-project-1752026205897, name=테스트 프로젝트 1752026205897, 마지막 업데이트=2026-02-19T05:58:02.113Z
+[2026-02-19 15:24:46] 프로젝트 테스트 프로젝트 1752026205897(test-project-1752026205897)는 최근에 업데이트됨 (0.0일 전) - 건너뜁니다.
+[2026-02-19 15:24:46] 현재 처리할 프로젝트가 없습니다.
+[2026-02-19 15:24:47] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-19 15:24:47] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:24:47] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:24:47] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:24:47] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:24:47] 프로젝트 데이터: id=test-project-1752026205897, name=테스트 프로젝트 1752026205897, 마지막 업데이트=2026-02-19T05:58:02.113Z
+[2026-02-19 15:24:47] 프로젝트 테스트 프로젝트 1752026205897(test-project-1752026205897)는 최근에 업데이트됨 (0.0일 전) - 건너뜁니다.
+[2026-02-19 15:24:47] 현재 처리할 프로젝트가 없습니다.
+[2026-02-19 15:24:48] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-19 15:24:48] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:24:48] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:24:48] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:24:48] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:24:48] 프로젝트 데이터: id=test-project-1752026205897, name=테스트 프로젝트 1752026205897, 마지막 업데이트=2026-02-19T05:58:02.113Z
+[2026-02-19 15:24:48] 프로젝트 테스트 프로젝트 1752026205897(test-project-1752026205897)는 최근에 업데이트됨 (0.0일 전) - 건너뜁니다.
+[2026-02-19 15:24:48] 현재 처리할 프로젝트가 없습니다.
+[2026-02-19 15:24:49] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-19 15:24:49] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:24:49] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:24:49] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:24:49] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:24:49] 프로젝트 데이터: id=test-project-1752026205897, name=테스트 프로젝트 1752026205897, 마지막 업데이트=2026-02-19T05:58:02.113Z
+[2026-02-19 15:24:49] 프로젝트 테스트 프로젝트 1752026205897(test-project-1752026205897)는 최근에 업데이트됨 (0.0일 전) - 건너뜁니다.
+[2026-02-19 15:24:49] 현재 처리할 프로젝트가 없습니다.
+[2026-02-19 15:24:50] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-19 15:24:50] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:24:50] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:24:50] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:24:50] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:24:50] 프로젝트 데이터: id=test-project-1752026205897, name=테스트 프로젝트 1752026205897, 마지막 업데이트=2026-02-19T05:58:02.113Z
+[2026-02-19 15:24:50] 프로젝트 테스트 프로젝트 1752026205897(test-project-1752026205897)는 최근에 업데이트됨 (0.0일 전) - 건너뜁니다.
+[2026-02-19 15:24:50] 현재 처리할 프로젝트가 없습니다.
+[2026-02-19 15:24:51] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-19 15:24:51] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:24:51] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:24:51] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:24:51] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:24:51] 프로젝트 데이터: id=test-project-1752026205897, name=테스트 프로젝트 1752026205897, 마지막 업데이트=2026-02-19T05:58:02.113Z
+[2026-02-19 15:24:51] 프로젝트 테스트 프로젝트 1752026205897(test-project-1752026205897)는 최근에 업데이트됨 (0.0일 전) - 건너뜁니다.
+[2026-02-19 15:24:51] 현재 처리할 프로젝트가 없습니다.
+[2026-02-19 15:24:52] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-19 15:24:52] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:24:52] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:24:52] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:24:52] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:24:52] 프로젝트 데이터: id=test-project-1752026205897, name=테스트 프로젝트 1752026205897, 마지막 업데이트=2026-02-19T05:58:02.113Z
+[2026-02-19 15:24:52] 프로젝트 테스트 프로젝트 1752026205897(test-project-1752026205897)는 최근에 업데이트됨 (0.0일 전) - 건너뜁니다.
+[2026-02-19 15:24:52] 현재 처리할 프로젝트가 없습니다.
+[2026-02-19 15:24:53] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-19 15:24:53] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:24:53] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:24:53] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:24:53] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:24:53] 프로젝트 데이터: id=test-project-1752026205897, name=테스트 프로젝트 1752026205897, 마지막 업데이트=2026-02-19T05:58:02.113Z
+[2026-02-19 15:24:53] 프로젝트 테스트 프로젝트 1752026205897(test-project-1752026205897)는 최근에 업데이트됨 (0.0일 전) - 건너뜁니다.
+[2026-02-19 15:24:53] 현재 처리할 프로젝트가 없습니다.
+[2026-02-19 15:24:54] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-19 15:24:54] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:24:54] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:24:54] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:24:54] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:24:54] 프로젝트 데이터: id=test-project-1752026205897, name=테스트 프로젝트 1752026205897, 마지막 업데이트=2026-02-19T05:58:02.113Z
+[2026-02-19 15:24:54] 프로젝트 테스트 프로젝트 1752026205897(test-project-1752026205897)는 최근에 업데이트됨 (0.0일 전) - 건너뜁니다.
+[2026-02-19 15:24:54] 현재 처리할 프로젝트가 없습니다.
+[2026-02-19 15:25:30] 총 2개의 Gemini API 키가 로드되었습니다.
+[2026-02-19 15:25:30] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2026-02-19 15:25:30] Groq API 키가 로드되었습니다.
+[2026-02-19 15:25:30] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2026-02-19 15:25:30] Groq API 클라이언트 초기화됨 (폴백용)
+[2026-02-19 15:25:30] 모든 프로젝트의 업데이트 상태를 리셋합니다...
+[2026-02-19 15:25:30] 프로젝트 업데이트 상태 리셋 완료: 101개 프로젝트 리셋됨
+[2026-02-19 15:25:30] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-19 15:25:30] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:25:30] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:25:30] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:25:30] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:25:30] 프로젝트 데이터: id=1002843322, name=Incomplete-proj, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:25:30] 업데이트할 프로젝트를 찾았습니다: Incomplete-proj (ID: 1002843322)
+[2026-02-19 15:25:30] 프로젝트 처리 시작: Incomplete-proj (ID: 1002843322)
+[2026-02-19 15:25:30] 프로젝트 Incomplete-proj (ID: 1002843322)에 대한 요약 생성 시도 중...
+[2026-02-19 15:25:30] Gemini API 호출 중...
+[2026-02-19 15:25:31] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [403 Forbidden] Permission denied: Consumer 'api_key:AIzaSyCtOONwzIF5fPWlVGvWSBqJvDxRI7OH87M' has been suspended. [{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"CONSUMER_SUSPENDED","domain":"googleapis.com","metadata":{"consumer":"projects/282268589154","containerInfo":"api_key:AIzaSyCtOONwzIF5fPWlVGvWSBqJvDxRI7OH87M","service":"generativelanguage.googleapis.com"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"Permission denied: Consumer 'api_key:AIzaSyCtOONwzIF5fPWlVGvWSBqJvDxRI7OH87M' has been suspended."}]
+[2026-02-19 15:25:31] 키 로테이션 시도 중... (1/5)
+[2026-02-19 15:25:31] 🔄 Gemini API 키 로테이션: 키 #1에서 키 #2로 전환합니다.
+[2026-02-19 15:25:31] Gemini API 클라이언트 초기화됨: AIza...1iS4 (39자리)
+[2026-02-19 15:25:31] Gemini API 호출 중...
+[2026-02-19 15:25:31] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:25:31] Groq API로 폴백 시도 중: Incomplete-proj
+[2026-02-19 15:25:32] 요약 생성 성공 (Groq): Incomplete-proj
+[2026-02-19 15:25:32] Updated summary for project 1002843322
+[2026-02-19 15:25:32] 프로젝트 요약이 성공적으로 업데이트됨: Incomplete-proj
+[2026-02-19 15:25:34] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:25:34] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:25:34] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:25:34] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:25:34] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:25:34] 프로젝트 데이터: id=1012278543, name=naverworks-message-cron-server, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:25:34] 업데이트할 프로젝트를 찾았습니다: naverworks-message-cron-server (ID: 1012278543)
+[2026-02-19 15:25:34] 프로젝트 처리 시작: naverworks-message-cron-server (ID: 1012278543)
+[2026-02-19 15:25:34] 프로젝트 naverworks-message-cron-server (ID: 1012278543)에 대한 요약 생성 시도 중...
+[2026-02-19 15:25:34] Gemini API 호출 중...
+[2026-02-19 15:25:34] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:25:34] Groq API로 폴백 시도 중: naverworks-message-cron-server
+[2026-02-19 15:25:35] 요약 생성 성공 (Groq): naverworks-message-cron-server
+[2026-02-19 15:25:35] Updated summary for project 1012278543
+[2026-02-19 15:25:35] 프로젝트 요약이 성공적으로 업데이트됨: naverworks-message-cron-server
+[2026-02-19 15:25:36] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:25:36] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:25:36] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:25:36] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:25:36] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:25:36] 프로젝트 데이터: id=1012454049, name=mother-father-diary-policy, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:25:36] 업데이트할 프로젝트를 찾았습니다: mother-father-diary-policy (ID: 1012454049)
+[2026-02-19 15:25:36] 프로젝트 처리 시작: mother-father-diary-policy (ID: 1012454049)
+[2026-02-19 15:25:36] 프로젝트 mother-father-diary-policy (ID: 1012454049)에 대한 요약 생성 시도 중...
+[2026-02-19 15:25:36] Gemini API 호출 중...
+[2026-02-19 15:25:36] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:25:36] Groq API로 폴백 시도 중: mother-father-diary-policy
+[2026-02-19 15:25:38] 요약 생성 성공 (Groq): mother-father-diary-policy
+[2026-02-19 15:25:38] Updated summary for project 1012454049
+[2026-02-19 15:25:38] 프로젝트 요약이 성공적으로 업데이트됨: mother-father-diary-policy
+[2026-02-19 15:25:39] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:25:39] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:25:39] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:25:39] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:25:39] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:25:39] 프로젝트 데이터: id=1012863000, name=neverbbointmyner, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:25:39] 업데이트할 프로젝트를 찾았습니다: neverbbointmyner (ID: 1012863000)
+[2026-02-19 15:25:39] 프로젝트 처리 시작: neverbbointmyner (ID: 1012863000)
+[2026-02-19 15:25:39] 프로젝트 neverbbointmyner (ID: 1012863000)에 대한 요약 생성 시도 중...
+[2026-02-19 15:25:39] Gemini API 호출 중...
+[2026-02-19 15:25:39] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:25:39] Groq API로 폴백 시도 중: neverbbointmyner
+[2026-02-19 15:25:40] 요약 생성 성공 (Groq): neverbbointmyner
+[2026-02-19 15:25:40] Updated summary for project 1012863000
+[2026-02-19 15:25:40] 프로젝트 요약이 성공적으로 업데이트됨: neverbbointmyner
+[2026-02-19 15:25:41] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:25:41] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:25:41] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:25:41] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:25:41] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:25:41] 프로젝트 데이터: id=1017765334, name=imoji-battle-field, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:25:41] 업데이트할 프로젝트를 찾았습니다: imoji-battle-field (ID: 1017765334)
+[2026-02-19 15:25:41] 프로젝트 처리 시작: imoji-battle-field (ID: 1017765334)
+[2026-02-19 15:25:41] 프로젝트 imoji-battle-field (ID: 1017765334)에 대한 요약 생성 시도 중...
+[2026-02-19 15:25:41] Gemini API 호출 중...
+[2026-02-19 15:25:41] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:25:41] Groq API로 폴백 시도 중: imoji-battle-field
+[2026-02-19 15:25:44] 요약 생성 성공 (Groq): imoji-battle-field
+[2026-02-19 15:25:44] Updated summary for project 1017765334
+[2026-02-19 15:25:44] 프로젝트 요약이 성공적으로 업데이트됨: imoji-battle-field
+[2026-02-19 15:25:45] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:25:45] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:25:45] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:25:45] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:25:45] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:25:45] 프로젝트 데이터: id=1029374616, name=auto_weekly_merge_system, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:25:45] 업데이트할 프로젝트를 찾았습니다: auto_weekly_merge_system (ID: 1029374616)
+[2026-02-19 15:25:45] 프로젝트 처리 시작: auto_weekly_merge_system (ID: 1029374616)
+[2026-02-19 15:25:45] 프로젝트 auto_weekly_merge_system (ID: 1029374616)에 대한 요약 생성 시도 중...
+[2026-02-19 15:25:45] Gemini API 호출 중...
+[2026-02-19 15:25:45] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:25:45] Groq API로 폴백 시도 중: auto_weekly_merge_system
+[2026-02-19 15:25:47] 요약 생성 성공 (Groq): auto_weekly_merge_system
+[2026-02-19 15:25:47] Updated summary for project 1029374616
+[2026-02-19 15:25:47] 프로젝트 요약이 성공적으로 업데이트됨: auto_weekly_merge_system
+[2026-02-19 15:25:48] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:25:48] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:25:48] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:25:48] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:25:48] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:25:48] 프로젝트 데이터: id=1063251993, name=kls-connect, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:25:48] 업데이트할 프로젝트를 찾았습니다: kls-connect (ID: 1063251993)
+[2026-02-19 15:25:48] 프로젝트 처리 시작: kls-connect (ID: 1063251993)
+[2026-02-19 15:25:48] 프로젝트 kls-connect (ID: 1063251993)에 대한 요약 생성 시도 중...
+[2026-02-19 15:25:48] Gemini API 호출 중...
+[2026-02-19 15:25:48] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:25:48] Groq API로 폴백 시도 중: kls-connect
+[2026-02-19 15:25:49] 요약 생성 성공 (Groq): kls-connect
+[2026-02-19 15:25:49] Updated summary for project 1063251993
+[2026-02-19 15:25:49] 프로젝트 요약이 성공적으로 업데이트됨: kls-connect
+[2026-02-19 15:25:50] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:25:50] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:25:50] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:25:50] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:25:50] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:25:50] 프로젝트 데이터: id=1063255178, name=jenkins-jobdsl-compiler, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:25:50] 업데이트할 프로젝트를 찾았습니다: jenkins-jobdsl-compiler (ID: 1063255178)
+[2026-02-19 15:25:50] 프로젝트 처리 시작: jenkins-jobdsl-compiler (ID: 1063255178)
+[2026-02-19 15:25:50] 프로젝트 jenkins-jobdsl-compiler (ID: 1063255178)에 대한 요약 생성 시도 중...
+[2026-02-19 15:25:50] Gemini API 호출 중...
+[2026-02-19 15:25:50] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:25:50] Groq API로 폴백 시도 중: jenkins-jobdsl-compiler
+[2026-02-19 15:25:52] 요약 생성 성공 (Groq): jenkins-jobdsl-compiler
+[2026-02-19 15:25:52] Updated summary for project 1063255178
+[2026-02-19 15:25:52] 프로젝트 요약이 성공적으로 업데이트됨: jenkins-jobdsl-compiler
+[2026-02-19 15:25:53] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:25:53] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:25:53] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:25:53] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:25:53] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:25:53] 프로젝트 데이터: id=1083936162, name=v0-kls-connect-app, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:25:53] 업데이트할 프로젝트를 찾았습니다: v0-kls-connect-app (ID: 1083936162)
+[2026-02-19 15:25:53] 프로젝트 처리 시작: v0-kls-connect-app (ID: 1083936162)
+[2026-02-19 15:25:53] 프로젝트 v0-kls-connect-app (ID: 1083936162)에 대한 요약 생성 시도 중...
+[2026-02-19 15:25:53] Gemini API 호출 중...
+[2026-02-19 15:25:53] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:25:53] Groq API로 폴백 시도 중: v0-kls-connect-app
+[2026-02-19 15:25:54] 요약 생성 성공 (Groq): v0-kls-connect-app
+[2026-02-19 15:25:54] Updated summary for project 1083936162
+[2026-02-19 15:25:54] 프로젝트 요약이 성공적으로 업데이트됨: v0-kls-connect-app
+[2026-02-19 15:25:55] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:25:55] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:25:55] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:25:55] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:25:55] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:25:55] 프로젝트 데이터: id=1092068237, name=jenkins-plugin, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:25:55] 업데이트할 프로젝트를 찾았습니다: jenkins-plugin (ID: 1092068237)
+[2026-02-19 15:25:55] 프로젝트 처리 시작: jenkins-plugin (ID: 1092068237)
+[2026-02-19 15:25:55] 프로젝트 jenkins-plugin (ID: 1092068237)에 대한 요약 생성 시도 중...
+[2026-02-19 15:25:55] Gemini API 호출 중...
+[2026-02-19 15:25:56] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:25:56] Groq API로 폴백 시도 중: jenkins-plugin
+[2026-02-19 15:25:57] 요약 생성 성공 (Groq): jenkins-plugin
+[2026-02-19 15:25:57] Updated summary for project 1092068237
+[2026-02-19 15:25:57] 프로젝트 요약이 성공적으로 업데이트됨: jenkins-plugin
+[2026-02-19 15:29:25] 총 2개의 Gemini API 키가 로드되었습니다.
+[2026-02-19 15:29:25] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2026-02-19 15:29:25] Groq API 키가 로드되었습니다.
+[2026-02-19 15:29:25] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2026-02-19 15:29:25] Groq API 클라이언트 초기화됨 (폴백용)
+[2026-02-19 15:29:25] 모든 프로젝트의 업데이트 상태를 리셋합니다...
+[2026-02-19 15:29:26] 프로젝트 업데이트 상태 리셋 완료: 101개 프로젝트 리셋됨
+[2026-02-19 15:29:26] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-19 15:29:26] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:29:26] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:29:26] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:29:26] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:29:26] 프로젝트 데이터: id=1002843322, name=Incomplete-proj, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:29:26] 업데이트할 프로젝트를 찾았습니다: Incomplete-proj (ID: 1002843322)
+[2026-02-19 15:29:26] 프로젝트 처리 시작: Incomplete-proj (ID: 1002843322)
+[2026-02-19 15:29:26] 프로젝트 Incomplete-proj (ID: 1002843322)에 대한 요약 생성 시도 중...
+[2026-02-19 15:29:26] Gemini API 호출 중...
+[2026-02-19 15:29:26] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [403 Forbidden] Permission denied: Consumer 'api_key:AIzaSyCtOONwzIF5fPWlVGvWSBqJvDxRI7OH87M' has been suspended. [{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"CONSUMER_SUSPENDED","domain":"googleapis.com","metadata":{"containerInfo":"api_key:AIzaSyCtOONwzIF5fPWlVGvWSBqJvDxRI7OH87M","service":"generativelanguage.googleapis.com","consumer":"projects/282268589154"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"Permission denied: Consumer 'api_key:AIzaSyCtOONwzIF5fPWlVGvWSBqJvDxRI7OH87M' has been suspended."}]
+[2026-02-19 15:29:26] 키 로테이션 시도 중... (1/5)
+[2026-02-19 15:29:26] 🔄 Gemini API 키 로테이션: 키 #1에서 키 #2로 전환합니다.
+[2026-02-19 15:29:26] Gemini API 클라이언트 초기화됨: AIza...1iS4 (39자리)
+[2026-02-19 15:29:26] Gemini API 호출 중...
+[2026-02-19 15:29:26] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:29:26] Groq API로 폴백 시도 중: Incomplete-proj
+[2026-02-19 15:29:28] 요약 생성 성공 (Groq): Incomplete-proj
+[2026-02-19 15:29:28] Updated summary for project 1002843322
+[2026-02-19 15:29:28] 프로젝트 요약이 성공적으로 업데이트됨: Incomplete-proj
+[2026-02-19 15:29:29] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:29:29] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:29:29] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:29:29] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:29:29] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:29:29] 프로젝트 데이터: id=1012278543, name=naverworks-message-cron-server, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:29:29] 업데이트할 프로젝트를 찾았습니다: naverworks-message-cron-server (ID: 1012278543)
+[2026-02-19 15:29:29] 프로젝트 처리 시작: naverworks-message-cron-server (ID: 1012278543)
+[2026-02-19 15:29:29] 프로젝트 naverworks-message-cron-server (ID: 1012278543)에 대한 요약 생성 시도 중...
+[2026-02-19 15:29:29] Gemini API 호출 중...
+[2026-02-19 15:29:29] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:29:29] Groq API로 폴백 시도 중: naverworks-message-cron-server
+[2026-02-19 15:29:31] 요약 생성 성공 (Groq): naverworks-message-cron-server
+[2026-02-19 15:29:32] Updated summary for project 1012278543
+[2026-02-19 15:29:32] 프로젝트 요약이 성공적으로 업데이트됨: naverworks-message-cron-server
+[2026-02-19 15:29:33] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:29:33] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:29:33] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:29:33] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:29:33] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:29:33] 프로젝트 데이터: id=1012454049, name=mother-father-diary-policy, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:29:33] 업데이트할 프로젝트를 찾았습니다: mother-father-diary-policy (ID: 1012454049)
+[2026-02-19 15:29:33] 프로젝트 처리 시작: mother-father-diary-policy (ID: 1012454049)
+[2026-02-19 15:29:33] 프로젝트 mother-father-diary-policy (ID: 1012454049)에 대한 요약 생성 시도 중...
+[2026-02-19 15:29:33] Gemini API 호출 중...
+[2026-02-19 15:29:33] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:29:33] Groq API로 폴백 시도 중: mother-father-diary-policy
+[2026-02-19 15:29:35] 요약 생성 성공 (Groq): mother-father-diary-policy
+[2026-02-19 15:29:35] Updated summary for project 1012454049
+[2026-02-19 15:29:35] 프로젝트 요약이 성공적으로 업데이트됨: mother-father-diary-policy
+[2026-02-19 15:29:36] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:29:36] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:29:36] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:29:36] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:29:36] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:29:36] 프로젝트 데이터: id=1012863000, name=neverbbointmyner, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:29:36] 업데이트할 프로젝트를 찾았습니다: neverbbointmyner (ID: 1012863000)
+[2026-02-19 15:29:36] 프로젝트 처리 시작: neverbbointmyner (ID: 1012863000)
+[2026-02-19 15:29:36] 프로젝트 neverbbointmyner (ID: 1012863000)에 대한 요약 생성 시도 중...
+[2026-02-19 15:29:36] Gemini API 호출 중...
+[2026-02-19 15:29:36] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:29:36] Groq API로 폴백 시도 중: neverbbointmyner
+[2026-02-19 15:29:38] 요약 생성 성공 (Groq): neverbbointmyner
+[2026-02-19 15:29:38] Updated summary for project 1012863000
+[2026-02-19 15:29:38] 프로젝트 요약이 성공적으로 업데이트됨: neverbbointmyner
+[2026-02-19 15:29:39] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:29:39] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:29:39] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:29:39] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:29:39] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:29:39] 프로젝트 데이터: id=1017765334, name=imoji-battle-field, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:29:39] 업데이트할 프로젝트를 찾았습니다: imoji-battle-field (ID: 1017765334)
+[2026-02-19 15:29:39] 프로젝트 처리 시작: imoji-battle-field (ID: 1017765334)
+[2026-02-19 15:29:39] 프로젝트 imoji-battle-field (ID: 1017765334)에 대한 요약 생성 시도 중...
+[2026-02-19 15:29:39] Gemini API 호출 중...
+[2026-02-19 15:29:39] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:29:39] Groq API로 폴백 시도 중: imoji-battle-field
+[2026-02-19 15:29:41] 요약 생성 성공 (Groq): imoji-battle-field
+[2026-02-19 15:29:41] Updated summary for project 1017765334
+[2026-02-19 15:29:41] 프로젝트 요약이 성공적으로 업데이트됨: imoji-battle-field
+[2026-02-19 15:29:42] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:29:42] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:29:42] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:29:42] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:29:42] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:29:42] 프로젝트 데이터: id=1029374616, name=auto_weekly_merge_system, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:29:42] 업데이트할 프로젝트를 찾았습니다: auto_weekly_merge_system (ID: 1029374616)
+[2026-02-19 15:29:42] 프로젝트 처리 시작: auto_weekly_merge_system (ID: 1029374616)
+[2026-02-19 15:29:42] 프로젝트 auto_weekly_merge_system (ID: 1029374616)에 대한 요약 생성 시도 중...
+[2026-02-19 15:29:42] Gemini API 호출 중...
+[2026-02-19 15:29:42] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:29:42] Groq API로 폴백 시도 중: auto_weekly_merge_system
+[2026-02-19 15:29:44] 요약 생성 성공 (Groq): auto_weekly_merge_system
+[2026-02-19 15:29:44] Updated summary for project 1029374616
+[2026-02-19 15:29:44] 프로젝트 요약이 성공적으로 업데이트됨: auto_weekly_merge_system
+[2026-02-19 15:29:45] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:29:45] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:29:45] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:29:45] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:29:45] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:29:45] 프로젝트 데이터: id=1063251993, name=kls-connect, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:29:45] 업데이트할 프로젝트를 찾았습니다: kls-connect (ID: 1063251993)
+[2026-02-19 15:29:45] 프로젝트 처리 시작: kls-connect (ID: 1063251993)
+[2026-02-19 15:29:45] 프로젝트 kls-connect (ID: 1063251993)에 대한 요약 생성 시도 중...
+[2026-02-19 15:29:45] Gemini API 호출 중...
+[2026-02-19 15:29:45] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:29:45] Groq API로 폴백 시도 중: kls-connect
+[2026-02-19 15:29:47] 요약 생성 성공 (Groq): kls-connect
+[2026-02-19 15:29:47] Updated summary for project 1063251993
+[2026-02-19 15:29:47] 프로젝트 요약이 성공적으로 업데이트됨: kls-connect
+[2026-02-19 15:29:48] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:29:48] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:29:48] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:29:48] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:29:48] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:29:48] 프로젝트 데이터: id=1063255178, name=jenkins-jobdsl-compiler, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:29:48] 업데이트할 프로젝트를 찾았습니다: jenkins-jobdsl-compiler (ID: 1063255178)
+[2026-02-19 15:29:48] 프로젝트 처리 시작: jenkins-jobdsl-compiler (ID: 1063255178)
+[2026-02-19 15:29:48] 프로젝트 jenkins-jobdsl-compiler (ID: 1063255178)에 대한 요약 생성 시도 중...
+[2026-02-19 15:29:48] Gemini API 호출 중...
+[2026-02-19 15:29:48] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:29:48] Groq API로 폴백 시도 중: jenkins-jobdsl-compiler
+[2026-02-19 15:29:50] 요약 생성 성공 (Groq): jenkins-jobdsl-compiler
+[2026-02-19 15:29:50] Updated summary for project 1063255178
+[2026-02-19 15:29:50] 프로젝트 요약이 성공적으로 업데이트됨: jenkins-jobdsl-compiler
+[2026-02-19 15:29:51] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:29:51] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:29:51] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:29:51] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:29:51] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:29:51] 프로젝트 데이터: id=1083936162, name=v0-kls-connect-app, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:29:51] 업데이트할 프로젝트를 찾았습니다: v0-kls-connect-app (ID: 1083936162)
+[2026-02-19 15:29:51] 프로젝트 처리 시작: v0-kls-connect-app (ID: 1083936162)
+[2026-02-19 15:29:51] 프로젝트 v0-kls-connect-app (ID: 1083936162)에 대한 요약 생성 시도 중...
+[2026-02-19 15:29:51] Gemini API 호출 중...
+[2026-02-19 15:29:51] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:29:51] Groq API로 폴백 시도 중: v0-kls-connect-app
+[2026-02-19 15:29:53] 요약 생성 성공 (Groq): v0-kls-connect-app
+[2026-02-19 15:29:53] Updated summary for project 1083936162
+[2026-02-19 15:29:53] 프로젝트 요약이 성공적으로 업데이트됨: v0-kls-connect-app
+[2026-02-19 15:29:54] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:29:54] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:29:54] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:29:54] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:29:54] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:29:54] 프로젝트 데이터: id=1092068237, name=jenkins-plugin, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:29:54] 업데이트할 프로젝트를 찾았습니다: jenkins-plugin (ID: 1092068237)
+[2026-02-19 15:29:54] 프로젝트 처리 시작: jenkins-plugin (ID: 1092068237)
+[2026-02-19 15:29:54] 프로젝트 jenkins-plugin (ID: 1092068237)에 대한 요약 생성 시도 중...
+[2026-02-19 15:29:54] Gemini API 호출 중...
+[2026-02-19 15:29:54] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:29:54] Groq API로 폴백 시도 중: jenkins-plugin
+[2026-02-19 15:29:56] 요약 생성 성공 (Groq): jenkins-plugin
+[2026-02-19 15:29:56] Updated summary for project 1092068237
+[2026-02-19 15:29:56] 프로젝트 요약이 성공적으로 업데이트됨: jenkins-plugin
+[2026-02-19 15:32:48] 총 2개의 Gemini API 키가 로드되었습니다.
+[2026-02-19 15:32:48] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2026-02-19 15:32:48] Groq API 키가 로드되었습니다.
+[2026-02-19 15:33:04] 총 2개의 Gemini API 키가 로드되었습니다.
+[2026-02-19 15:33:04] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2026-02-19 15:33:04] Groq API 키가 로드되었습니다.
+[2026-02-19 15:33:20] 총 2개의 Gemini API 키가 로드되었습니다.
+[2026-02-19 15:33:20] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2026-02-19 15:33:20] Groq API 키가 로드되었습니다.
+[2026-02-19 15:33:20] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2026-02-19 15:33:20] Groq API 클라이언트 초기화됨 (폴백용)
+[2026-02-19 15:33:20] 모든 프로젝트의 업데이트 상태를 리셋합니다...
+[2026-02-19 15:33:21] 프로젝트 업데이트 상태 리셋 완료: 101개 프로젝트 리셋됨
+[2026-02-19 15:33:21] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-19 15:33:21] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:33:21] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:33:21] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:33:21] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:33:21] 프로젝트 데이터: id=1002843322, name=Incomplete-proj, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:33:21] 업데이트할 프로젝트를 찾았습니다: Incomplete-proj (ID: 1002843322)
+[2026-02-19 15:33:21] 프로젝트 처리 시작: Incomplete-proj (ID: 1002843322)
+[2026-02-19 15:33:21] 프로젝트 Incomplete-proj (ID: 1002843322) 정밀 분석 중...
+[2026-02-19 15:33:21] Gemini API 호출 중...
+[2026-02-19 15:33:22] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [403 Forbidden] Permission denied: Consumer 'api_key:AIzaSyCtOONwzIF5fPWlVGvWSBqJvDxRI7OH87M' has been suspended. [{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"CONSUMER_SUSPENDED","domain":"googleapis.com","metadata":{"consumer":"projects/282268589154","containerInfo":"api_key:AIzaSyCtOONwzIF5fPWlVGvWSBqJvDxRI7OH87M","service":"generativelanguage.googleapis.com"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"Permission denied: Consumer 'api_key:AIzaSyCtOONwzIF5fPWlVGvWSBqJvDxRI7OH87M' has been suspended."}]
+[2026-02-19 15:33:22] 키 로테이션 시도 중... (1/5)
+[2026-02-19 15:33:22] 🔄 Gemini API 키 로테이션: 키 #1에서 키 #2로 전환합니다.
+[2026-02-19 15:33:22] Gemini API 클라이언트 초기화됨: AIza...1iS4 (39자리)
+[2026-02-19 15:33:22] Gemini API 호출 중...
+[2026-02-19 15:33:22] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:33:22] Groq API로 폴백 시도 중: Incomplete-proj
+[2026-02-19 15:33:24] 요약 생성 성공 (Groq): Incomplete-proj
+[2026-02-19 15:33:24] Updated summary for project 1002843322
+[2026-02-19 15:33:24] 프로젝트 요약이 성공적으로 업데이트됨: Incomplete-proj
+[2026-02-19 15:33:25] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:33:25] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:33:25] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:33:25] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:33:25] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:33:25] 프로젝트 데이터: id=1012278543, name=naverworks-message-cron-server, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:33:25] 업데이트할 프로젝트를 찾았습니다: naverworks-message-cron-server (ID: 1012278543)
+[2026-02-19 15:33:25] 프로젝트 처리 시작: naverworks-message-cron-server (ID: 1012278543)
+[2026-02-19 15:33:25] 프로젝트 naverworks-message-cron-server (ID: 1012278543) 정밀 분석 중...
+[2026-02-19 15:33:25] Gemini API 호출 중...
+[2026-02-19 15:33:25] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:33:25] Groq API로 폴백 시도 중: naverworks-message-cron-server
+[2026-02-19 15:33:28] 요약 생성 성공 (Groq): naverworks-message-cron-server
+[2026-02-19 15:33:28] Updated summary for project 1012278543
+[2026-02-19 15:33:28] 프로젝트 요약이 성공적으로 업데이트됨: naverworks-message-cron-server
+[2026-02-19 15:33:29] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:33:29] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:33:29] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:33:29] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:33:29] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:33:29] 프로젝트 데이터: id=1012454049, name=mother-father-diary-policy, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:33:29] 업데이트할 프로젝트를 찾았습니다: mother-father-diary-policy (ID: 1012454049)
+[2026-02-19 15:33:29] 프로젝트 처리 시작: mother-father-diary-policy (ID: 1012454049)
+[2026-02-19 15:33:29] 프로젝트 mother-father-diary-policy (ID: 1012454049) 정밀 분석 중...
+[2026-02-19 15:33:29] Gemini API 호출 중...
+[2026-02-19 15:33:29] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:33:29] Groq API로 폴백 시도 중: mother-father-diary-policy
+[2026-02-19 15:33:31] 요약 생성 성공 (Groq): mother-father-diary-policy
+[2026-02-19 15:33:31] Updated summary for project 1012454049
+[2026-02-19 15:33:31] 프로젝트 요약이 성공적으로 업데이트됨: mother-father-diary-policy
+[2026-02-19 15:33:32] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:33:32] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:33:32] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:33:32] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:33:32] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:33:32] 프로젝트 데이터: id=1012863000, name=neverbbointmyner, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:33:32] 업데이트할 프로젝트를 찾았습니다: neverbbointmyner (ID: 1012863000)
+[2026-02-19 15:33:32] 프로젝트 처리 시작: neverbbointmyner (ID: 1012863000)
+[2026-02-19 15:33:32] 프로젝트 neverbbointmyner (ID: 1012863000) 정밀 분석 중...
+[2026-02-19 15:33:33] Gemini API 호출 중...
+[2026-02-19 15:33:33] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:33:33] Groq API로 폴백 시도 중: neverbbointmyner
+[2026-02-19 15:33:34] 요약 생성 성공 (Groq): neverbbointmyner
+[2026-02-19 15:33:34] Updated summary for project 1012863000
+[2026-02-19 15:33:34] 프로젝트 요약이 성공적으로 업데이트됨: neverbbointmyner
+[2026-02-19 15:33:35] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:33:35] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:33:35] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:33:35] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:33:35] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:33:35] 프로젝트 데이터: id=1017765334, name=imoji-battle-field, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:33:35] 업데이트할 프로젝트를 찾았습니다: imoji-battle-field (ID: 1017765334)
+[2026-02-19 15:33:35] 프로젝트 처리 시작: imoji-battle-field (ID: 1017765334)
+[2026-02-19 15:33:35] 프로젝트 imoji-battle-field (ID: 1017765334) 정밀 분석 중...
+[2026-02-19 15:33:36] Gemini API 호출 중...
+[2026-02-19 15:33:36] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:33:36] Groq API로 폴백 시도 중: imoji-battle-field
+[2026-02-19 15:33:38] 요약 생성 성공 (Groq): imoji-battle-field
+[2026-02-19 15:33:38] Updated summary for project 1017765334
+[2026-02-19 15:33:38] 프로젝트 요약이 성공적으로 업데이트됨: imoji-battle-field
+[2026-02-19 15:33:39] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:33:39] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:33:39] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:33:39] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:33:39] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:33:39] 프로젝트 데이터: id=1029374616, name=auto_weekly_merge_system, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:33:39] 업데이트할 프로젝트를 찾았습니다: auto_weekly_merge_system (ID: 1029374616)
+[2026-02-19 15:33:39] 프로젝트 처리 시작: auto_weekly_merge_system (ID: 1029374616)
+[2026-02-19 15:33:39] 프로젝트 auto_weekly_merge_system (ID: 1029374616) 정밀 분석 중...
+[2026-02-19 15:33:39] Gemini API 호출 중...
+[2026-02-19 15:33:40] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:33:40] Groq API로 폴백 시도 중: auto_weekly_merge_system
+[2026-02-19 15:33:42] 요약 생성 성공 (Groq): auto_weekly_merge_system
+[2026-02-19 15:33:42] Updated summary for project 1029374616
+[2026-02-19 15:33:42] 프로젝트 요약이 성공적으로 업데이트됨: auto_weekly_merge_system
+[2026-02-19 15:33:43] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:33:43] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:33:43] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:33:43] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:33:43] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:33:43] 프로젝트 데이터: id=1063251993, name=kls-connect, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:33:43] 업데이트할 프로젝트를 찾았습니다: kls-connect (ID: 1063251993)
+[2026-02-19 15:33:43] 프로젝트 처리 시작: kls-connect (ID: 1063251993)
+[2026-02-19 15:33:43] 프로젝트 kls-connect (ID: 1063251993) 정밀 분석 중...
+[2026-02-19 15:33:43] Gemini API 호출 중...
+[2026-02-19 15:33:43] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:33:43] Groq API로 폴백 시도 중: kls-connect
+[2026-02-19 15:33:45] 요약 생성 성공 (Groq): kls-connect
+[2026-02-19 15:33:45] Updated summary for project 1063251993
+[2026-02-19 15:33:45] 프로젝트 요약이 성공적으로 업데이트됨: kls-connect
+[2026-02-19 15:33:46] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:33:46] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:33:46] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:33:46] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:33:46] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:33:46] 프로젝트 데이터: id=1063255178, name=jenkins-jobdsl-compiler, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:33:46] 업데이트할 프로젝트를 찾았습니다: jenkins-jobdsl-compiler (ID: 1063255178)
+[2026-02-19 15:33:46] 프로젝트 처리 시작: jenkins-jobdsl-compiler (ID: 1063255178)
+[2026-02-19 15:33:46] 프로젝트 jenkins-jobdsl-compiler (ID: 1063255178) 정밀 분석 중...
+[2026-02-19 15:33:46] Gemini API 호출 중...
+[2026-02-19 15:33:47] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:33:47] Groq API로 폴백 시도 중: jenkins-jobdsl-compiler
+[2026-02-19 15:33:49] 요약 생성 성공 (Groq): jenkins-jobdsl-compiler
+[2026-02-19 15:33:49] Updated summary for project 1063255178
+[2026-02-19 15:33:49] 프로젝트 요약이 성공적으로 업데이트됨: jenkins-jobdsl-compiler
+[2026-02-19 15:33:50] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:33:50] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:33:50] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:33:50] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:33:50] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:33:50] 프로젝트 데이터: id=1083936162, name=v0-kls-connect-app, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:33:50] 업데이트할 프로젝트를 찾았습니다: v0-kls-connect-app (ID: 1083936162)
+[2026-02-19 15:33:50] 프로젝트 처리 시작: v0-kls-connect-app (ID: 1083936162)
+[2026-02-19 15:33:50] 프로젝트 v0-kls-connect-app (ID: 1083936162) 정밀 분석 중...
+[2026-02-19 15:33:50] Gemini API 호출 중...
+[2026-02-19 15:33:50] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:33:50] Groq API로 폴백 시도 중: v0-kls-connect-app
+[2026-02-19 15:33:52] 요약 생성 성공 (Groq): v0-kls-connect-app
+[2026-02-19 15:33:52] Updated summary for project 1083936162
+[2026-02-19 15:33:52] 프로젝트 요약이 성공적으로 업데이트됨: v0-kls-connect-app
+[2026-02-19 15:33:53] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:33:53] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:33:53] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:33:53] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:33:53] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:33:53] 프로젝트 데이터: id=1092068237, name=jenkins-plugin, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:33:53] 업데이트할 프로젝트를 찾았습니다: jenkins-plugin (ID: 1092068237)
+[2026-02-19 15:33:53] 프로젝트 처리 시작: jenkins-plugin (ID: 1092068237)
+[2026-02-19 15:33:53] 프로젝트 jenkins-plugin (ID: 1092068237) 정밀 분석 중...
+[2026-02-19 15:33:53] Gemini API 호출 중...
+[2026-02-19 15:33:53] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:33:53] Groq API로 폴백 시도 중: jenkins-plugin
+[2026-02-19 15:33:56] 요약 생성 성공 (Groq): jenkins-plugin
+[2026-02-19 15:33:56] Updated summary for project 1092068237
+[2026-02-19 15:33:56] 프로젝트 요약이 성공적으로 업데이트됨: jenkins-plugin
+[2026-02-19 15:36:08] 총 2개의 Gemini API 키가 로드되었습니다.
+[2026-02-19 15:36:08] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2026-02-19 15:36:08] Groq API 키가 로드되었습니다.
+[2026-02-19 15:36:08] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2026-02-19 15:36:08] Groq API 클라이언트 초기화됨 (폴백용)
+[2026-02-19 15:36:08] 모든 프로젝트의 업데이트 상태를 리셋합니다...
+[2026-02-19 15:36:08] 프로젝트 업데이트 상태 리셋 완료: 101개 프로젝트 리셋됨
+[2026-02-19 15:36:08] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-19 15:36:08] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:36:08] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:36:08] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:36:08] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:36:08] 프로젝트 데이터: id=1002843322, name=Incomplete-proj, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:36:08] 업데이트할 프로젝트를 찾았습니다: Incomplete-proj (ID: 1002843322)
+[2026-02-19 15:36:08] 프로젝트 처리 시작: Incomplete-proj (ID: 1002843322)
+[2026-02-19 15:36:08] 프로젝트 Incomplete-proj (ID: 1002843322) 정밀 분석 중...
+[2026-02-19 15:36:09] Gemini API 호출 중...
+[2026-02-19 15:36:09] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [403 Forbidden] Permission denied: Consumer 'api_key:AIzaSyCtOONwzIF5fPWlVGvWSBqJvDxRI7OH87M' has been suspended. [{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"CONSUMER_SUSPENDED","domain":"googleapis.com","metadata":{"containerInfo":"api_key:AIzaSyCtOONwzIF5fPWlVGvWSBqJvDxRI7OH87M","service":"generativelanguage.googleapis.com","consumer":"projects/282268589154"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"Permission denied: Consumer 'api_key:AIzaSyCtOONwzIF5fPWlVGvWSBqJvDxRI7OH87M' has been suspended."}]
+[2026-02-19 15:36:09] 키 로테이션 시도 중... (1/5)
+[2026-02-19 15:36:09] 🔄 Gemini API 키 로테이션: 키 #1에서 키 #2로 전환합니다.
+[2026-02-19 15:36:09] Gemini API 클라이언트 초기화됨: AIza...1iS4 (39자리)
+[2026-02-19 15:36:09] Gemini API 호출 중...
+[2026-02-19 15:36:09] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:36:09] Groq API로 폴백 시도 중: Incomplete-proj
+[2026-02-19 15:36:11] 요약 생성 성공 (Groq): Incomplete-proj
+[2026-02-19 15:36:11] Updated summary for project 1002843322
+[2026-02-19 15:36:11] 프로젝트 요약이 성공적으로 업데이트됨: Incomplete-proj
+[2026-02-19 15:36:12] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:36:12] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:36:12] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:36:12] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:36:12] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:36:12] 프로젝트 데이터: id=1012278543, name=naverworks-message-cron-server, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:36:12] 업데이트할 프로젝트를 찾았습니다: naverworks-message-cron-server (ID: 1012278543)
+[2026-02-19 15:36:12] 프로젝트 처리 시작: naverworks-message-cron-server (ID: 1012278543)
+[2026-02-19 15:36:12] 프로젝트 naverworks-message-cron-server (ID: 1012278543) 정밀 분석 중...
+[2026-02-19 15:36:12] Gemini API 호출 중...
+[2026-02-19 15:36:12] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:36:12] Groq API로 폴백 시도 중: naverworks-message-cron-server
+[2026-02-19 15:36:15] 요약 생성 성공 (Groq): naverworks-message-cron-server
+[2026-02-19 15:36:15] Updated summary for project 1012278543
+[2026-02-19 15:36:15] 프로젝트 요약이 성공적으로 업데이트됨: naverworks-message-cron-server
+[2026-02-19 15:36:16] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:36:16] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:36:16] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:36:16] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:36:16] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:36:16] 프로젝트 데이터: id=1012454049, name=mother-father-diary-policy, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:36:16] 업데이트할 프로젝트를 찾았습니다: mother-father-diary-policy (ID: 1012454049)
+[2026-02-19 15:36:16] 프로젝트 처리 시작: mother-father-diary-policy (ID: 1012454049)
+[2026-02-19 15:36:16] 프로젝트 mother-father-diary-policy (ID: 1012454049) 정밀 분석 중...
+[2026-02-19 15:36:16] Gemini API 호출 중...
+[2026-02-19 15:36:16] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:36:16] Groq API로 폴백 시도 중: mother-father-diary-policy
+[2026-02-19 15:36:18] 요약 생성 성공 (Groq): mother-father-diary-policy
+[2026-02-19 15:36:18] Updated summary for project 1012454049
+[2026-02-19 15:36:18] 프로젝트 요약이 성공적으로 업데이트됨: mother-father-diary-policy
+[2026-02-19 15:36:19] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:36:19] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:36:19] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:36:19] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:36:19] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:36:19] 프로젝트 데이터: id=1012863000, name=neverbbointmyner, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:36:19] 업데이트할 프로젝트를 찾았습니다: neverbbointmyner (ID: 1012863000)
+[2026-02-19 15:36:19] 프로젝트 처리 시작: neverbbointmyner (ID: 1012863000)
+[2026-02-19 15:36:19] 프로젝트 neverbbointmyner (ID: 1012863000) 정밀 분석 중...
+[2026-02-19 15:36:19] Gemini API 호출 중...
+[2026-02-19 15:36:19] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:36:19] Groq API로 폴백 시도 중: neverbbointmyner
+[2026-02-19 15:36:21] 요약 생성 성공 (Groq): neverbbointmyner
+[2026-02-19 15:36:21] Updated summary for project 1012863000
+[2026-02-19 15:36:21] 프로젝트 요약이 성공적으로 업데이트됨: neverbbointmyner
+[2026-02-19 15:36:22] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:36:22] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:36:22] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:36:22] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:36:22] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:36:22] 프로젝트 데이터: id=1017765334, name=imoji-battle-field, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:36:22] 업데이트할 프로젝트를 찾았습니다: imoji-battle-field (ID: 1017765334)
+[2026-02-19 15:36:22] 프로젝트 처리 시작: imoji-battle-field (ID: 1017765334)
+[2026-02-19 15:36:22] 프로젝트 imoji-battle-field (ID: 1017765334) 정밀 분석 중...
+[2026-02-19 15:36:22] Gemini API 호출 중...
+[2026-02-19 15:36:23] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:36:23] Groq API로 폴백 시도 중: imoji-battle-field
+[2026-02-19 15:36:24] 요약 생성 성공 (Groq): imoji-battle-field
+[2026-02-19 15:36:24] Updated summary for project 1017765334
+[2026-02-19 15:36:24] 프로젝트 요약이 성공적으로 업데이트됨: imoji-battle-field
+[2026-02-19 15:36:25] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:36:25] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:36:25] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:36:25] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:36:25] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:36:25] 프로젝트 데이터: id=1029374616, name=auto_weekly_merge_system, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:36:25] 업데이트할 프로젝트를 찾았습니다: auto_weekly_merge_system (ID: 1029374616)
+[2026-02-19 15:36:25] 프로젝트 처리 시작: auto_weekly_merge_system (ID: 1029374616)
+[2026-02-19 15:36:25] 프로젝트 auto_weekly_merge_system (ID: 1029374616) 정밀 분석 중...
+[2026-02-19 15:36:25] Gemini API 호출 중...
+[2026-02-19 15:36:26] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:36:26] Groq API로 폴백 시도 중: auto_weekly_merge_system
+[2026-02-19 15:36:27] 요약 생성 성공 (Groq): auto_weekly_merge_system
+[2026-02-19 15:36:27] Updated summary for project 1029374616
+[2026-02-19 15:36:27] 프로젝트 요약이 성공적으로 업데이트됨: auto_weekly_merge_system
+[2026-02-19 15:36:28] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:36:28] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:36:28] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:36:28] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:36:28] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:36:28] 프로젝트 데이터: id=1063251993, name=kls-connect, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:36:28] 업데이트할 프로젝트를 찾았습니다: kls-connect (ID: 1063251993)
+[2026-02-19 15:36:28] 프로젝트 처리 시작: kls-connect (ID: 1063251993)
+[2026-02-19 15:36:28] 프로젝트 kls-connect (ID: 1063251993) 정밀 분석 중...
+[2026-02-19 15:36:28] Gemini API 호출 중...
+[2026-02-19 15:36:29] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:36:29] Groq API로 폴백 시도 중: kls-connect
+[2026-02-19 15:36:30] 요약 생성 성공 (Groq): kls-connect
+[2026-02-19 15:36:30] Updated summary for project 1063251993
+[2026-02-19 15:36:30] 프로젝트 요약이 성공적으로 업데이트됨: kls-connect
+[2026-02-19 15:36:31] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:36:31] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:36:31] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:36:31] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:36:31] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:36:31] 프로젝트 데이터: id=1063255178, name=jenkins-jobdsl-compiler, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:36:31] 업데이트할 프로젝트를 찾았습니다: jenkins-jobdsl-compiler (ID: 1063255178)
+[2026-02-19 15:36:31] 프로젝트 처리 시작: jenkins-jobdsl-compiler (ID: 1063255178)
+[2026-02-19 15:36:31] 프로젝트 jenkins-jobdsl-compiler (ID: 1063255178) 정밀 분석 중...
+[2026-02-19 15:36:32] Gemini API 호출 중...
+[2026-02-19 15:36:32] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:36:32] Groq API로 폴백 시도 중: jenkins-jobdsl-compiler
+[2026-02-19 15:36:33] 요약 생성 성공 (Groq): jenkins-jobdsl-compiler
+[2026-02-19 15:36:33] Updated summary for project 1063255178
+[2026-02-19 15:36:33] 프로젝트 요약이 성공적으로 업데이트됨: jenkins-jobdsl-compiler
+[2026-02-19 15:36:34] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:36:34] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:36:34] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:36:34] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:36:34] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:36:34] 프로젝트 데이터: id=1083936162, name=v0-kls-connect-app, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:36:34] 업데이트할 프로젝트를 찾았습니다: v0-kls-connect-app (ID: 1083936162)
+[2026-02-19 15:36:34] 프로젝트 처리 시작: v0-kls-connect-app (ID: 1083936162)
+[2026-02-19 15:36:34] 프로젝트 v0-kls-connect-app (ID: 1083936162) 정밀 분석 중...
+[2026-02-19 15:36:35] Gemini API 호출 중...
+[2026-02-19 15:36:35] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:36:35] Groq API로 폴백 시도 중: v0-kls-connect-app
+[2026-02-19 15:36:36] 요약 생성 성공 (Groq): v0-kls-connect-app
+[2026-02-19 15:36:36] Updated summary for project 1083936162
+[2026-02-19 15:36:36] 프로젝트 요약이 성공적으로 업데이트됨: v0-kls-connect-app
+[2026-02-19 15:36:37] API 키 상태: 전체 2개, 사용 가능 1개, 실패 1개
+[2026-02-19 15:36:37] 프로젝트 데이터베이스 접근 중...
+[2026-02-19 15:36:37] 총 101개의 프로젝트가 데이터베이스에 있습니다.
+[2026-02-19 15:36:37] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-19 15:36:37] 가장 오래된 프로젝트 찾는 중...
+[2026-02-19 15:36:37] 프로젝트 데이터: id=1092068237, name=jenkins-plugin, 마지막 업데이트=1999-12-31T15:00:00.000Z
+[2026-02-19 15:36:37] 업데이트할 프로젝트를 찾았습니다: jenkins-plugin (ID: 1092068237)
+[2026-02-19 15:36:37] 프로젝트 처리 시작: jenkins-plugin (ID: 1092068237)
+[2026-02-19 15:36:37] 프로젝트 jenkins-plugin (ID: 1092068237) 정밀 분석 중...
+[2026-02-19 15:36:38] Gemini API 호출 중...
+[2026-02-19 15:36:38] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [404 Not Found] models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-19 15:36:38] Groq API로 폴백 시도 중: jenkins-plugin
+[2026-02-19 15:36:39] 요약 생성 성공 (Groq): jenkins-plugin
+[2026-02-19 15:36:39] Updated summary for project 1092068237
+[2026-02-19 15:36:39] 프로젝트 요약이 성공적으로 업데이트됨: jenkins-plugin

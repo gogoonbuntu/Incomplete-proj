@@ -20,6 +20,9 @@ export class ApiKeyManager {
   // 모든 Gemini API 키를 저장하는 배열
   private geminiApiKeys: string[] = [];
   
+  // Groq API 키
+  private groqApiKey: string | null = null;
+  
   // 현재 사용 중인 Gemini API 키 인덱스
   private currentGeminiKeyIndex = 0;
   
@@ -29,6 +32,9 @@ export class ApiKeyManager {
   constructor() {
     this.loadApiKeys();
     logger.logSummaryUpdate(`API 키 관리자 초기화: ${this.geminiApiKeys.length}개의 Gemini API 키 로드됨`);
+    if (this.groqApiKey) {
+      logger.logSummaryUpdate(`Groq API 키가 로드되었습니다.`);
+    }
   }
 
   /**
@@ -51,6 +57,9 @@ export class ApiKeyManager {
         }
       }
 
+      // Groq API 키 로드
+      this.groqApiKey = process.env.GROQ_API_KEY || null;
+
       // 키가 없는 경우 경고
       if (this.geminiApiKeys.length === 0) {
         logger.logSummaryUpdate("⚠️ 경고: 사용 가능한 Gemini API 키가 없습니다!");
@@ -70,6 +79,13 @@ export class ApiKeyManager {
       return null;
     }
     return this.geminiApiKeys[this.currentGeminiKeyIndex];
+  }
+
+  /**
+   * Groq API 키 반환
+   */
+  public getGroqApiKey(): string | null {
+    return this.groqApiKey;
   }
 
   /**

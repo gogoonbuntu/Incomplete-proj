@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai"
 import { logger } from "./logger-service"
+import Groq from "groq-sdk"
 
 interface SummaryRequest {
   readme: string
@@ -38,29 +39,33 @@ interface Repository {
 
 class AIService {
   private apiKey: string
+  private groqApiKey: string
   private genAI: GoogleGenerativeAI | null = null
+  private groq: Groq | null = null
   private requestCount = 0
   private lastResetTime = Date.now()
-  private maxRequestsPerMinute = 8 // More conservative setting
+  private maxRequestsPerMinute = 30 // Increased from 8
   private dailyRequestCount = 0
   private lastDayReset = new Date().getDate()
-  private maxDailyRequests = 100 // Conservative daily limit
+  private maxDailyRequests = 1000 // Increased from 100
 
   constructor() {
     // 다양한 방식으로 환경 변수 로드 시도
     this.apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY || ''
+    this.groqApiKey = process.env.GROQ_API_KEY || ''
     
     if (!this.apiKey) {
       console.warn('GEMINI_API_KEY is not set in environment variables. AI 기능이 제한됩니다.')
-      // 개발 환경에서도 API 키가 필요합니다
-      if (process.env.NODE_ENV === 'development') {
-        console.error('개발 환경에서도 .env.local 파일에 GEMINI_API_KEY를 설정해야 합니다.')
-      }
     }
     
     // API 키가 있을 때만 GoogleGenerativeAI 초기화
     if (this.apiKey) {
       this.genAI = new GoogleGenerativeAI(this.apiKey)
+    }
+
+    if (this.groqApiKey) {
+      this.groq = new Groq({ apiKey: this.groqApiKey })
+      logger.info('Groq API가 폴백으로 설정되었습니다.')
     }
   }
 
@@ -106,11 +111,6 @@ class AIService {
    */
   async generateText(prompt: string): Promise<string | null> {
     try {
-      if (!this.genAI) {
-        logger.warn("AI API 키가 설정되지 않아 텍스트 생성을 건너뜁니다.")
-        return null
-      }
-      
       // 요청 한도 확인
       const canProceed = await this.checkRateLimit()
       if (!canProceed) {
@@ -118,23 +118,107 @@ class AIService {
         return null
       }
       
-      // 텍스트 생성 모델 사용
-      const model = this.genAI.getGenerativeModel({
-        model: "gemini-pro",
-      })
+      // 1. Gemini 시도
+      if (this.genAI) {
+        try {
+          const model = this.genAI.getGenerativeModel({
+            model: "gemini-pro",
+          })
+          
+          this.requestCount++
+          this.dailyRequestCount++
+          
+          const result = await model.generateContent(prompt)
+          const response = await result.response
+          return response.text()
+        } catch (geminiError) {
+          logger.error("Gemini 텍스트 생성 실패, Groq 시도:", geminiError)
+        }
+      }
+
+      // 2. Groq 폴백 시도
+      if (this.groq) {
+        try {
+          const completion = await this.groq.chat.completions.create({
+            messages: [{ role: "user", content: prompt }],
+            model: "llama-3.3-70b-versatile",
+          })
+          return completion.choices[0]?.message?.content || null
+        } catch (groqError) {
+          logger.error("Groq 텍스트 생성 실패:", groqError)
+        }
+      }
       
-      // 요청 횟수 증가
-      this.requestCount++
-      this.dailyRequestCount++
-      
-      // 텍스트 생성
-      const result = await model.generateContent(prompt)
-      const response = await result.response
-      const text = response.text()
-      
-      return text
+      return null
     } catch (error) {
       logger.error("텍스트 생성 중 오류:", error)
+      return null
+    }
+  }
+
+  // Groq를 사용한 프로젝트 분석
+  private async analyzeProjectWithGroq(
+    repository: Repository,
+    readme: string,
+  ): Promise<{
+    summary: string
+    todos: string[]
+    categories: string[]
+  } | null> {
+    if (!this.groq) return null
+
+    try {
+      logger.info(`Groq 분석 시작: ${repository.full_name}`)
+      
+      const prompt = `
+당신은 전 세계의 오픈소스 프로젝트를 분석하여 그 가치를 발굴하는 **시니어 소프트웨어 아키텍트**이자 **기술 에반젤리스트**입니다.
+다음 프로젝트를 분석하여 개발자들이 협업하고 싶어질 만큼 전문적이고 매력적인 리포트를 작성하세요.
+
+[프로젝트 정보]
+- 명칭: ${repository.name}
+- 핵심 언어: ${repository.language || "Unknown"}
+- 기존 설명: ${repository.description || "No description provided"}
+- README 요약: ${readme.substring(0, 2000)}
+
+[작업 가이드라인]
+1. **분석적 태도**: 정보가 부족하더라도 이름과 언어를 바탕으로 이 프로젝트가 해결하려는 문제나 아키텍처적 의도를 전문적으로 추론하세요. "정보가 없다"는 표현은 지양합니다.
+2. **요약(Summary)**: 단순 나열이 아닌, 프로젝트의 '존재 이유'와 '핵심 가치'를 관통하는 임팩트 있는 문장을 작성하세요.
+3. **전문 용어 활용**: 기술적 숙련도가 느껴지는 업계 표준 용어를 적절히 사용하세요.
+4. **매력적인 톤**: 프로젝트의 잠재력을 강조하여 다른 개발자들이 기여하고 싶게 만드세요.
+
+아래 형식의 JSON으로만 응답하세요:
+{
+  "summary_ko": "프로젝트의 핵심 가치를 담은 전문적인 한국어 요약 (3문장 내외)",
+  "summary_en": "Professional, high-impact English summary focusing on value proposition",
+  "todos": ["아키텍처 완성도를 높이기 위한 고난도 작업1", "확장성을 위한 작업2", "엔지니어링 완성도를 위한 작업3", "테스트 자동화", "문서화"],
+  "categories": ["전문 카테고리 1", "전문 카테고리 2"]
+}
+`
+
+      const completion = await this.groq.chat.completions.create({
+        messages: [{ role: "user", content: prompt }],
+        model: "llama-3.3-70b-versatile",
+        response_format: { type: "json_object" },
+      })
+
+      const text = completion.choices[0]?.message?.content || ""
+      const parsed = JSON.parse(text)
+      
+      logger.success(`Groq 분석 완료: ${repository.full_name}`)
+
+      const summaryKo = parsed.summary_ko || this.getFallbackSummary(repository)
+      const summaryEn = parsed.summary_en || ""
+      const combinedSummary = summaryEn
+        ? `KOREAN SUMMARY:\n${summaryKo}\n\nENGLISH SUMMARY:\n${summaryEn}`
+        : summaryKo
+
+      return {
+        summary: combinedSummary,
+        todos: Array.isArray(parsed.todos) ? parsed.todos.slice(0, 5) : [],
+        categories: Array.isArray(parsed.categories) ? parsed.categories.slice(0, 2) : ["prototype"],
+      }
+    } catch (error) {
+      logger.error("Groq 분석 실패:", error)
       return null
     }
   }
@@ -156,89 +240,98 @@ class AIService {
         return this.getFallbackAnalysis(repository, readme)
       }
 
-      logger.info(`통합 AI 분석 시작: ${repository.full_name}`)
+      // 1. Gemini 시도
+      if (this.genAI) {
+        try {
+          logger.info(`Gemini 통합 AI 분석 시작: ${repository.full_name}`)
 
-      if (!this.genAI) {
-        logger.warn("AI API 키가 설정되지 않아 기본 분석 사용")
-        return this.getFallbackAnalysis(repository, readme)
-      }
+          const model = this.genAI.getGenerativeModel({
+            model: "gemini-1.5-flash",
+            generationConfig: {
+              temperature: 0.7,
+              topK: 40,
+              topP: 0.95,
+              maxOutputTokens: 800,
+            },
+            safetySettings: [
+              {
+                category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+                threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+              },
+              {
+                category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+                threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+              },
+              {
+                category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+                threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+              },
+              {
+                category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+                threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+              },
+            ],
+          })
 
-      const model = this.genAI.getGenerativeModel({
-        model: "gemini-1.5-flash",
-        generationConfig: {
-          temperature: 0.7,
-          topK: 40,
-          topP: 0.95,
-          maxOutputTokens: 800, // 토큰 수 제한
-        },
-        safetySettings: [
-          {
-            category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-            threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-          },
-          {
-            category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-            threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-          },
-          {
-            category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-            threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-          },
-          {
-            category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-            threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-          },
-        ],
-      })
+          const prompt = `
+당신은 전 세계의 오픈소스 프로젝트를 분석하여 그 가치를 발굴하는 **시니어 소프트웨어 아키텍트**이자 **기술 에반젤리스트**입니다.
+다음 프로젝트를 분석하여 개발자들이 협업하고 싶어질 만큼 전문적이고 매력적인 리포트를 작성하세요.
 
-      const prompt = `
-다음은 ${repository.language || "Unknown"}로 작성된 GitHub 프로젝트입니다:
+[프로젝트 정보]
+- 명칭: ${repository.name}
+- 핵심 언어: ${repository.language || "Unknown"}
+- 기존 설명: ${repository.description || "No description provided"}
+- README 요약: ${readme.substring(0, 2000)}
 
-프로젝트명: ${repository.name}
-설명: ${repository.description || "설명 없음"}
-README (처음 2000자): ${readme.substring(0, 2000)}
+[작업 가이드라인]
+1. **분석적 태도**: 정보가 부족하더라도 이름과 언어를 바탕으로 이 프로젝트가 해결하려는 문제나 아키텍처적 의도를 전문적으로 추론하세요. "정보가 없다"는 표현은 지양합니다.
+2. **요약(Summary)**: 단순 나열이 아닌, 프로젝트의 '존재 이유'와 '핵심 가치'를 관통하는 임팩트 있는 문장을 작성하세요.
+3. **전문 용어 활용**: 기술적 숙련도가 느껴지는 업계 표준 용어를 적절히 사용하세요.
+4. **매력적인 톤**: 프로젝트의 잠재력을 강조하여 다른 개발자들이 기여하고 싶게 만드세요.
 
-아래 형식의 JSON으로만 응답하세요 (추가 텍스트 금지):
+아래 형식의 JSON으로만 응답하세요:
 {
-  "summary_ko": "프로젝트 요약 (한국어, 200자 이내)",
-  "summary_en": "Project summary in English (max 2-3 sentences)",
-  "todos": ["완성을 위한 작업1", "작업2", "작업3", "작업4", "작업5"],
-  "categories": ["카테고리1", "카테고리2"]
+  "summary_ko": "프로젝트의 핵심 가치를 담은 전문적인 한국어 요약 (3문장 내외)",
+  "summary_en": "Professional, high-impact English summary focusing on value proposition",
+  "todos": ["아키텍처 완성도를 높이기 위한 고난도 작업1", "확장성을 위한 작업2", "엔지니어링 완성도를 위한 작업3", "테스트 자동화", "문서화"],
+  "categories": ["전문 카테고리 1", "전문 카테고리 2"]
 }
-
-카테고리는 다음 중에서 선택: web-development, mobile-app, cli-tool, api, game, data-science, machine-learning, devtools, library, prototype
-요약은 한국어/영어 버전을 각각 summary_ko, summary_en에 담아주세요.
 `
 
-      this.requestCount++
-      this.dailyRequestCount++
+          this.requestCount++
+          this.dailyRequestCount++
 
-      const result = await model.generateContent(prompt)
-      const response = await result.response
-      const text = response.text()
+          const result = await model.generateContent(prompt)
+          const response = await result.response
+          const text = response.text()
 
-      // JSON 파싱 시도
-      try {
-        const parsed = JSON.parse(text)
-        logger.success(`통합 AI 분석 완료: ${repository.full_name}`)
+          const parsed = JSON.parse(text)
+          logger.success(`Gemini 분석 완료: ${repository.full_name}`)
 
-        const summaryKo = parsed.summary_ko || this.getFallbackSummary(repository)
-        const summaryEn = parsed.summary_en || ""
-        const combinedSummary = summaryEn
-          ? `KOREAN SUMMARY:\n${summaryKo}\n\nENGLISH SUMMARY:\n${summaryEn}`
-          : summaryKo
+          const summaryKo = parsed.summary_ko || this.getFallbackSummary(repository)
+          const summaryEn = parsed.summary_en || ""
+          const combinedSummary = summaryEn
+            ? `KOREAN SUMMARY:\n${summaryKo}\n\nENGLISH SUMMARY:\n${summaryEn}`
+            : summaryKo
 
-        return {
-          summary: combinedSummary,
-          todos: Array.isArray(parsed.todos) ? parsed.todos.slice(0, 5) : [],
-          categories: Array.isArray(parsed.categories) ? parsed.categories.slice(0, 2) : ["prototype"],
+          return {
+            summary: combinedSummary,
+            todos: Array.isArray(parsed.todos) ? parsed.todos.slice(0, 5) : [],
+            categories: Array.isArray(parsed.categories) ? parsed.categories.slice(0, 2) : ["prototype"],
+          }
+        } catch (geminiError) {
+          logger.error("Gemini 분석 실패, Groq 시도:", geminiError)
         }
-      } catch (parseError) {
-        logger.warn("AI 응답 파싱 실패, 기본값 사용")
-        return this.getFallbackAnalysis(repository, readme)
       }
+
+      // 2. Groq 폴백 시도
+      const groqResult = await this.analyzeProjectWithGroq(repository, readme)
+      if (groqResult) return groqResult
+
+      // 3. 둘 다 실패 시 기본값
+      return this.getFallbackAnalysis(repository, readme)
     } catch (error: any) {
-      logger.error("AI 분석 실패", error)
+      logger.error("AI 분석 전체 실패", error)
       return this.getFallbackAnalysis(repository, readme)
     }
   }

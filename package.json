@@ -11,7 +11,8 @@
     "prepare-vercel": "node scripts/prepare-vercel-env.js",
     "verify-env": "node scripts/verify-env.js",
     "update-descriptions": "node scripts/start-description-updater.js",
-    "update-summaries": "node scripts/start-summary-updater.js"
+    "update-summaries": "node scripts/start-summary-updater.js",
+    "scheduler": "node scripts/integrated-updater.js"
   },
   "dependencies": {
     "@google/generative-ai": "latest",
@@ -55,6 +56,7 @@
     "firebase": "latest",
     "firebase-admin": "^13.4.0",
     "firebase-functions": "latest",
+    "groq-sdk": "^0.37.0",
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
     "next": "15.2.4",
