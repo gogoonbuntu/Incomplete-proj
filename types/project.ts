@@ -30,6 +30,7 @@ export interface Project {
   views?: number
   defaultBranch?: string
   // 프로젝트 설명 자동 업데이트 관련 필드
+  enhancedDescription?: string
   koreanDescription?: string
   englishDescription?: string
   isDescriptionUpdated?: boolean

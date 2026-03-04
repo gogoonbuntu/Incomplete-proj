@@ -1,20 +1,16 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import Groq from "groq-sdk";
-import { db, storage } from "../lib/firebase-admin";
+import { rtdb, storage } from "../lib/firebase-admin";
 import { readFile } from "fs/promises";
 import path from "path";
 import { logger } from "./logger";
 import { apiKeyManager } from "./api-key-manager";
 import { githubService } from "./github-service";
-import { Timestamp, FieldValue, DocumentSnapshot, DocumentData, Firestore } from "firebase-admin/firestore";
 
 // DB가 null이 아님을 확인
-if (!db) {
-  throw new Error("Firestore database not initialized");
+if (!rtdb) {
+  throw new Error("Realtime Database not initialized");
 }
-
-// 타입 캐스팅을 위한 변수
-const firestore = db as Firestore;
 
 // API 인스턴스를 저장할 변수들
 let genAI: GoogleGenerativeAI;
@@ -32,7 +28,7 @@ function initializeGeminiApi() {
   try {
     // 새 API 키로 클라이언트 재초기화
     genAI = new GoogleGenerativeAI(apiKey);
-    model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+    model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
     
     // API 키의 일부를 로그에 기록 (보안상 전체 키는 표시하지 않음)
     const maskedKey = apiKey.substring(0, 4) + "..." + apiKey.substring(apiKey.length - 4);
@@ -80,7 +76,8 @@ const RETRY_DELAY_MS = 5000; // 재시도 간격 (밀리초)
 
 interface ProjectData {
   id: string;
-  name: string;
+  name?: string;
+  title?: string;
   description: string;
   language: string;
   readme?: string;
@@ -173,25 +170,18 @@ export const summaryGenerator = {
       logger.logSummaryUpdate("강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.");
       return false;
       
-      /* 일시적으로 비활성화
-      // 지난 7일 이내에 업데이트되지 않은 프로젝트 찾기
+      /* RTDB용 구현 예시
       const oneWeekAgo = new Date();
       oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
       
-      const snapshot = await firestore
-        .collection("projects")
-        .where("lastSummaryUpdate", "<", oneWeekAgo.toISOString())
-        .limit(1)
+      const snapshot = await rtdb!
+        .ref("projects")
+        .orderByChild("lastSummaryUpdate")
+        .endAt(oneWeekAgo.toISOString())
+        .limitToFirst(1)
         .get();
       
-      // 업데이트가 필요한 프로젝트가 없으면 true 반환
-      const allUpdated = snapshot.empty;
-      
-      if (allUpdated) {
-        logger.logSummaryUpdate("모든 프로젝트가 최근 7일 이내에 업데이트되었습니다. 리셋이 필요합니다.");
-      }
-      
-      return allUpdated;
+      return snapshot.exists();
       */
     } catch (error) {
       console.error("[Summary Generator] 프로젝트 업데이트 상태 확인 중 오류:", error);
@@ -216,36 +206,20 @@ export const summaryGenerator = {
       // 확인 로깅
       logger.logSummaryUpdate("모든 프로젝트의 업데이트 상태를 리셋합니다...");
       
-      // 프로젝트 수 확인을 위한 카운트 쿼리
-      const countSnapshot = await firestore.collection("projects").count().get();
-      const totalProjects = countSnapshot.data().count;
+      const snapshot = await rtdb!.ref("projects").get();
+      if (!snapshot.exists()) return true;
+
+      const projects = snapshot.val();
+      const updates: Record<string, any> = {};
+      const oldDate = new Date(2000, 0, 1).toISOString();
+
+      Object.keys(projects).forEach(projectId => {
+        updates[`projects/${projectId}/lastSummaryUpdate`] = oldDate;
+      });
       
-      // 배치 업데이트 준비 (최대 500개까지만 가능)
-      const batchSize = 500;
-      const batches = Math.ceil(totalProjects / batchSize);
+      await rtdb!.ref().update(updates);
       
-      let resetCount = 0;
-      
-      for (let i = 0; i < batches; i++) {
-        const batch = firestore.batch();
-        
-        const projectsSnapshot = await firestore
-          .collection("projects")
-          .offset(i * batchSize)
-          .limit(batchSize)
-          .get();
-        
-        projectsSnapshot.docs.forEach((doc: DocumentSnapshot<DocumentData>) => {
-          // lastSummaryUpdate 필드를 매우 오래된 날짜로 설정
-          const oldDate = new Date(2000, 0, 1).toISOString();
-          batch.update(doc.ref, { lastSummaryUpdate: oldDate });
-          resetCount++;
-        });
-        
-        await batch.commit();
-      }
-      
-      logger.logSummaryUpdate(`프로젝트 업데이트 상태 리셋 완료: ${resetCount}개 프로젝트 리셋됨`);
+      logger.logSummaryUpdate(`프로젝트 업데이트 상태 리셋 완료: ${Object.keys(projects).length}개 프로젝트 리셋됨`);
       return true;
     } catch (error) {
       console.error("[Summary Generator] 프로젝트 업데이트 상태 리셋 중 오류:", error);
@@ -269,14 +243,17 @@ export const summaryGenerator = {
       
       // 최소한 하나의 프로젝트가 존재하는지 확인
       logger.logSummaryUpdate("프로젝트 데이터베이스 접근 중...");
-      const projectCountSnapshot = await firestore.collection("projects").count().get();
-      const totalProjects = projectCountSnapshot.data().count;
-      logger.logSummaryUpdate(`총 ${totalProjects}개의 프로젝트가 데이터베이스에 있습니다.`);
-
-      if (totalProjects === 0) {
+      const snapshot = await rtdb!.ref("projects").limitToFirst(1).get();
+      
+      if (!snapshot.exists()) {
         logger.logSummaryUpdate("데이터베이스에 프로젝트가 없습니다. 테스트 프로젝트를 생성하거나 데이터를 가져와야 합니다.");
         return null;
       }
+
+      // 전체 개수 확인 (필요한 경우)
+      // const totalSnapshot = await rtdb!.ref("projects").get();
+      // const totalProjects = totalSnapshot.numChildren();
+      // logger.logSummaryUpdate(`총 ${totalProjects}개의 프로젝트가 데이터베이스에 있습니다.`);
 
       // 먼저 모든 프로젝트가 업데이트되었는지 확인
       // All projects updated - reset status
@@ -292,37 +269,46 @@ export const summaryGenerator = {
         return null;
       }
       
-      // Get projects sorted by lastSummaryUpdate (oldest first or null first)
-      logger.logSummaryUpdate("가장 오래된 프로젝트 찾는 중...");
-      const snapshot = await firestore
-        .collection("projects")
-        .orderBy("lastSummaryUpdate", "asc")
-        .limit(1)
-        .get();
+      // Get all projects and sort by lastSummaryUpdate locally to avoid indexing issues
+      logger.logSummaryUpdate("가장 오래된 프로젝트 찾는 중 (로컬 정렬)...");
+      const projectsSnapshot = await rtdb!.ref("projects").get();
 
-      if (snapshot.empty) {
+      if (!projectsSnapshot.exists()) {
         logger.logSummaryUpdate("업데이트할 프로젝트가 없습니다.");
-        return null; // 올바른 타입으로 리턴
+        return null;
       }
 
-      const projectDoc = snapshot.docs[0];
-      const project = { id: projectDoc.id, ...projectDoc.data() } as ProjectData;
+      const projectsData = projectsSnapshot.val();
+      const projectList = Object.keys(projectsData).map(id => ({
+        id,
+        ...projectsData[id]
+      })) as ProjectData[];
+
+      // Sort by lastSummaryUpdate (oldest first)
+      projectList.sort((a, b) => {
+        const timeA = a.lastSummaryUpdate ? new Date(a.lastSummaryUpdate).getTime() : 0;
+        const timeB = b.lastSummaryUpdate ? new Date(b.lastSummaryUpdate).getTime() : 0;
+        return timeA - timeB;
+      });
+
+      const project = projectList[0];
       
       // 프로젝트 데이터 필드 확인
-      logger.logSummaryUpdate(`프로젝트 데이터: id=${project.id}, name=${project.name || '없음'}, 마지막 업데이트=${project.lastSummaryUpdate || '없음'}`); 
+      logger.logSummaryUpdate(`프로젝트 데이터: id=${project.id}, name=${project.name || project.title || '없음'}, 마지막 업데이트=${project.lastSummaryUpdate || '없음'}`); 
       
       // If the project was updated in the last 7 days, skip it
       if (project.lastSummaryUpdate) {
         const lastUpdate = new Date(project.lastSummaryUpdate);
         const daysSinceUpdate = (Date.now() - lastUpdate.getTime()) / (1000 * 60 * 60 * 24);
+        const hoursSinceUpdate = (Date.now() - lastUpdate.getTime()) / (1000 * 60 * 60);
         
-        if (daysSinceUpdate < 7) {
-          logger.logSummaryUpdate(`프로젝트 ${project.name}(${project.id})는 최근에 업데이트됨 (${daysSinceUpdate.toFixed(1)}일 전) - 건너뜁니다.`);
+        if (hoursSinceUpdate < 1) {
+          logger.logSummaryUpdate(`프로젝트 ${project.name || project.title}(${project.id})는 최근에 업데이트됨 (${hoursSinceUpdate.toFixed(1)}시간 전) - 건너뜁니다.`);
           return null;
         }
       }
       
-      logger.logSummaryUpdate(`업데이트할 프로젝트를 찾았습니다: ${project.name} (ID: ${project.id})`);
+      logger.logSummaryUpdate(`업데이트할 프로젝트를 찾았습니다: ${project.name || project.title} (ID: ${project.id})`);
       return project;
     } catch (error: any) {
       console.error("[Summary Generator] Error getting next project:", error);
@@ -349,11 +335,12 @@ export const summaryGenerator = {
         }
       }
       
-      logger.logSummaryUpdate(`프로젝트 ${projectData.name} (ID: ${projectData.id}) 정밀 분석 중...`);
+      const projectName = projectData.name || projectData.title || "Unknown";
+      logger.logSummaryUpdate(`프로젝트 ${projectName} (ID: ${projectData.id}) 정밀 분석 중...`);
 
       // NEW: Get more technical context (File Tree and Entry Point)
       const owner = 'tmddud333'; // Default owner
-      const repo = projectData.name;
+      const repo = projectName;
       
       let fileTree: string[] = [];
       let packageJsonContent: string | null = null;
@@ -369,7 +356,7 @@ export const summaryGenerator = {
           githubService.fetchFileContent(owner, repo, 'app.py')
         ]);
       } catch (e) {
-        logger.logSummaryUpdate(`GitHub 추가 데이터 획득 실패 (기본 정보로 진행): ${projectData.name}`);
+        logger.logSummaryUpdate(`GitHub 추가 데이터 획득 실패 (기본 정보로 진행): ${projectName}`);
       }
 
       // Optimize context: Parse dependencies from package.json if available
@@ -394,7 +381,7 @@ export const summaryGenerator = {
 과장된 마케팅 용어는 배제하고, 엔지니어가 읽었을 때 신뢰할 수 있는 실무적 통찰만 담으세요.
 
 [엔지니어링 데이터]
-- 프로젝트명: ${projectData.name}
+- 프로젝트명: ${projectName}
 - 핵심 스택: ${projectData.language} / ${technicalContext.dependencies}
 - 아키텍처 토폴로지: ${technicalContext.files}
 - 핵심 구현부(Partial): 
@@ -453,7 +440,7 @@ CATEGORIES:
           retryAttemptsCounter = 0;
           lastRetryTime = 0;
           
-          logger.logSummaryUpdate(`요약 생성 성공 (Gemini): ${projectData.name}`);
+          logger.logSummaryUpdate(`요약 생성 성공 (Gemini): ${projectName}`);
           return text;
         } catch (apiError: any) {
           const errorMessage = apiError?.message || String(apiError);
@@ -495,14 +482,14 @@ CATEGORIES:
         if (!groq) initializeGroqApi();
         if (groq) {
           try {
-            logger.logSummaryUpdate(`Groq API로 폴백 시도 중: ${projectData.name}`);
+            logger.logSummaryUpdate(`Groq API로 폴백 시도 중: ${projectName}`);
             const completion = await groq.chat.completions.create({
               messages: [{ role: "user", content: prompt }],
               model: "llama-3.3-70b-versatile",
             });
             const text = completion.choices[0]?.message?.content || null;
             if (text) {
-              logger.logSummaryUpdate(`요약 생성 성공 (Groq): ${projectData.name}`);
+              logger.logSummaryUpdate(`요약 생성 성공 (Groq): ${projectName}`);
               return text;
             }
           } catch (groqError: any) {
@@ -522,7 +509,7 @@ CATEGORIES:
   // Update project with new summary in Firebase
   updateProjectSummary: async (projectId: string, summary: string): Promise<boolean> => {
     try {
-      await firestore.collection("projects").doc(projectId).update({
+      await rtdb!.ref(`projects/${projectId}`).update({
         enhancedDescription: summary,
         lastSummaryUpdate: new Date().toISOString(),
       });
@@ -547,8 +534,9 @@ CATEGORIES:
         return { updated: false };
       }
 
+      const projectName = project.name || project.title || "Unknown";
       // 프로젝트 처리 시작 로그
-      logger.logSummaryUpdate(`프로젝트 처리 시작: ${project.name} (ID: ${project.id})`);
+      logger.logSummaryUpdate(`프로젝트 처리 시작: ${projectName} (ID: ${project.id})`);
       
       // API 호출 제한 확인
       if (!summaryGenerator.canMakeApiCall() && retryAttemptsCounter === 0) {
@@ -566,22 +554,26 @@ CATEGORIES:
         const success = await summaryGenerator.updateProjectSummary(project.id, summary);
         
         if (success) {
-          logger.logSummaryUpdate(`프로젝트 요약이 성공적으로 업데이트됨: ${project.name}`);
+          logger.logSummaryUpdate(`프로젝트 요약이 성공적으로 업데이트됨: ${projectName}`);
           
           // 프로젝트 업데이트 현황 통계 업데이트
-          await firestore.collection("system").doc("summary-updater-stats").set({
+          const statsRef = rtdb!.ref("system/summary-updater-stats");
+          const statsSnapshot = await statsRef.get();
+          const currentTotal = (statsSnapshot.val()?.totalUpdates || 0);
+          
+          await statsRef.update({
             lastSuccessfulUpdate: new Date().toISOString(),
-            lastUpdatedProject: project.name,
+            lastUpdatedProject: projectName,
             lastUpdatedProjectId: project.id,
-            totalUpdates: FieldValue.increment(1)
-          }, { merge: true });
+            totalUpdates: currentTotal + 1
+          });
         } else {
-          logger.logSummaryUpdate(`프로젝트 요약 업데이트 실패: ${project.name}`);
+          logger.logSummaryUpdate(`프로젝트 요약 업데이트 실패: ${projectName}`);
         }
-        return { updated: success, projectId: project.id, projectName: project.name };
+        return { updated: success, projectId: project.id, projectName: projectName };
       } else {
-        logger.logSummaryUpdate(`프로젝트 요약 생성 실패: ${project.name}`);
-        return { updated: false, projectId: project.id, projectName: project.name };
+        logger.logSummaryUpdate(`프로젝트 요약 생성 실패: ${projectName}`);
+        return { updated: false, projectId: project.id, projectName: projectName };
       }
     } catch (error) {
       console.error("[Summary Generator] 프로젝트 처리 중 오류:", error);
@@ -593,9 +585,9 @@ CATEGORIES:
   // 시스템 통계 정보 가져오기
   getSystemStats: async (): Promise<SystemStats | null> => {
     try {
-      const statsDoc = await firestore.collection("system").doc("summary-updater-stats").get();
-      if (statsDoc.exists) {
-        return statsDoc.data() as SystemStats;
+      const statsSnapshot = await rtdb!.ref("system/summary-updater-stats").get();
+      if (statsSnapshot.exists()) {
+        return statsSnapshot.val() as SystemStats;
       }
       return null;
     } catch (error) {

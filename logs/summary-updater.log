@@ -953,3 +953,54 @@
 [2026-02-19 15:36:39] 요약 생성 성공 (Groq): jenkins-plugin
 [2026-02-19 15:36:39] Updated summary for project 1092068237
 [2026-02-19 15:36:39] 프로젝트 요약이 성공적으로 업데이트됨: jenkins-plugin
+[2026-02-26 11:27:06] 총 2개의 Gemini API 키가 로드되었습니다.
+[2026-02-26 11:27:06] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2026-02-26 11:27:06] Groq API 키가 로드되었습니다.
+[2026-02-26 11:27:07] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2026-02-26 11:27:07] Groq API 클라이언트 초기화됨 (폴백용)
+[2026-02-26 11:27:45] 총 2개의 Gemini API 키가 로드되었습니다.
+[2026-02-26 11:27:45] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2026-02-26 11:27:45] Groq API 키가 로드되었습니다.
+[2026-02-26 11:27:45] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2026-02-26 11:27:45] Groq API 클라이언트 초기화됨 (폴백용)
+[2026-02-26 11:27:53] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-26 11:27:53] 프로젝트 데이터베이스 접근 중...
+[2026-02-26 11:27:53] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-26 11:27:53] 가장 오래된 프로젝트 찾는 중...
+[2026-02-26 11:27:54] 프로젝트 검색 중 오류 발생: Index not defined, add ".indexOn": "lastSummaryUpdate", for path "/projects", to the rules
+[2026-02-26 11:27:54] 현재 처리할 프로젝트가 없습니다.
+[2026-02-26 11:28:08] 총 2개의 Gemini API 키가 로드되었습니다.
+[2026-02-26 11:28:08] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2026-02-26 11:28:08] Groq API 키가 로드되었습니다.
+[2026-02-26 11:28:08] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2026-02-26 11:28:08] Groq API 클라이언트 초기화됨 (폴백용)
+[2026-02-26 11:28:08] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-26 11:28:08] 프로젝트 데이터베이스 접근 중...
+[2026-02-26 11:28:08] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-26 11:28:08] 가장 오래된 프로젝트 찾는 중...
+[2026-02-26 11:28:08] 프로젝트 검색 중 오류 발생: Index not defined, add ".indexOn": "lastSummaryUpdate", for path "/projects", to the rules
+[2026-02-26 11:28:08] 현재 처리할 프로젝트가 없습니다.
+[2026-02-26 11:28:30] 총 2개의 Gemini API 키가 로드되었습니다.
+[2026-02-26 11:28:30] API 키 관리자 초기화: 2개의 Gemini API 키 로드됨
+[2026-02-26 11:28:30] Groq API 키가 로드되었습니다.
+[2026-02-26 11:28:30] Gemini API 클라이언트 초기화됨: AIza...H87M (39자리)
+[2026-02-26 11:28:30] Groq API 클라이언트 초기화됨 (폴백용)
+[2026-02-26 11:28:30] API 키 상태: 전체 2개, 사용 가능 2개, 실패 0개
+[2026-02-26 11:28:30] 프로젝트 데이터베이스 접근 중...
+[2026-02-26 11:28:31] 강제 업데이트 모드: 모든 프로젝트를 업데이트 대상으로 처리합니다.
+[2026-02-26 11:28:31] 가장 오래된 프로젝트 찾는 중 (로컬 정렬)...
+[2026-02-26 11:28:31] 프로젝트 데이터: id=6495665, name=mediawiki-extensions-RelatedArticles, 마지막 업데이트=없음
+[2026-02-26 11:28:31] 업데이트할 프로젝트를 찾았습니다: mediawiki-extensions-RelatedArticles (ID: 6495665)
+[2026-02-26 11:28:31] 프로젝트 처리 시작: mediawiki-extensions-RelatedArticles (ID: 6495665)
+[2026-02-26 11:28:31] 프로젝트 mediawiki-extensions-RelatedArticles (ID: 6495665) 정밀 분석 중...
+[2026-02-26 11:28:32] Gemini API 호출 중...
+[2026-02-26 11:28:32] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [403 Forbidden] Permission denied: Consumer 'api_key:AIzaSyCtOONwzIF5fPWlVGvWSBqJvDxRI7OH87M' has been suspended. [{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"CONSUMER_SUSPENDED","domain":"googleapis.com","metadata":{"containerInfo":"api_key:AIzaSyCtOONwzIF5fPWlVGvWSBqJvDxRI7OH87M","consumer":"projects/282268589154","service":"generativelanguage.googleapis.com"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"Permission denied: Consumer 'api_key:AIzaSyCtOONwzIF5fPWlVGvWSBqJvDxRI7OH87M' has been suspended."}]
+[2026-02-26 11:28:32] 키 로테이션 시도 중... (1/5)
+[2026-02-26 11:28:32] 🔄 Gemini API 키 로테이션: 키 #1에서 키 #2로 전환합니다.
+[2026-02-26 11:28:32] Gemini API 클라이언트 초기화됨: AIza...1iS4 (39자리)
+[2026-02-26 11:28:32] Gemini API 호출 중...
+[2026-02-26 11:28:32] ⚠️ Gemini API 오류: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-26 11:28:32] Groq API로 폴백 시도 중: mediawiki-extensions-RelatedArticles
+[2026-02-26 11:28:34] 요약 생성 성공 (Groq): mediawiki-extensions-RelatedArticles
+[2026-02-26 11:28:34] Updated summary for project 6495665
+[2026-02-26 11:28:34] 프로젝트 요약이 성공적으로 업데이트됨: mediawiki-extensions-RelatedArticles

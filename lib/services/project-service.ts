@@ -325,6 +325,7 @@ await firebaseService.triggerCrawling()
         scoreBreakdown: scoringResult.breakdown,
         scoreReasoning: scoringResult.reasoning,
         readmeSummary: summary,
+        enhancedDescription: summary,
         todos: todos,
         topics: repository.topics || [],
         categories: categories,

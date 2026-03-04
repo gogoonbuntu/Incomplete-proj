@@ -246,7 +246,7 @@ class AIService {
           logger.info(`Gemini 통합 AI 분석 시작: ${repository.full_name}`)
 
           const model = this.genAI.getGenerativeModel({
-            model: "gemini-1.5-flash",
+            model: "gemini-2.0-flash",
             generationConfig: {
               temperature: 0.7,
               topK: 40,

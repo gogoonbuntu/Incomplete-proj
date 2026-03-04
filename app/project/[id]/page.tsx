@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Progress } from "@/components/ui/progress"
+import { useLanguage } from "@/hooks/use-language"
 import {
   ArrowLeft,
   Star,
@@ -23,11 +24,12 @@ import {
   Eye,
   Users,
   GitCommit,
+  Rocket,
+  ShieldAlert
 } from "lucide-react"
 import { useAuth } from "@/hooks/use-auth"
 import { useBookmarks } from "@/hooks/use-bookmarks"
 import { projectService } from "@/lib/services/project-service"
-import { firebaseServicePromise } from '@/lib/services/firebase-service';
 import type { Project } from "@/types/project"
 import { AdBanner } from "@/components/ad-banner"
 
@@ -35,10 +37,23 @@ export default function ProjectDetailPage() {
   const params = useParams()
   const { user } = useAuth()
   const { isBookmarked, addBookmark, removeBookmark } = useBookmarks()
+  const { t, language } = useLanguage()
   const [project, setProject] = useState<Project | null>(null)
   const [recommendedProjects, setRecommendedProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [bookmarkLoading, setBookmarkLoading] = useState(false)
+
+  // AI 리포트 섹션 추출을 위한 안전한 함수
+  const extractSection = (text: string | undefined, sectionName: string) => {
+    if (!text) return null;
+    try {
+      const regex = new RegExp(`${sectionName}:\\s*([\\s\\S]*?)(?=\\n\\n|KOREAN SUMMARY:|ENGLISH SUMMARY:|FEATURES:|TECHNICAL:|CATEGORIES:|$)`, 'i');
+      const match = text.match(regex);
+      return match ? match[1].trim() : null;
+    } catch (e) {
+      return null;
+    }
+  };
 
   useEffect(() => {
     loadProject()
@@ -92,47 +107,43 @@ export default function ProjectDetailPage() {
   }
 
   const formatDate = (dateString: string) => {
+    if (!dateString) return "---";
     const date = new Date(dateString)
-    return date.toLocaleDateString("ko-KR", {
+    return date.toLocaleDateString(language === 'ko' ? "ko-KR" : "en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
     })
   }
 
-  const getScoreColor = (score: number) => {
-    if (score >= 9) return "bg-green-100 text-green-800"
-    if (score >= 7) return "bg-yellow-100 text-yellow-800"
-    return "bg-red-100 text-red-800"
-  }
-
-  const getScoreProgress = (score: number) => {
-    return (score / 12) * 100 // Assuming max score is 12
-  }
-
   if (loading) {
     return (
-      <div className="min-h-screen bg-transparent flex items-center justify-center">
+      <div className="min-h-screen bg-transparent flex flex-col items-center justify-center">
         <Header />
-        <main className="container mx-auto px-4 py-8">
-          <LoadingSpinner className="text-cyan-400" />
-          <p className="text-cyan-200 mt-4 animate-pulse font-mono">ESTABLISHING DATA LINK...</p>
-        </main>
+        <div className="flex flex-col items-center justify-center h-[60vh]">
+          <LoadingSpinner className="text-cyan-400 h-12 w-12" />
+          <p className="text-cyan-200 mt-6 animate-pulse font-mono tracking-[0.3em] uppercase text-sm">
+            {language === 'ko' ? '데이터 링크 설정 중...' : 'Establishing Data Link...'}
+          </p>
+        </div>
       </div>
     )
   }
 
   if (!project) {
     return (
-      <div className="min-h-screen bg-transparent">
+      <div className="min-h-screen bg-transparent text-white">
         <Header />
         <main className="container mx-auto px-4 py-8">
-          <div className="text-center py-24 glass-panel rounded-2xl">
-            <h1 className="text-2xl font-bold text-white mb-4">COORDINATES LOST: PROJECT NOT FOUND</h1>
-            <Button asChild className="bg-cyan-600 hover:bg-cyan-500">
+          <div className="text-center py-24 glass-panel rounded-3xl border-red-500/20 border-2">
+            <ShieldAlert className="h-16 w-16 text-red-500 mx-auto mb-6 opacity-50" />
+            <h1 className="text-3xl font-black text-white mb-4 uppercase tracking-tighter">
+              {language === 'ko' ? '데이터 유실: 프로젝트를 찾을 수 없습니다' : 'COORDINATES LOST: PROJECT NOT FOUND'}
+            </h1>
+            <Button asChild className="bg-white text-black hover:bg-cyan-400 transition-all font-bold px-8 py-6 rounded-none">
               <Link href="/">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                RETURN TO SECTOR MAP
+                <ArrowLeft className="mr-2 h-5 w-5" />
+                {language === 'ko' ? '섹터 맵으로 복귀' : 'RETURN TO SECTOR MAP'}
               </Link>
             </Button>
           </div>
@@ -143,238 +154,249 @@ export default function ProjectDetailPage() {
 
   const bookmarked = user ? isBookmarked(project.id) : false
 
+  // AI 섹션 추출
+  // enhancedDescription이 없으면 readmeSummary를 사용 (일부 프로젝트는 readmeSummary에 AI 분석이 저장됨)
+  const analysisSource = project.enhancedDescription || project.readmeSummary;
+  const summaryKo = extractSection(analysisSource, "KOREAN SUMMARY");
+  const summaryEn = extractSection(analysisSource, "ENGLISH SUMMARY");
+  const technicalReport = extractSection(analysisSource, "TECHNICAL");
+  const featuresRaw = extractSection(analysisSource, "FEATURES");
+  const featuresList = featuresRaw ? featuresRaw.split('\n').filter(line => line.trim().startsWith('-')).map(line => line.replace(/^- /, '').trim()) : [];
+
   return (
-    <div className="min-h-screen bg-transparent text-white">
+    <div className="min-h-screen bg-transparent text-white pb-20">
       <Header />
       <main className="container mx-auto px-4 py-8">
-        <div className="mb-6">
-          <Button asChild variant="ghost" className="mb-4 text-cyan-400 hover:text-cyan-300 hover:bg-cyan-950/30">
+        <div className="mb-8">
+          <Button asChild variant="ghost" className="text-cyan-400 hover:text-cyan-200 hover:bg-cyan-950/30 transition-all">
             <Link href="/">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              BACK TO GALAXY MAP
+              {language === 'ko' ? '은하계 항성 지도로 돌아가기' : 'BACK TO GALAXY MAP'}
             </Link>
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* 메인 콘텐츠 */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* 프로젝트 헤더 */}
-            <Card className="glass-panel border-none overflow-hidden relative group">
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-purple-500/5 pointer-events-none" />
-              <CardHeader className="relative z-10">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex-1">
-                    <CardTitle className="text-4xl font-black mb-4 title-gradient text-glow uppercase tracking-tight">{project.title}</CardTitle>
-                    <div className="flex items-center space-x-3 mb-4 flex-wrap gap-2">
-                      <Badge variant="outline" className="border-cyan-500/50 text-cyan-300 bg-cyan-950/30">{project.language}</Badge>
-                      <Badge className={`border-none shadow-[0_0_10px_rgba(188,19,254,0.5)] bg-purple-600 text-white`}>RANK SCORE {project.score}</Badge>
-                      {project.categories?.map((category) => (
-                        <Badge key={category} variant="outline" className="border-white/10 text-gray-400 bg-white/5">
-                          {category}
-                        </Badge>
-                      ))}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          {/* LEFT: MAIN CONTENT */}
+          <div className="lg:col-span-2 space-y-10">
+            
+            {/* HERO CARD */}
+            <Card className="glass-panel border-none overflow-hidden relative">
+              <div className="absolute top-0 right-0 p-8 opacity-10">
+                <Rocket className="h-32 w-32 text-cyan-500" />
+              </div>
+              <CardHeader className="relative z-10 p-8 md:p-12">
+                <div className="flex flex-col md:flex-row justify-between items-start gap-6 mb-8">
+                  <div className="flex-1 space-y-4">
+                    <div className="flex items-center space-x-3">
+                      <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 bg-cyan-950/30 px-3 py-1 font-mono text-[10px] tracking-widest">{project.language}</Badge>
+                      <Badge className="bg-purple-600 text-white font-black border-none shadow-[0_0_15px_rgba(168,85,247,0.4)] px-3 py-1 text-[10px]">RANK {project.score}</Badge>
                     </div>
+                    <CardTitle className="text-5xl md:text-6xl font-black title-gradient text-glow leading-tight tracking-tighter uppercase">
+                      {project.title}
+                    </CardTitle>
                   </div>
                   {user && (
                     <Button
-                      variant="outline"
-                      size="sm"
                       onClick={handleBookmark}
                       disabled={bookmarkLoading}
-                      className={`border-cyan-500/30 bg-cyan-950/20 ${bookmarked ? "text-yellow-400 border-yellow-500/50 shadow-[0_0_10px_rgba(250,204,21,0.2)]" : "text-cyan-400 hover:text-white"}`}
+                      className={`h-14 px-8 rounded-none font-bold transition-all ${bookmarked ? "bg-yellow-500 text-black hover:bg-yellow-400 shadow-[0_0_20px_rgba(234,179,8,0.3)]" : "bg-white/10 text-white hover:bg-white/20 border border-white/10"}`}
                     >
-                      <Bookmark className="h-4 w-4 mr-2" fill={bookmarked ? "currentColor" : "none"} />
-                      {bookmarked ? "STATIONED" : "BOOKMARK"}
+                      <Bookmark className="h-5 w-5 mr-2" fill={bookmarked ? "currentColor" : "none"} />
+                      {bookmarked ? (language === 'ko' ? "정박 완료" : "STATIONED") : (language === 'ko' ? "북마크" : "BOOKMARK")}
                     </Button>
                   )}
                 </div>
 
-                <p className="text-gray-300 text-lg leading-relaxed mb-8 font-light italic border-l-4 border-cyan-500/30 pl-6">
-                  {project.description}
-                </p>
+                <div className="relative">
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-500 to-purple-500 opacity-50" />
+                  <p className="text-gray-300 text-xl leading-relaxed font-light italic pl-8 mb-10 max-w-3xl">
+                    {project.description}
+                  </p>
+                </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
-                  <div className="flex flex-col items-center p-3 rounded-lg bg-black/20 border border-white/5">
-                    <Star className="h-5 w-5 text-yellow-400 mb-1" />
-                    <span className="font-mono text-gray-400">STARS</span>
-                    <span className="font-bold text-white text-lg">{project.stars}</span>
-                  </div>
-                  <div className="flex flex-col items-center p-3 rounded-lg bg-black/20 border border-white/5">
-                    <GitFork className="h-5 w-5 text-blue-400 mb-1" />
-                    <span className="font-mono text-gray-400">FORKS</span>
-                    <span className="font-bold text-white text-lg">{project.forks}</span>
-                  </div>
-                  <div className="flex flex-col items-center p-3 rounded-lg bg-black/20 border border-white/5">
-                    <Eye className="h-5 w-5 text-green-400 mb-1" />
-                    <span className="font-mono text-gray-400">VIEWS</span>
-                    <span className="font-bold text-white text-lg">{project.views || 0}</span>
-                  </div>
-                  <div className="flex flex-col items-center p-3 rounded-lg bg-black/20 border border-white/5">
-                    <Calendar className="h-5 w-5 text-pink-400 mb-1" />
-                    <span className="font-mono text-gray-400">SYNCED</span>
-                    <span className="font-bold text-white text-sm">{formatDate(project.lastUpdate)}</span>
-                  </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {[
+                    { icon: Star, label: 'STARS', value: project.stars, color: 'text-yellow-400' },
+                    { icon: GitFork, label: 'FORKS', value: project.forks, color: 'text-blue-400' },
+                    { icon: Eye, label: 'VIEWS', value: project.views || 0, color: 'text-green-400' },
+                    { icon: Calendar, label: language === 'ko' ? '동기화' : 'SYNCED', value: formatDate(project.lastUpdate), color: 'text-pink-400', isDate: true }
+                  ].map((stat, i) => (
+                    <div key={i} className="bg-black/30 border border-white/5 p-4 rounded-2xl hover:bg-black/50 transition-colors group">
+                      <stat.icon className={`h-5 w-5 ${stat.color} mb-2 group-hover:scale-110 transition-transform`} />
+                      <div className="font-mono text-[9px] text-gray-500 tracking-widest mb-1">{stat.label}</div>
+                      <div className={`font-black text-white ${stat.isDate ? 'text-xs' : 'text-2xl'}`}>{stat.value}</div>
+                    </div>
+                  ))}
                 </div>
               </CardHeader>
             </Card>
 
-            {/* AI 요약 & 기술 리포트 (통합) */}
-            <Card className="glass-panel border-none overflow-hidden">
-              <CardHeader className="border-b border-white/5 bg-white/5">
-                <CardTitle className="flex items-center text-cyan-400 font-mono tracking-widest text-sm uppercase">
-                  <FileText className="mr-2 h-5 w-5 animate-pulse" />
+            {/* AI AUDIT REPORT */}
+            <Card className="glass-panel border-none overflow-hidden shadow-2xl">
+              <CardHeader className="bg-white/[0.03] border-b border-white/5 py-6 px-8">
+                <CardTitle className="flex items-center text-cyan-400 font-mono tracking-[0.4em] text-[10px] uppercase italic">
+                  <FileText className="mr-3 h-5 w-5 animate-pulse text-cyan-500" />
                   Principal Architect Engineering Report
                 </CardTitle>
               </CardHeader>
-              <CardContent className="pt-8 space-y-8">
-                {project.enhancedDescription ? (
-                  <div className="space-y-10">
-                    {/* Summary Section */}
-                    <section>
-                      <h3 className="text-xs font-bold text-purple-400 mb-4 tracking-[0.2em] uppercase border-b border-purple-500/20 pb-2">I. Executive Summary</h3>
-                      <div className="text-gray-200 leading-relaxed text-lg font-light bg-purple-500/5 p-6 rounded-xl border border-purple-500/10">
-                        {project.enhancedDescription.match(/KOREAN SUMMARY:\s*([\s\S]*?)(?=\n\n|ENGLISH SUMMARY:|FEATURES:|TECHNICAL:|$)/)?.[1]?.trim() || project.enhancedDescription}
+              <CardContent className="p-8 md:p-12 space-y-12">
+                {analysisSource ? (
+                  <>
+                    {/* I. Summary */}
+                    <section className="space-y-6">
+                      <div className="flex items-center space-x-4">
+                        <span className="text-purple-500 font-mono text-lg font-bold">01</span>
+                        <h3 className="text-xs font-black text-white uppercase tracking-[0.3em]">Executive Summary</h3>
+                        <div className="flex-1 h-px bg-gradient-to-r from-purple-500/30 to-transparent" />
+                      </div>
+                      <div className="text-gray-200 leading-relaxed text-xl font-light bg-purple-500/[0.03] p-8 rounded-3xl border border-purple-500/10 shadow-inner">
+                        {language === 'ko' ? (summaryKo || summaryEn || analysisSource) : (summaryEn || summaryKo || analysisSource)}
                       </div>
                     </section>
 
-                    {/* Features Section */}
-                    <section>
-                      <h3 className="text-xs font-bold text-cyan-400 mb-4 tracking-[0.2em] uppercase border-b border-cyan-500/20 pb-2">II. Technical Features</h3>
-                      <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {project.enhancedDescription.match(/FEATURES:\s*([\s\S]*?)(?=\n\n|TECHNICAL:|CATEGORIES:|$)/)?.[1]?.split('\n').filter(line => line.trim().startsWith('-')).map((feature, i) => (
-                          <li key={i} className="flex items-start space-x-3 bg-white/5 p-4 rounded-lg border border-white/5 hover:border-cyan-500/30 transition-all group">
-                            <span className="text-cyan-500 group-hover:scale-125 transition-transform">✦</span>
-                            <span className="text-gray-300 text-sm">{feature.replace(/^- /, '').trim()}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </section>
+                    {/* II. Features */}
+                    {featuresList.length > 0 && (
+                      <section className="space-y-6">
+                        <div className="flex items-center space-x-4">
+                          <span className="text-cyan-500 font-mono text-lg font-bold">02</span>
+                          <h3 className="text-xs font-black text-white uppercase tracking-[0.3em]">Core Specifications</h3>
+                          <div className="flex-1 h-px bg-gradient-to-r from-cyan-500/30 to-transparent" />
+                        </div>
+                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {featuresList.map((feature, i) => (
+                            <li key={i} className="flex items-center space-x-4 bg-white/5 p-5 rounded-2xl border border-white/5 hover:border-cyan-500/40 transition-all group cursor-default">
+                              <div className="h-2 w-2 bg-cyan-500 rounded-full shadow-[0_0_10px_#06b6d4] group-hover:scale-150 transition-transform" />
+                              <span className="text-gray-300 text-sm font-medium tracking-tight leading-snug">{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </section>
+                    )}
 
-                    {/* Technical Roadmap Section */}
-                    <section>
-                      <h3 className="text-xs font-bold text-pink-400 mb-4 tracking-[0.2em] uppercase border-b border-pink-500/20 pb-2">III. Architectural Roadmap</h3>
-                      <div className="text-gray-300 text-sm leading-relaxed bg-black/30 p-6 rounded-xl border border-pink-500/10 font-mono">
-                        {project.enhancedDescription.match(/TECHNICAL:\s*([\s\S]*?)(?=\n\n|CATEGORIES:|$)/)?.[1]?.trim().split('\n').map((para, i) => (
-                          <p key={i} className="mb-4 last:mb-0 opacity-80 hover:opacity-100 transition-opacity">
-                            {para}
-                          </p>
-                        ))}
-                      </div>
-                    </section>
-                  </div>
+                    {/* III. Technical Roadmap */}
+                    {technicalReport && (
+                      <section className="space-y-6">
+                        <div className="flex items-center space-x-4">
+                          <span className="text-pink-500 font-mono text-lg font-bold">03</span>
+                          <h3 className="text-xs font-black text-white uppercase tracking-[0.3em]">Architectural Roadmap</h3>
+                          <div className="flex-1 h-px bg-gradient-to-r from-pink-500/30 to-transparent" />
+                        </div>
+                        <div className="text-gray-300 text-sm leading-relaxed bg-black/40 p-8 rounded-3xl border border-pink-500/10 font-mono opacity-90 hover:opacity-100 transition-opacity whitespace-pre-wrap">
+                          {technicalReport}
+                        </div>
+                      </section>
+                    )}
+                  </>
                 ) : (
-                  <div className="text-center py-12">
-                    <LoadingSpinner className="mx-auto mb-4 text-cyan-500" />
-                    <p className="text-gray-500 font-mono italic">GENERATING ARCHITECTURAL AUDIT...</p>
+                  <div className="text-center py-20">
+                    <LoadingSpinner className="mx-auto mb-6 text-cyan-500 h-10 w-10" />
+                    <p className="text-gray-500 font-mono text-xs tracking-[0.5em] uppercase animate-pulse">
+                      PROCESSING NEURAL ANALYSIS...
+                    </p>
                   </div>
                 )}
               </CardContent>
             </Card>
 
-            {/* TODO 리스트 */}
+            <AdBanner adSlot="5678901234" className="glass-panel rounded-3xl overflow-hidden border-none" format="horizontal" />
+          </div>
+
+          {/* RIGHT: SIDEBAR */}
+          <div className="space-y-10">
+            
+            {/* ACTION CARD */}
+            <Card className="glass-panel border-none overflow-hidden bg-gradient-to-br from-cyan-900/20 via-black/40 to-purple-900/20 shadow-2xl p-2">
+              <CardContent className="pt-10 pb-8 space-y-4 px-6">
+                <Button asChild className="w-full h-16 text-xs font-black tracking-[0.2em] bg-white text-black hover:bg-cyan-400 transition-all hover:scale-[1.03] uppercase">
+                  <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="mr-3 h-5 w-5" />
+                    {language === 'ko' ? 'GitHub 저장소 탐사' : 'EXPLORE REPOSITORY'}
+                  </a>
+                </Button>
+                <div className="grid grid-cols-2 gap-3">
+                  <Button variant="outline" className="h-14 border-white/10 bg-white/5 text-gray-300 hover:text-white hover:bg-white/10 transition-all font-bold text-[10px] uppercase" asChild>
+                    <a href={`${project.githubUrl}/fork`} target="_blank" rel="noopener noreferrer">
+                      <GitFork className="mr-2 h-4 w-4 text-purple-400" />
+                      FORK
+                    </a>
+                  </Button>
+                  <Button variant="outline" className="h-14 border-white/10 bg-white/5 text-gray-300 hover:text-white hover:bg-white/10 transition-all font-bold text-[10px] uppercase" asChild>
+                    <a href={`${project.githubUrl}/issues`} target="_blank" rel="noopener noreferrer">
+                      <Users className="mr-2 h-4 w-4 text-cyan-400" />
+                      CREW
+                    </a>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* MISSION LOG (TODO) */}
             {project.todos && project.todos.length > 0 && (
-              <Card className="glass-panel border-none overflow-hidden">
-                <CardHeader className="bg-white/5">
-                  <CardTitle className="flex items-center text-yellow-400 font-mono tracking-widest text-sm uppercase">
-                    <CheckSquare className="mr-2 h-5 w-5" />
-                    Pending Mission Tasks
+              <Card className="glass-panel border-none shadow-xl">
+                <CardHeader className="border-b border-white/5 bg-white/5 py-4 px-6">
+                  <CardTitle className="text-[10px] font-black text-yellow-500 tracking-[0.3em] uppercase flex items-center italic">
+                    <CheckSquare className="mr-2 h-4 w-4" />
+                    {language === 'ko' ? '미해결 미션' : 'Pending Missions'}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pt-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {project.todos.map((todo, index) => (
-                      <div key={index} className="flex items-center space-x-4 p-4 bg-black/40 rounded-xl border border-white/5 hover:bg-black/60 transition-all">
-                        <div className="w-8 h-8 bg-cyan-900/50 text-cyan-400 rounded-lg flex items-center justify-center text-xs font-bold border border-cyan-500/30">
-                          {index + 1}
-                        </div>
-                        <span className="text-gray-200 text-sm font-light">{todo}</span>
+                <CardContent className="p-6 space-y-3">
+                  {project.todos.map((todo, index) => (
+                    <div key={index} className="flex items-center space-x-4 p-4 bg-black/40 rounded-2xl border border-white/5 hover:bg-white/5 transition-all group">
+                      <div className="w-6 h-6 bg-yellow-500/10 text-yellow-500 rounded flex items-center justify-center text-[10px] font-bold border border-yellow-500/20">
+                        {index + 1}
                       </div>
-                    ))}
-                  </div>
+                      <span className="text-gray-300 text-xs font-light leading-tight">{todo}</span>
+                    </div>
+                  ))}
                 </CardContent>
               </Card>
             )}
 
-            <AdBanner adSlot="5678901234" className="glass-panel rounded-xl overflow-hidden" format="horizontal" />
-          </div>
-
-          {/* 사이드바 */}
-          <div className="space-y-8">
-            {/* 액션 버튼들 */}
-            <Card className="glass-panel border-none overflow-hidden bg-gradient-to-b from-cyan-950/20 to-purple-950/20">
-              <CardContent className="pt-8">
-                <div className="space-y-4">
-                  <Button asChild className="w-full h-14 text-lg font-bold bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 border-none shadow-lg shadow-cyan-500/20 transition-all hover:scale-[1.02]">
-                    <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="mr-2 h-5 w-5" />
-                      BOARD SPACESHIP
-                    </a>
-                  </Button>
-                  <Button variant="outline" className="w-full h-12 border-purple-500/30 bg-purple-950/10 text-purple-300 hover:bg-purple-900/20 hover:text-purple-200 transition-all" asChild>
-                    <a href={`${project.githubUrl}/fork`} target="_blank" rel="noopener noreferrer">
-                      <GitFork className="mr-2 h-4 w-4" />
-                      FORK TECHNOLOGY
-                    </a>
-                  </Button>
-                  <Button variant="outline" className="w-full h-12 border-gray-700 bg-black/20 text-gray-400 hover:text-white transition-all" asChild>
-                    <a href={`${project.githubUrl}/issues`} target="_blank" rel="noopener noreferrer">
-                      <Users className="mr-2 h-4 w-4" />
-                      CREW DISCUSSION
-                    </a>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* 프로젝트 세부 정보 */}
+            {/* SPECS CARD */}
             <Card className="glass-panel border-none">
-              <CardHeader className="border-b border-white/5">
-                <CardTitle className="text-sm font-mono tracking-widest text-gray-400 uppercase">System Specifications</CardTitle>
+              <CardHeader className="border-b border-white/5 bg-white/5 py-4 px-6">
+                <CardTitle className="text-[9px] font-mono tracking-[0.4em] text-gray-500 uppercase">{language === 'ko' ? '시스템 제원' : 'System Specifications'}</CardTitle>
               </CardHeader>
-              <CardContent className="pt-6 space-y-6">
-                <div>
-                  <h4 className="text-xs font-bold text-cyan-500 mb-2 uppercase tracking-tighter">Core Engine</h4>
-                  <p className="text-white text-lg font-light">{project.language}</p>
-                </div>
-                <Separator className="bg-white/5" />
-                <div>
-                  <h4 className="text-xs font-bold text-purple-500 mb-2 uppercase tracking-tighter">Protocol License</h4>
-                  <p className="text-white font-light">{project.license || "UNKNOWN"}</p>
-                </div>
-                <Separator className="bg-white/5" />
-                <div>
-                  <h4 className="text-xs font-bold text-pink-500 mb-2 uppercase tracking-tighter">Iteration Count</h4>
-                  <div className="flex items-center space-x-2">
-                    <GitCommit className="h-4 w-4 text-pink-400" />
-                    <p className="text-white font-light">{project.commits || "????"} Commits</p>
+              <CardContent className="p-8 space-y-8">
+                {[
+                  { label: language === 'ko' ? '코어 엔진' : 'CORE ENGINE', value: project.language, color: 'text-cyan-400' },
+                  { label: language === 'ko' ? '라이선스' : 'LICENSE', value: (project.license || "UNKNOWN").toUpperCase(), color: 'text-purple-400' },
+                  { label: language === 'ko' ? '반복 주기' : 'ITERATIONS', value: `${project.commits || "?"} COMMITS`, color: 'text-pink-400', icon: GitCommit },
+                  { label: language === 'ko' ? '데이터 크기' : 'PAYLOAD', value: `~${project.linesOfCode || "500"}+ LINES`, color: 'text-blue-400' }
+                ].map((spec, i) => (
+                  <div key={i} className="space-y-2">
+                    <h4 className={`text-[9px] font-black ${spec.color} tracking-widest`}>{spec.label}</h4>
+                    <div className="flex items-center space-x-2">
+                      {spec.icon && <spec.icon className={`h-4 w-4 ${spec.color} opacity-50`} />}
+                      <p className="text-white text-lg font-light tracking-tight">{spec.value}</p>
+                    </div>
+                    {i < 3 && <Separator className="bg-white/5 mt-4" />}
                   </div>
-                </div>
-                <Separator className="bg-white/5" />
-                <div>
-                  <h4 className="text-xs font-bold text-blue-500 mb-2 uppercase tracking-tighter">Code Payload</h4>
-                  <p className="text-white font-light">Approx. {project.linesOfCode || "500"}+ Lines</p>
-                </div>
+                ))}
               </CardContent>
             </Card>
 
-            {/* 추천 섹션 (우주 테마 적용) */}
+            {/* NEARBY SYSTEMS */}
             {recommendedProjects.length > 0 && (
-              <div className="space-y-4">
-                <h3 className="text-xs font-bold text-gray-500 tracking-[0.3em] uppercase ml-2">Nearby Systems</h3>
-                {recommendedProjects.slice(0, 3).map((recommendedProject) => (
-                  <Link
-                    key={recommendedProject.id}
-                    href={`/project/${recommendedProject.id}`}
-                    className="block p-4 rounded-xl glass-panel border-none hover:border-cyan-500/30 hover:bg-white/5 transition-all group"
-                  >
-                    <h4 className="font-bold text-white group-hover:text-cyan-400 transition-colors line-clamp-1">{recommendedProject.title}</h4>
-                    <div className="flex items-center justify-between mt-3">
-                      <Badge variant="outline" className="text-[10px] border-white/10 text-gray-400">{recommendedProject.language}</Badge>
-                      <span className="text-xs text-yellow-500/70 font-mono">⭐ {recommendedProject.stars}</span>
-                    </div>
-                  </Link>
-                ))}
+              <div className="space-y-5">
+                <h3 className="text-[10px] font-black text-gray-600 tracking-[0.5em] uppercase ml-4">{language === 'ko' ? '인접 항성계' : 'Nearby Systems'}</h3>
+                <div className="space-y-4">
+                  {recommendedProjects.slice(0, 3).map((rp) => (
+                    <Link
+                      key={rp.id}
+                      href={`/project/${rp.id}`}
+                      className="block p-5 rounded-3xl glass-panel border-none hover:bg-white/[0.07] transition-all group relative overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <h4 className="font-bold text-white group-hover:text-cyan-400 transition-colors line-clamp-1 text-sm uppercase tracking-tight mb-3 relative z-10">{rp.title}</h4>
+                      <div className="flex items-center justify-between relative z-10">
+                        <Badge variant="outline" className="text-[8px] border-white/10 text-gray-500 bg-white/5 font-mono px-2 py-0">{rp.language}</Badge>
+                        <span className="text-[10px] text-yellow-500/50 font-mono font-bold">⭐ {rp.stars}</span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
               </div>
             )}
           </div>

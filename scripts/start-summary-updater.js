@@ -6,7 +6,7 @@ let active = true;
 const DEFAULT_INTERVAL = 30 * 60 * 1000; // 30 minutes between updates
 const API_ENDPOINT = process.env.VERCEL_URL 
   ? `https://${process.env.VERCEL_URL}/api/admin/summary-updater` 
-  : 'http://localhost:3721/api/admin/summary-updater';
+  : 'http://localhost:3003/api/admin/summary-updater';
 
 // Load environment variables if not in production
 if (process.env.NODE_ENV !== 'production') {
