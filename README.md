@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="docs/screenshots/hero-section.png" alt="Incomplete Projects Discovery - 히어로 섹션" width="100%" />
-</p>
-
 <h1 align="center">🌌 Incomplete Projects Discovery</h1>
 
 <p align="center">
