@@ -43,8 +43,8 @@ export function Header() {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-black/80 backdrop-blur-xl border-white/10 text-white">
                 {languages.map((lang) => (
-                  <DropdownMenuItem 
-                    key={lang.code} 
+                  <DropdownMenuItem
+                    key={lang.code}
                     onClick={() => setLanguage(lang.code)}
                     className={`focus:bg-cyan-500/20 focus:text-cyan-400 ${language === lang.code ? 'text-cyan-400 bg-cyan-500/10' : ''}`}
                   >
@@ -57,6 +57,9 @@ export function Header() {
             <nav className="hidden md:flex items-center space-x-6">
               <Link href="/" className="text-sm font-medium text-gray-400 hover:text-white hover:text-glow transition-all uppercase tracking-widest">
                 HOME
+              </Link>
+              <Link href="/blog" className="text-sm font-medium text-gray-400 hover:text-white hover:text-glow transition-all uppercase tracking-widest">
+                BLOG
               </Link>
               {user && (
                 <Link href="/bookmarks" className="text-sm font-medium text-gray-400 hover:text-white hover:text-glow transition-all uppercase tracking-widest">
