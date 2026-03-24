@@ -13,7 +13,11 @@
   "crons": [
     {
       "path": "/api/cron/summary-updater",
-      "schedule": "* * * * *"
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/crawl",
+      "schedule": "0 6 * * *"
     }
   ]
 }

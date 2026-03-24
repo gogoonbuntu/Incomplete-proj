@@ -466,13 +466,22 @@ class FirebaseService {
   // Cloud Functions
   async triggerCrawling(): Promise<void> {
     try {
-      logger.info("로컬 크롤링 프로세스 시작")
+      logger.info("서버사이드 크롤링 API 호출 시작")
 
-      // 로컬에서 크롤링 처리
-      const { projectService } = await import("./project-service")
-      await projectService.processNewProjects()
+      const response = await fetch("/api/crawl", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-      logger.success("크롤링 프로세스 완료")
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Crawl API returned ${response.status}`);
+      }
+
+      const result = await response.json();
+      logger.success(`크롤링 완료: ${result.message}`);
     } catch (error) {
       logger.error("크롤링 프로세스 실패", error)
       throw error
