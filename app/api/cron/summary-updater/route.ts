@@ -7,6 +7,9 @@ export async function GET() {
   try {
     logger.logSummaryUpdate("🔄 자동 스케줄러에 의한 프로젝트 요약 업데이트 시작");
     
+    // 이전 실패 상태 초기화 (키 교체 후에도 정상 동작하도록)
+    summaryGenerator.resetApiKeyFailures();
+    
     // 한 개의 프로젝트 처리
     const result = await summaryGenerator.processSingleProject();
     

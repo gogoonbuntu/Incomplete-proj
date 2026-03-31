@@ -17,6 +17,7 @@ import { Progress } from "@/components/ui/progress"
 import { RefreshCw, AlertCircle, Activity } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AdBanner } from "@/components/ad-banner"
+import { TrendBanner } from "@/components/trend-banner"
 import { useLanguage } from "@/hooks/use-language"
 
 export function HomePage() {
@@ -344,7 +345,10 @@ export function HomePage() {
             </Button>
           </div>
 
-          <AdBanner adSlot="1234567890" className="mb-8 glass-panel rounded-xl overflow-hidden border-none" />
+
+
+          {/* 트렌드 통계 배너 */}
+          {projects.length > 0 && <TrendBanner projects={projects} />}
 
           {crawlingProgress && (
             <Alert className="mb-6 border-cyan-500/30 bg-cyan-950/40 backdrop-blur-md">
@@ -413,9 +417,17 @@ export function HomePage() {
           </>
         )}
 
-        {/* Move CrawlingLogs to the very bottom and make it less prominent */}
+        {/* 하단: 엔진 로그 + Activity 버튼 */}
         <div className="mt-24 opacity-30 hover:opacity-100 transition-opacity duration-500 border-t border-white/5 pt-8">
-          <h3 className="text-xs font-mono text-gray-500 mb-4 tracking-[0.3em] uppercase text-center">Engine Execution Logs</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xs font-mono text-gray-500 tracking-[0.3em] uppercase">Engine Execution Logs</h3>
+            <a
+              href="/activity"
+              className="text-[11px] font-mono text-gray-600 hover:text-cyan-400 border border-gray-800 hover:border-cyan-500/30 px-3 py-1.5 rounded-lg transition-all"
+            >
+              ⚡ Activity Log →
+            </a>
+          </div>
           <CrawlingLogs />
         </div>
       </main>

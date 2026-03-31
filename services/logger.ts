@@ -1,23 +1,10 @@
-import fs from 'fs';
-import path from 'path';
 import { format } from 'date-fns';
 
-// Logger class to write logs to a file and console
+// In-memory logger (Vercel 서버리스 호환 - fs 사용 불가)
+const LOG_MAX_ENTRIES = 200;
+const logEntries: string[] = [];
+
 export class Logger {
-  private logDir: string;
-  private summaryLogPath: string;
-  
-  constructor() {
-    // Ensure logs directory exists
-    this.logDir = path.join(process.cwd(), 'logs');
-    if (!fs.existsSync(this.logDir)) {
-      fs.mkdirSync(this.logDir, { recursive: true });
-    }
-    
-    // Log file paths
-    this.summaryLogPath = path.join(this.logDir, 'summary-updater.log');
-  }
-  
   // Format a message with timestamp
   private formatMessage(message: string): string {
     const timestamp = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
@@ -29,26 +16,19 @@ export class Logger {
     const formattedMessage = this.formatMessage(message);
     console.log(formattedMessage);
     
-    // Append to log file
-    fs.appendFileSync(this.summaryLogPath, formattedMessage + '\n');
+    // In-memory log storage
+    logEntries.push(formattedMessage);
+    if (logEntries.length > LOG_MAX_ENTRIES) {
+      logEntries.splice(0, logEntries.length - LOG_MAX_ENTRIES);
+    }
   }
   
   // Get summary updater log contents
   getSummaryUpdateLog(lines: number = 50): string {
-    if (!fs.existsSync(this.summaryLogPath)) {
+    if (logEntries.length === 0) {
       return 'No log entries yet.';
     }
-    
-    try {
-      const logContent = fs.readFileSync(this.summaryLogPath, 'utf-8');
-      const logLines = logContent.split('\n').filter(Boolean);
-      
-      // Return the last X lines
-      return logLines.slice(-lines).join('\n');
-    } catch (error) {
-      console.error('Error reading log file:', error);
-      return 'Error reading log file.';
-    }
+    return logEntries.slice(-lines).join('\n');
   }
 }
 

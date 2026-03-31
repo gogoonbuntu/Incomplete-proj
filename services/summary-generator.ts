@@ -7,9 +7,9 @@ import { logger } from "./logger";
 import { apiKeyManager } from "./api-key-manager";
 import { githubService } from "./github-service";
 
-// DB가 null이 아님을 확인
+// DB가 null이면 경고 (Vercel 서버리스에서 최상위 throw는 금지)
 if (!rtdb) {
-  throw new Error("Realtime Database not initialized");
+  console.warn("[Summary Generator] ⚠️ Realtime Database not initialized - summary features will not work");
 }
 
 // API 인스턴스를 저장할 변수들
@@ -28,7 +28,7 @@ function initializeGeminiApi() {
   try {
     // 새 API 키로 클라이언트 재초기화
     genAI = new GoogleGenerativeAI(apiKey);
-    model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
     
     // API 키의 일부를 로그에 기록 (보안상 전체 키는 표시하지 않음)
     const maskedKey = apiKey.substring(0, 4) + "..." + apiKey.substring(apiKey.length - 4);

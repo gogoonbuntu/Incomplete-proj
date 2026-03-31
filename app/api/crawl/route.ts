@@ -24,135 +24,87 @@ const PUSHED_RECENT = `pushed:>${oneYearAgo()}`;
 const BASE_FILTER = `${PUSHED_RECENT} archived:false`;
 const STARS = "stars:10..500";
 
-// ── 트렌드 카테고리 정의 ──
-const CATEGORIES: SearchCategory[] = [
-  {
-    name: "🤖 AI / LLM / GenAI",
-    queries: [
-      `${STARS} ${BASE_FILTER} topic:llm`,
-      `${STARS} ${BASE_FILTER} topic:generative-ai`,
-      `${STARS} ${BASE_FILTER} topic:langchain`,
-      `${STARS} ${BASE_FILTER} topic:openai`,
-      `${STARS} ${BASE_FILTER} "RAG" in:name,description language:Python`,
-      `${STARS} ${BASE_FILTER} "agent" in:name,description topic:ai`,
-      `${STARS} ${BASE_FILTER} "chatbot" in:name,description language:TypeScript`,
-      `${STARS} ${BASE_FILTER} topic:stable-diffusion`,
-      `${STARS} ${BASE_FILTER} topic:huggingface`,
-      `${STARS} ${BASE_FILTER} "fine-tuning" in:name,description`,
-    ],
-  },
-  {
-    name: "🌐 풀스택 / 웹 프레임워크",
-    queries: [
-      `${STARS} ${BASE_FILTER} topic:nextjs`,
-      `${STARS} ${BASE_FILTER} topic:nuxt`,
-      `${STARS} ${BASE_FILTER} topic:svelte`,
-      `${STARS} ${BASE_FILTER} topic:astro`,
-      `${STARS} ${BASE_FILTER} topic:remix`,
-      `${STARS} ${BASE_FILTER} topic:htmx`,
-      `${STARS} ${BASE_FILTER} "dashboard" in:name,description topic:react`,
-      `${STARS} ${BASE_FILTER} "admin-panel" in:name,description`,
-      `${STARS} ${BASE_FILTER} topic:tailwindcss "template" in:name,description`,
-      `${STARS} ${BASE_FILTER} topic:shadcn-ui`,
-    ],
-  },
-  {
-    name: "⚙️ Rust / Go / 시스템 프로그래밍",
-    queries: [
-      `${STARS} ${BASE_FILTER} language:Rust topic:cli`,
-      `${STARS} ${BASE_FILTER} language:Rust "tool" in:name,description`,
-      `${STARS} ${BASE_FILTER} language:Go topic:cli`,
-      `${STARS} ${BASE_FILTER} language:Go "api" in:name,description`,
-      `${STARS} ${BASE_FILTER} language:Rust topic:wasm`,
-      `${STARS} ${BASE_FILTER} language:Zig`,
-      `${STARS} ${BASE_FILTER} language:Go topic:grpc`,
-      `${STARS} ${BASE_FILTER} language:Rust "parser" in:name,description`,
-    ],
-  },
-  {
-    name: "📱 모바일 / 크로스플랫폼",
-    queries: [
-      `${STARS} ${BASE_FILTER} topic:react-native`,
-      `${STARS} ${BASE_FILTER} topic:flutter`,
-      `${STARS} ${BASE_FILTER} topic:expo`,
-      `${STARS} ${BASE_FILTER} language:Swift topic:ios`,
-      `${STARS} ${BASE_FILTER} language:Kotlin topic:android`,
-      `${STARS} ${BASE_FILTER} topic:tauri`,
-      `${STARS} ${BASE_FILTER} topic:electron "app" in:name,description`,
-    ],
-  },
-  {
-    name: "🔗 Web3 / 블록체인 / 크립토",
-    queries: [
-      `${STARS} ${BASE_FILTER} topic:solidity`,
-      `${STARS} ${BASE_FILTER} topic:web3`,
-      `${STARS} ${BASE_FILTER} topic:ethereum "dapp" in:name,description`,
-      `${STARS} ${BASE_FILTER} topic:defi`,
-      `${STARS} ${BASE_FILTER} topic:nft`,
-      `${STARS} ${BASE_FILTER} "smart-contract" in:name,description`,
-    ],
-  },
-  {
-    name: "🛠️ DevOps / 인프라 / CLI 도구",
-    queries: [
-      `${STARS} ${BASE_FILTER} topic:docker "tool" in:name,description`,
-      `${STARS} ${BASE_FILTER} topic:kubernetes "operator" in:name,description`,
-      `${STARS} ${BASE_FILTER} topic:terraform`,
-      `${STARS} ${BASE_FILTER} topic:github-actions`,
-      `${STARS} ${BASE_FILTER} "monitoring" in:name,description topic:devops`,
-      `${STARS} ${BASE_FILTER} "automation" in:name,description language:Python`,
-      `${STARS} ${BASE_FILTER} topic:cli language:TypeScript`,
-    ],
-  },
-  {
-    name: "🎮 게임 / 크리에이티브",
-    queries: [
-      `${STARS} ${BASE_FILTER} topic:game language:Rust`,
-      `${STARS} ${BASE_FILTER} topic:godot`,
-      `${STARS} ${BASE_FILTER} topic:unity "tool" in:name,description`,
-      `${STARS} ${BASE_FILTER} topic:threejs`,
-      `${STARS} ${BASE_FILTER} "pixel" in:name,description topic:game`,
-      `${STARS} ${BASE_FILTER} topic:webgl`,
-    ],
-  },
-  {
-    name: "📊 데이터 / 시각화 / 분석",
-    queries: [
-      `${STARS} ${BASE_FILTER} topic:data-visualization`,
-      `${STARS} ${BASE_FILTER} "analytics" in:name,description language:Python`,
-      `${STARS} ${BASE_FILTER} topic:pandas "tool" in:name,description`,
-      `${STARS} ${BASE_FILTER} topic:d3`,
-      `${STARS} ${BASE_FILTER} "scraper" in:name,description language:Python`,
-      `${STARS} ${BASE_FILTER} topic:etl`,
-    ],
-  },
+// ── 언어별 다양성 보장 검색 전략 ──
+// 핵심: 모든 쿼리에 language: 필터를 명시하여 다양한 언어 프로젝트를 균등 수집
+
+// 언어 풀 (매 크롤링마다 여기서 골고루 선택)
+const LANGUAGE_POOLS = {
+  tier1: ["Python", "TypeScript", "Rust", "Go"],           // 트렌디
+  tier2: ["Java", "Kotlin", "Swift", "C++", "C#"],         // 주류
+  tier3: ["Ruby", "PHP", "Dart", "Scala", "Elixir"],       // 확장
+  tier4: ["Lua", "Haskell", "Julia", "Zig", "Shell", "R"], // 니치
+};
+
+// 토픽 키워드 (언어 쿼리에 붙여 흥미도를 높임)
+const TOPIC_MODIFIERS = [
+  'topic:cli', 'topic:api', 'topic:tool', 'topic:framework',
+  'topic:game', 'topic:bot', 'topic:ai', 'topic:devtools',
+  '"dashboard" in:name,description', '"plugin" in:name,description',
+  '"template" in:name,description', '"starter" in:name,description',
+  'topic:automation', 'topic:web', 'topic:app',
+  '"scraper" in:name,description', '"analyzer" in:name,description',
+  'topic:docker', 'topic:database', 'topic:testing',
 ];
 
-// 매 호출마다 카테고리를 로테이션 (시간 기반)
-function selectCategories(count: number): SearchCategory[] {
-  // 현재 시각의 hour를 시드로 사용하여 카테고리를 로테이션
-  const hour = new Date().getHours();
-  const dayOfYear = Math.floor(
-    (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000
-  );
-  const seed = dayOfYear * 24 + hour;
+function pick<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+function shuffle<T>(arr: T[]): T[] {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
 
-  // 시간에 따라 시작 인덱스를 변경
-  const startIdx = seed % CATEGORIES.length;
-  const selected: SearchCategory[] = [];
+// 매 크롤링마다 다양한 언어를 골고루 선택하여 쿼리 생성
+function generateDiverseQueries(): Array<{ query: string; label: string }> {
+  const queries: Array<{ query: string; label: string }> = [];
 
-  for (let i = 0; i < count; i++) {
-    selected.push(CATEGORIES[(startIdx + i) % CATEGORIES.length]);
+  // Tier별로 최소 1개씩 언어를 뽑아 최소 4개 언어를 보장
+  const selectedLangs: string[] = [
+    pick(LANGUAGE_POOLS.tier1),
+    pick(LANGUAGE_POOLS.tier2),
+    pick(LANGUAGE_POOLS.tier3),
+    pick(LANGUAGE_POOLS.tier4),
+  ];
+
+  // 추가로 전체 풀에서 4개 더 뽑기 (중복 제거)
+  const allLangs = shuffle([
+    ...LANGUAGE_POOLS.tier1,
+    ...LANGUAGE_POOLS.tier2,
+    ...LANGUAGE_POOLS.tier3,
+    ...LANGUAGE_POOLS.tier4,
+  ]);
+  for (const lang of allLangs) {
+    if (selectedLangs.length >= 8) break;
+    if (!selectedLangs.includes(lang)) selectedLangs.push(lang);
   }
 
-  return selected;
+  // 각 언어별로 1개 쿼리 생성 (총 8개)
+  for (const lang of selectedLangs) {
+    const topic = pick(TOPIC_MODIFIERS);
+    const query = `${STARS} ${BASE_FILTER} language:${lang} ${topic}`;
+    queries.push({ query, label: `${lang} / ${topic.substring(0, 20)}` });
+  }
+
+  // 보너스: 언어 무관 트렌드 토픽 2개 (다양성 + 흥미도)
+  const trendQueries = shuffle([
+    `${STARS} ${BASE_FILTER} topic:llm`,
+    `${STARS} ${BASE_FILTER} topic:generative-ai`,
+    `${STARS} ${BASE_FILTER} topic:langchain`,
+    `${STARS} ${BASE_FILTER} topic:web3`,
+    `${STARS} ${BASE_FILTER} topic:react-native language:TypeScript`,
+    `${STARS} ${BASE_FILTER} topic:flutter language:Dart`,
+    `${STARS} ${BASE_FILTER} topic:godot language:C#`,
+    `${STARS} ${BASE_FILTER} topic:kubernetes language:Go`,
+    `${STARS} ${BASE_FILTER} topic:machine-learning language:Python`,
+    `${STARS} ${BASE_FILTER} topic:wasm language:Rust`,
+  ]);
+  queries.push({ query: trendQueries[0], label: "🔥 Trend 1" });
+  queries.push({ query: trendQueries[1], label: "🔥 Trend 2" });
+
+  return queries;
 }
 
-// 각 카테고리에서 쿼리를 랜덤 선택
-function pickQueries(category: SearchCategory, count: number): string[] {
-  const shuffled = [...category.queries].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, count);
-}
+// 언어별 저장 cap (한 언어가 저장을 독점하지 않도록)
+const MAX_PER_LANGUAGE = 4;
 
 const SORT_OPTIONS = ["updated", "stars", ""] as const;
 
@@ -190,17 +142,24 @@ async function searchGitHub(
     headers: {
       Accept: "application/vnd.github.v3+json",
       Authorization: `token ${token}`,
+      "User-Agent": "IncompleteProj-Crawler",
     },
   });
 
   if (!response.ok) {
+    const body = await response.text().catch(() => "");
+    if (response.status === 401) {
+      throw new Error(`GitHub token invalid/expired (401): ${body.substring(0, 100)}`);
+    }
     if (response.status === 403) {
-      throw new Error("GitHub API rate limit exceeded");
+      const remaining = response.headers.get("x-ratelimit-remaining");
+      throw new Error(`GitHub rate limit (403), remaining: ${remaining}`);
     }
     if (response.status === 422) {
-      return []; // 잘못된 쿼리 → 빈 결과
+      console.warn(`⚠️ Query validation failed (422): ${body.substring(0, 100)}`);
+      return [];
     }
-    throw new Error(`GitHub API error: ${response.status}`);
+    throw new Error(`GitHub API ${response.status}: ${body.substring(0, 100)}`);
   }
 
   const data = await response.json();
@@ -314,7 +273,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ success: false, error: "Firebase RTDB not initialized" }, { status: 500 });
     }
 
-    console.log("🛰️ Trend-based crawl started...");
+    console.log("🛰️ Diversity-first crawl started...");
 
     // 기존 프로젝트 ID 수집
     const existingSnapshot = await rtdb.ref("projects").once("value");
@@ -327,44 +286,34 @@ export async function GET(request: NextRequest) {
     }
     console.log(`📦 DB에 ${existingIds.size}개 프로젝트 존재`);
 
-    // 이번 호출에서 사용할 카테고리 3개 선택 (로테이션)
-    const selectedCategories = selectCategories(3);
-    console.log(`🎯 선택된 카테고리: ${selectedCategories.map((c) => c.name).join(", ")}`);
+    // 다양한 언어를 보장하는 쿼리 생성 (8개 언어 + 2개 트렌드)
+    const diverseQueries = generateDiverseQueries();
+    console.log(`🎯 ${diverseQueries.length}개 쿼리 생성: ${diverseQueries.map((q) => q.label).join(", ")}`);
 
     const allRepos: GitHubRepo[] = [];
     let totalQueries = 0;
-    const categoryResults: Array<{ name: string; queries: number; found: number }> = [];
+    const queryResults: Array<{ label: string; found: number; error?: string }> = [];
 
-    for (const category of selectedCategories) {
-      // 각 카테고리에서 2~3개 쿼리 랜덤 선택
-      const queries = pickQueries(category, 3);
-      let categoryFound = 0;
+    for (const { query, label } of diverseQueries) {
+      try {
+        const sort = SORT_OPTIONS[totalQueries % SORT_OPTIONS.length];
+        const page = (totalQueries % 3) + 1;
+        console.log(`🔍 [${label}] page=${page} sort=${sort || "relevance"}`);
 
-      for (const query of queries) {
-        try {
-          const sort = SORT_OPTIONS[totalQueries % SORT_OPTIONS.length];
-          const page = (totalQueries % 3) + 1; // 1, 2, 3 로테이션
-          console.log(`🔍 [${category.name}] page=${page} sort=${sort || "relevance"}`);
-          console.log(`   ${query.substring(0, 80)}...`);
+        const repos = await searchGitHub(query, token, sort, page);
+        allRepos.push(...repos);
+        queryResults.push({ label, found: repos.length });
+        totalQueries++;
 
-          const repos = await searchGitHub(query, token, sort, page);
-          allRepos.push(...repos);
-          categoryFound += repos.length;
-          totalQueries++;
-
-          console.log(`   ✓ ${repos.length}개 발견`);
-          await new Promise((resolve) => setTimeout(resolve, 2500));
-        } catch (error: any) {
-          console.error(`   ❌ ${error.message}`);
-          if (error.message.includes("rate limit")) break;
-        }
+        console.log(`   ✓ ${repos.length}개 발견`);
+        await new Promise((resolve) => setTimeout(resolve, 2500));
+      } catch (error: any) {
+        const errMsg = error.message || String(error);
+        console.error(`   ❌ [${label}] ${errMsg}`);
+        queryResults.push({ label, found: 0, error: errMsg });
+        totalQueries++;
+        if (errMsg.includes("rate limit") || errMsg.includes("401")) break;
       }
-
-      categoryResults.push({
-        name: category.name,
-        queries: queries.length,
-        found: categoryFound,
-      });
     }
 
     // 중복 제거
@@ -372,7 +321,7 @@ export async function GET(request: NextRequest) {
       (repo, index, self) => index === self.findIndex((r) => r.id === repo.id)
     );
 
-    // DB에 없는 것만
+    // DB에 없는 것만 + 최소 스타 10
     const newRepos = uniqueRepos.filter(
       (repo) => !existingIds.has(String(repo.id)) && repo.stargazers_count >= 10
     );
@@ -385,13 +334,31 @@ export async function GET(request: NextRequest) {
         repo,
         ...scoreProject(repo),
       }))
-      .filter((r) => !r.dominated && r.score >= 6) // 최소 6점 이상만
+      .filter((r) => !r.dominated && r.score >= 6)
       .sort((a, b) => b.score - a.score);
 
     console.log(`✅ 품질 기준(6점+) 통과: ${scoredRepos.length}개`);
 
-    // 상위 20개만 저장
-    const toSave = scoredRepos.slice(0, 20);
+    // 언어별 cap 적용하여 다양성 보장
+    const langSavedCount: Record<string, number> = {};
+    const toSave: typeof scoredRepos = [];
+
+    for (const item of scoredRepos) {
+      const lang = item.repo.language || "Unknown";
+      const currentCount = langSavedCount[lang] || 0;
+
+      if (currentCount >= MAX_PER_LANGUAGE) {
+        console.log(`   ⏭ ${lang} cap(${MAX_PER_LANGUAGE}) 도달, ${item.repo.full_name} 건너뜀`);
+        continue;
+      }
+
+      langSavedCount[lang] = currentCount + 1;
+      toSave.push(item);
+
+      if (toSave.length >= 24) break; // 최대 24개
+    }
+
+    console.log(`🌈 언어 분포: ${Object.entries(langSavedCount).map(([l, c]) => `${l}:${c}`).join(", ")}`);
     const updates: Record<string, any> = {};
 
     for (const { repo, score, reasoning } of toSave) {
@@ -450,8 +417,9 @@ export async function GET(request: NextRequest) {
         passedQuality: scoredRepos.length,
         saved: savedCount,
         existingInDB: existingIds.size,
-        categories: categoryResults,
-        topSaved: toSave.slice(0, 5).map((r) => ({
+        languageDistribution: langSavedCount,
+        queryResults,
+        topSaved: toSave.slice(0, 8).map((r) => ({
           name: r.repo.full_name,
           stars: r.repo.stargazers_count,
           score: r.score,
