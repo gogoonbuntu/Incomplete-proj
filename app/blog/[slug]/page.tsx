@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
+import { ShareButtons } from "@/components/share-buttons"
 import { blogPosts } from "@/lib/blog-data"
-import { Calendar, Clock, ArrowLeft, ArrowRight, Share2, BookOpen } from "lucide-react"
+import { Calendar, Clock, ArrowLeft, ArrowRight, BookOpen } from "lucide-react"
 
 interface Props {
     params: Promise<{ slug: string }>
@@ -108,16 +109,10 @@ export default async function BlogPostPage(props: Props) {
                                     {post.readTime}
                                 </span>
                             </div>
-                            <a
-                                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`https://incomplete-proj.vercel.app/blog/${post.slug}`)}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 text-gray-500 hover:text-cyan-400 transition-colors"
-                                title="트위터에 공유"
-                            >
-                                <Share2 className="w-4 h-4" />
-                                <span className="text-xs">공유</span>
-                            </a>
+                            <ShareButtons
+                                title={post.title}
+                                url={`https://incomplete-proj.vercel.app/blog/${post.slug}`}
+                            />
                         </div>
                     </header>
 
