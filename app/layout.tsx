@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/sonner"
 import { LanguageProvider } from "@/hooks/use-language"
 import { GalaxyBackground } from "@/components/galaxy-background"
 import { Footer } from "@/components/footer"
+import { ScrollToTop } from "@/components/scroll-to-top"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -49,6 +50,7 @@ export default function RootLayout({
                 <main className="flex-1">{children}</main>
                 <Footer />
               </div>
+              <ScrollToTop />
               <Toaster />
             </AuthProvider>
           </LanguageProvider>

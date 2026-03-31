@@ -2,6 +2,7 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { ShareButtons } from "@/components/share-buttons"
+import { ReadingProgress } from "@/components/reading-progress"
 import { blogPosts } from "@/lib/blog-data"
 import { Calendar, Clock, ArrowLeft, ArrowRight, BookOpen } from "lucide-react"
 
@@ -73,6 +74,7 @@ export default async function BlogPostPage(props: Props) {
 
     return (
         <div className="min-h-screen bg-transparent text-white">
+            <ReadingProgress />
             <Header />
 
             <main className="container mx-auto px-4 py-12 max-w-4xl relative z-10">

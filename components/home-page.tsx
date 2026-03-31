@@ -228,6 +228,57 @@ export function HomePage() {
     }
   }
 
+  // 추천 알고리즘: score(40%) + 최신성(30%) + 유저 선호도(30%)
+  const getRecommendationScore = (project: Project): number => {
+    // 1. 기본 스코어 (0~10 → 0~40)
+    const baseScore = (project.score / 10) * 40
+
+    // 2. 최신성 가중치 (0~30) — 최근 업데이트일수록 높음
+    const now = Date.now()
+    const updateTime = new Date(project.lastUpdate).getTime()
+    const daysSinceUpdate = Math.max(0, (now - updateTime) / (1000 * 60 * 60 * 24))
+    // 30일 이내 = 30점, 365일+ = 0점 (로그 감쇠)
+    const recencyScore = Math.max(0, 30 - (Math.log(daysSinceUpdate + 1) / Math.log(365)) * 30)
+
+    // 3. 유저 선호도 (0~30)
+    let preferenceScore = 0
+    try {
+      const raw = typeof window !== "undefined" ? localStorage.getItem("user_pref") : null
+      if (raw) {
+        const prefs: Record<string, number> = JSON.parse(raw)
+        const maxPref = Math.max(...Object.values(prefs), 1)
+
+        // 언어 매칭
+        const langKey = `lang:${project.language}`
+        if (prefs[langKey]) {
+          preferenceScore += (prefs[langKey] / maxPref) * 15
+        }
+
+        // 카테고리 매칭
+        project.categories?.forEach((cat) => {
+          const catKey = `cat:${cat}`
+          if (prefs[catKey]) {
+            preferenceScore += (prefs[catKey] / maxPref) * 5
+          }
+        })
+
+        // 토픽 매칭
+        project.topics?.forEach((topic) => {
+          const topicKey = `topic:${topic}`
+          if (prefs[topicKey]) {
+            preferenceScore += (prefs[topicKey] / maxPref) * 3
+          }
+        })
+
+        preferenceScore = Math.min(preferenceScore, 30)
+      }
+    } catch {
+      // localStorage 접근 불가 시 무시
+    }
+
+    return baseScore + recencyScore + preferenceScore
+  }
+
   const applyFiltersAndSearch = () => {
     let filtered = projects
 
@@ -283,7 +334,8 @@ export function HomePage() {
     filtered.sort((a, b) => {
       switch (sortBy) {
         case "score":
-          return b.score - a.score
+          // 추천 알고리즘: score + 최신 업데이트 + 유저 선호도
+          return getRecommendationScore(b) - getRecommendationScore(a)
         case "stars":
           return b.stars - a.stars
         case "updated":

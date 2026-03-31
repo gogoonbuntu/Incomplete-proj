@@ -15,13 +15,41 @@ interface ProjectCardProps {
   project: Project
 }
 
+// 유저 선호도 기록 (localStorage)
+function trackPreference(project: Project) {
+  try {
+    const key = "user_pref"
+    const raw = localStorage.getItem(key)
+    const prefs: Record<string, number> = raw ? JSON.parse(raw) : {}
+
+    // 언어 선호
+    if (project.language) {
+      prefs[`lang:${project.language}`] = (prefs[`lang:${project.language}`] || 0) + 1
+    }
+    // 카테고리 선호
+    project.categories?.forEach((cat) => {
+      prefs[`cat:${cat}`] = (prefs[`cat:${cat}`] || 0) + 1
+    })
+    // 토픽 선호
+    project.topics?.slice(0, 3).forEach((topic) => {
+      prefs[`topic:${topic}`] = (prefs[`topic:${topic}`] || 0) + 1
+    })
+
+    localStorage.setItem(key, JSON.stringify(prefs))
+  } catch {
+    // localStorage 접근 불가 시 무시
+  }
+}
+
 export function ProjectCard({ project }: ProjectCardProps) {
   const { user } = useAuth()
   const { isBookmarked, addBookmark, removeBookmark } = useBookmarks()
   const { t } = useLanguage()
   const [bookmarkLoading, setBookmarkLoading] = useState(false)
 
-  const handleBookmark = async () => {
+  const handleBookmark = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
     if (!user) return
 
     try {
@@ -38,8 +66,13 @@ export function ProjectCard({ project }: ProjectCardProps) {
     }
   }
 
+  const handleGithubClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    window.open(project.githubUrl, "_blank", "noopener,noreferrer")
+  }
+
   const getScoreColor = (score: number) => {
-    // Neon colors for scores
     if (score >= 9) return "border-[#00f3ff] text-[#00f3ff] shadow-[0_0_10px_#00f3ff]"
     if (score >= 7) return "border-[#bc13fe] text-[#bc13fe] shadow-[0_0_10px_#bc13fe]"
     if (score >= 5) return "border-[#7a04eb] text-[#7a04eb]"
@@ -61,8 +94,12 @@ export function ProjectCard({ project }: ProjectCardProps) {
   const bookmarked = user ? isBookmarked(project.id) : false
 
   return (
-    <div className="perspective-container h-full">
-      <Card className="card-3d glass-panel h-full flex flex-col border-none text-white overflow-hidden group">
+    <Link
+      href={`/project/${project.id}`}
+      onClick={() => trackPreference(project)}
+      className="perspective-container h-full block"
+    >
+      <Card className="card-3d glass-panel h-full flex flex-col border-none text-white overflow-hidden group cursor-pointer hover:shadow-[0_0_30px_rgba(0,243,255,0.15)] transition-shadow duration-300">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
         
         <CardHeader className="relative z-10">
@@ -100,7 +137,6 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
         <CardContent className="flex-1 relative z-10 card-content-3d">
           {(() => {
-            // AI 요약 파싱 로직: KOREAN SUMMARY 섹션 추출
             let displayDescription = project.description || "No description available.";
             
             try {
@@ -109,7 +145,6 @@ export function ProjectCard({ project }: ProjectCardProps) {
                 if (koMatch && koMatch[1] && koMatch[1].trim()) {
                   displayDescription = koMatch[1].trim();
                 } else if (project.enhancedDescription.length > 10) {
-                  // If marker not found, but content exists, show beginning
                   displayDescription = project.enhancedDescription.split('\n')[0].substring(0, 200);
                 }
               }
@@ -174,18 +209,18 @@ export function ProjectCard({ project }: ProjectCardProps) {
           )}
         </CardContent>
 
-        <CardFooter className="flex justify-between relative z-10 pt-4">
-          <Button asChild variant="ghost" size="sm" className="hover:bg-white/10 hover:text-cyan-300 text-gray-400 transition-all">
-            <Link href={`/project/${project.id}`}>{t('analyze')}</Link>
-          </Button>
-          <Button asChild size="sm" className="bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 border-none text-white shadow-lg shadow-purple-500/30 transition-all hover:scale-105">
-            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-              <ExternalLink className="h-4 w-4 mr-1" />
-              {t('deploy')}
-            </a>
+        <CardFooter className="relative z-10 pt-4 justify-end">
+          <Button
+            size="sm"
+            className="bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 border-none text-white shadow-lg shadow-purple-500/30 transition-all hover:scale-105"
+            onClick={handleGithubClick}
+          >
+            <ExternalLink className="h-4 w-4 mr-1" />
+            {t('deploy')}
           </Button>
         </CardFooter>
       </Card>
-    </div>
+    </Link>
   )
 }
+
