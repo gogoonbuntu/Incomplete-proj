@@ -53,6 +53,7 @@ export function Footer() {
             <ul className="space-y-2">
               <li><Link href="/privacy" className="text-xs text-gray-500 hover:text-cyan-400 transition-colors">개인정보처리방침</Link></li>
               <li><Link href="/terms" className="text-xs text-gray-500 hover:text-cyan-400 transition-colors">이용약관</Link></li>
+              <li><Link href="/faq" className="text-xs text-gray-500 hover:text-cyan-400 transition-colors">FAQ</Link></li>
             </ul>
           </div>
         </div>
